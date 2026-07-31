@@ -106,7 +106,7 @@ $logcodigo = $_SESSION['codigo'];
 <body class="layout-page">
 
     <?php include 'partials/header.php'; ?>
-    <div class="container mt-5">
+    <main class="container mt-5 contenido-principal">
         <!-- <h2>Usuario: <?php //echo $lognombre." ".$logcodigo;?></h2><br>
         <h4>Formulario para seleccionar activos a editar de los centros educativos.</h4> -->
         
@@ -132,7 +132,7 @@ $logcodigo = $_SESSION['codigo'];
                         <label for="codigo_centro" class="form-label">Código del Centro:</label>
                         <input type="text" class="form-control" id="codigo_centro" name="codigo_centro" 
                             placeholder="Ingrese el código del centro educativo">
-                        <div class="form-text">El código debe ser de 4 dígitos. Si tiene 3 dígitos, agregue un cero a la izquierda (ej. 0315).</div>
+                        <div class="form-text small fst-italic text-muted opacity-75">El código debe ser de 4 dígitos. Si tiene 3 dígitos, agregue un cero a la izquierda (ej. 0315).</div>
                     </div>
                 </div>
             </div>
@@ -159,7 +159,7 @@ $logcodigo = $_SESSION['codigo'];
             <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293z"/>
             </svg>
         </div>
-    </div>
+    </main>
 
 
     <!-- <footer class="bg-dark text-white pt-4 pb-4">
@@ -206,6 +206,13 @@ $logcodigo = $_SESSION['codigo'];
                         '&codigo_centro=' + encodeURIComponent(codigoCentro);
             xhr.send(params);
         }
+
+        document.getElementById('codigo_centro').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                cargarActivos();
+            }
+        });
     </script>
 
     <script>

@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+/*
 $tienellave = in_array($_SESSION['tipo'], [1, 7]);
 if (!$tienellave) {
     echo '<script language="javascript">
@@ -8,7 +11,7 @@ if (!$tienellave) {
     </script>';
     exit();
 }
-
+*/
 require_once("conexion.php");
 $link = $mysqli;
 if (mysqli_connect_errno()) {
@@ -20,6 +23,15 @@ if (!mysqli_set_charset($link, "utf8")) {
     echo "Error cargando el conjunto de caracteres utf8";
     exit();
 }
+
+require_once __DIR__ . '/usuarioAzure.php';
+$usuario_azure = obtenerUsuarioSesion();
+
+if (!$usuario_azure) {
+    header("Location: index.html");
+    exit();
+}
+
 
 // Verificar que se enviaron datos para editar
 if (isset($_POST['btnEditar']) && isset($_POST['idsplacas'])) {
@@ -93,6 +105,19 @@ if (isset($_POST['btnEditar']) && isset($_POST['idsplacas'])) {
 
 // Cerrar conexión
 mysqli_close($link);
+
+// ==== RUTA DE REGRESO A LA CARD PADRE =====
+$subsistema_id = intval($_POST['subsistema_id'] ?? 0);
+$modulo_id = intval($_POST['modulo_id'] ?? 0);
+
+$ruta_padre = 'navegar.php?ruta=formulario_menu_principal.php';
+$ruta_formulario = 'navegar.php?ruta=herramienta_formulario_editar_activos_n.php';
+if ($subsistema_id > 0 && $modulo_id > 0) {
+    $ruta_padre = 'navegar.php?ruta=formulario_sub_modulos.php'
+        . '&subsistema_id=' . $subsistema_id
+        . '&modulo_id=' . $modulo_id;
+    $ruta_formulario .= '&subsistema_id=' . $subsistema_id . '&modulo_id=' . $modulo_id;
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,6 +127,11 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado de Edición</title>
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
+    <link rel="stylesheet" href="css/formulario_menu_principal.css" />
+
     <style>
         .container {
             margin-top: 50px;
@@ -111,11 +141,8 @@ mysqli_close($link);
         }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <img src="img/logodelgobierno.png" width="35" height="30" alt="" loading="lazy">
-        <a class="navbar-brand" href="formulario_menu_principal.html">Tecnopresta</a>
-    </nav>
+<body class="layout-page">
+    <?php include 'partials/header.php'; ?>
 
     <div class="container">
         <div class="row">
@@ -143,10 +170,10 @@ mysqli_close($link);
                         <?php endif; ?>
                         
                         <div class="d-grid gap-2">
-                            <a href="herramienta_formulario_editar_activos.php" class="btn btn-primary">
+                            <a href="<?= htmlspecialchars($ruta_formulario) ?>" class="btn btn-primary">
                                 <i class="bi bi-arrow-left"></i> Volver a Editar Activos
                             </a>
-                            <a href="herramientas.php" class="btn btn-secondary">
+                            <a href="<?= htmlspecialchars($ruta_padre) ?>" class="btn btn-secondary">
                                 <i class="bi bi-house"></i> Volver al Menú Principal
                             </a>
                         </div>
@@ -156,16 +183,8 @@ mysqli_close($link);
         </div>
     </div>
 
-    <footer class="bg-dark text-white pt-4 pb-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p class="mb-0">© 2024 Ministerio de Educación Pública. Todos los derechos reservados.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
+    <?php include 'partials/footer.php'; ?>
+
 </body>
 </html>

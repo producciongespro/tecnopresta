@@ -33,8 +33,8 @@ $logcodigo = $_SESSION['codigo'];
     <title>Editar activos</title>
     <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <style>
             .card-custom {
                 background-color: #f0f4f8; /* Color frío y suave */
@@ -166,7 +166,7 @@ $logcodigo = $_SESSION['codigo'];
     </div>
 </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
     
 <script>
 function cargarActivos() {

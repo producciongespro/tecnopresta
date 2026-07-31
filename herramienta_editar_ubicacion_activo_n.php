@@ -1,9 +1,11 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 require_once("conexion.php");
 
 $link = $mysqli;
-
+/*
 // Verificar permisos
 $tienellave = in_array($_SESSION['tipo'], [1,7]);
 if (!$tienellave) {
@@ -13,6 +15,7 @@ if (!$tienellave) {
     </script>';
     exit();
 }
+*/
 
 // Configurar conexión y charset
 if (mysqli_connect_errno()) {
@@ -21,6 +24,28 @@ if (mysqli_connect_errno()) {
 
 if (!mysqli_set_charset($link, "utf8")) {
     die("Error cargando el conjunto de caracteres UTF-8: " . mysqli_error($link));
+}
+
+require_once __DIR__ . '/usuarioAzure.php';
+$usuario_azure = obtenerUsuarioSesion();
+
+if (!$usuario_azure) {
+    header("Location: index.html");
+    exit();
+}
+
+// ==== CONSTRUIR RUTA DE REGRESO =====
+$ruta_regreso ='navegar.php?ruta=formulario_menu_principal.php';
+if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
+    $ruta_regreso = 'navegar.php?ruta=formulario_sub_modulos.php'
+    . '&subsistema_id=' . intval($_GET['subsistema_id'] ?? 0)
+    . '&modulo_id=' . intval($_GET['modulo_id'] ?? 0);
+}
+
+// === Bloquear acceso directo ===
+if (!defined('ACCESO_SEGURO')) {
+  http_response_code(403);
+  exit('Acceso directo no permitido');
 }
 
 // Definir nomenclatura de lugares
@@ -123,6 +148,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
         }
     }
 }
+
+// ==== DATOS DE FONDOS PARA EL SELECTOR DE NOMBRE =====
+$fondos_html = '<option value="">Seleccione el Fondo...</option>';
+$fondos_js = [];
+$query_fondos = $link->query("SELECT id_fondos, fondos FROM t_fondos ORDER BY fondos");
+if ($query_fondos) {
+    while ($fila_fondo = $query_fondos->fetch_assoc()) {
+        $fid_fondo = intval($fila_fondo['id_fondos']);
+        $fondos_js[$fid_fondo] = $fila_fondo['fondos'];
+        $seleccionado = (isset($_POST['id_fondos']) && intval($_POST['id_fondos']) === $fid_fondo) ? ' selected' : '';
+        $fondos_html .= '<option value="' . $fid_fondo . '"' . $seleccionado . '>' . htmlspecialchars($fila_fondo['fondos']) . '</option>';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +175,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
+    <link rel="stylesheet" href="css/formulario_menu_principal.css" />
+
     <style>
         .table-responsive {
             max-height: 500px;
@@ -145,16 +188,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
         .header-fixed {
             position: sticky;
             top: 0;
-            background: white;
+            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
             z-index: 100;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header-fixed th {
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-bottom: none;
+            white-space: nowrap;
         }
         .required-field::after {
             content: " *";
             color: red;
         }
         .contador-registros {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
+            border-left: 3px solid var(--mep-gold);
             color: white;
             padding: 10px 15px;
             border-radius: 8px;
@@ -168,39 +221,140 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
             font-size: 0.9rem;
         }
         .nomenclatura-table th {
-            background-color: #e9ecef;
+            background-color: #eef3f9;
+            color: var(--mep-blue);
+        }
+        .accordion-item {
+            border: 1px solid #e8ecf0;
+            border-radius: 10px !important;
+            overflow: hidden;
+        }
+        .accordion-button {
+            font-weight: 600;
+            color: var(--mep-blue);
         }
         .accordion-button:not(.collapsed) {
-            background-color: #e7f1ff;
-            color: #0c63e4;
+            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
+            color: #fff;
+            box-shadow: none;
+        }
+        .accordion-button:not(.collapsed)::after {
+            filter: brightness(0) invert(1);
+        }
+
+        /* ==== Panel de búsqueda MEP ==== */
+        .search-panel {
+            background: #f8fafd;
+            border: 1px solid #e8ecf0;
+            border-left: 4px solid var(--mep-blue);
+            border-radius: 10px;
+            padding: 1.2rem 1.2rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .filtro-titulo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--mep-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+        }
+        .search-panel .input-group-text {
+            background: #eef3f9;
+            border: 1px solid #dfe7f0;
+            border-right: none;
+            color: var(--mep-blue);
+            border-radius: 8px 0 0 8px !important;
+            padding: 0.55rem 0.75rem;
+        }
+        .search-panel .form-control,
+        .search-panel .form-select {
+            border: 1px solid #dfe7f0;
+            border-left: none;
+            border-radius: 0 8px 8px 0 !important;
+            padding: 0.55rem 0.8rem;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-panel .form-control:focus,
+        .search-panel .form-select:focus {
+            border-color: var(--mep-blue);
+            box-shadow: 0 0 0 3px rgba(0, 56, 118, 0.1);
+        }
+
+        /* ==== Botón Actualizar MEP ==== */
+        .btn-guardar-mep {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #28a745, #1e8a36);
+            color: #fff;
+            border: none;
+            border-left: 3px solid var(--mep-gold);
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 14px rgba(40, 167, 69, 0.25);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .btn-guardar-mep:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 56, 118, 0.3);
+        }
+        .btn-guardar-mep:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ==== Badges de estado ==== */
+        .estado-badge-activo {
+            background: #e8f7ee;
+            color: #1e7e34;
+            font-weight: 600;
+        }
+        .estado-badge-inactivo {
+            background: #fdecea;
+            color: #c0392b;
+            font-weight: 600;
+        }
+
+        /* ==== Tabla de edición ==== */
+        #form-edicion .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        #form-edicion tbody tr:hover {
+            background: #f8faff;
+        }
+
+        /* ==== Card sin efectos de hover de menú ==== */
+        .card-edicion,
+        .card-edicion:hover {
+            transform: none !important;
+            cursor: default !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
         }
     </style>
 </head>
 
-<body class="bg-light">
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <img src="img/logodelgobierno.png" width="35" height="30" alt="" loading="lazy">
-        <a class="navbar-brand" href="formulario_menu_principal.html">Tecnopresta</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="herramientas.php"><i class="bi bi-reply-all"></i> Regresar</a>
-            </li> 
-            <li class="nav-item">
-                <a class="nav-link" href="gameover.php"><i class="bi bi-door-open"></i> Cerrar Sesión</a>
-            </li>  
-            </ul>
-        </div>  
-    </nav>
+<body class="bg-light layout-page">
+    <?php include 'partials/header.php'; ?>
+    
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edición de ID Lugar</h3>
+                <div class="card shadow card-edicion">
+                    <div class="card-header" style="background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2)); border-bottom: 3px solid var(--mep-gold);">
+                        <h3 class="mb-0 text-white"><i class="bi bi-pencil-square me-2"></i>Edición de ID Lugar</h3>
+                        <p class="mb-0 mt-1 text-white opacity-75 small"><i class="bi bi-geo-alt-fill me-1"></i>Actualice la ubicación (ID Lugar) de los activos de su institución.</p>
                     </div>
                     <div class="card-body">
                         <!-- Mostrar mensajes -->
@@ -212,25 +366,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                         <?php endif; ?>
                         
                         <!-- Formulario de búsqueda -->
-                        <form method="POST" class="mb-4">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="codigo" class="form-label required-field">Código</label>
-                                    <input type="text" class="form-control" id="codigo" name="codigo" required 
-                                           value="<?php echo isset($_POST['codigo']) ? htmlspecialchars($_POST['codigo']) : ''; ?>">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="id_fondos" class="form-label required-field">ID Fondos</label>
-                                    <input type="number" class="form-control" id="id_fondos" name="id_fondos" required 
-                                           value="<?php echo isset($_POST['id_fondos']) ? htmlspecialchars($_POST['id_fondos']) : ''; ?>">
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" name="buscar" class="btn btn-primary">
-                                        <i class="bi bi-search me-1"></i> Buscar
-                                    </button>
-                                </div>
+                        <div class="search-panel">
+                            <div class="filtro-titulo">
+                                <i class="bi bi-funnel-fill"></i> Criterios de búsqueda
                             </div>
-                        </form>
+                            <form method="POST">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="codigo" class="form-label required-field">Código</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                                            <input type="text" class="form-control" id="codigo" name="codigo" required 
+                                                   value="<?php echo isset($_POST['codigo']) ? htmlspecialchars($_POST['codigo']) : ''; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_fondos" class="form-label required-field">ID Fondos</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                            <input type="number" class="form-control" id="id_fondos" name="id_fondos" required 
+                                                   value="<?php echo isset($_POST['id_fondos']) ? htmlspecialchars($_POST['id_fondos']) : ''; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="nombre_fondo" class="form-label">Nombre del Fondo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-folder2-open"></i></span>
+                                            <select class="form-select" id="nombre_fondo">
+                                                <?php echo $fondos_html; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" name="buscar" class="btn btn-mep-primary">
+                                            <i class="bi bi-search me-1"></i> Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
                         <!-- Acordeón con la nomenclatura de lugares -->
                         <div class="accordion mb-4" id="accordionNomenclatura">
@@ -290,7 +464,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                             <input type="hidden" name="id_fondos" value="<?php echo htmlspecialchars($_POST['id_fondos']); ?>">
                             
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover">
+                                <table class="table table-hover">
                                     <thead class="header-fixed">
                                         <tr>
                                             <th width="5%">Editar</th>
@@ -327,7 +501,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                                                 <small class="text-muted">(1-6)</small>
                                             </td>
                                             <td>
-                                                <span class="badge bg-<?php echo $registro['activo'] ? 'success' : 'danger'; ?>">
+                                                <span class="badge rounded-pill <?php echo $registro['activo'] ? 'estado-badge-activo' : 'estado-badge-inactivo'; ?>">
+                                                    <i class="bi bi-<?php echo $registro['activo'] ? 'check-circle-fill' : 'x-circle-fill'; ?> me-1"></i>
                                                     <?php echo $registro['activo'] ? 'Activo' : 'Inactivo'; ?>
                                                 </span>
                                             </td>
@@ -337,12 +512,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                                 </table>
                             </div>
                             
-                            <div class="mt-3">
-                                <button type="submit" name="actualizar" class="btn btn-success" id="btn-actualizar" disabled>
+                            <div class="mt-3 d-flex align-items-center flex-wrap gap-3">
+                                <button type="submit" name="actualizar" class="btn btn-guardar-mep" id="btn-actualizar" disabled>
                                     <i class="bi bi-save me-1"></i> Actualizar Seleccionados
                                 </button>
-                                <span class="ms-2 text-muted" id="contador-seleccionados">
-                                    (0 seleccionados)
+                                <span class="text-muted small" id="contador-seleccionados">
+                                    <i class="bi bi-check2-square me-1"></i> (0 seleccionados)
                                 </span>
                             </div>
                         </form>
@@ -357,10 +532,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
         </div>
     </div>
 
+    <!-- Botón flotante Volver -->
+      <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="btn-disponibilidad"
+          style="bottom: 100px;" data-tooltip="Regresar">
+          <i class="bi bi-arrow-left-circle-fill"></i>
+      </a>
+    <?php include 'partials/footer.php'; ?>
+    
     <!-- Bootstrap 5 JS Bundle -->
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="js/jquery-3.7.1.min.js"></script>
+
     <script>
         $(document).ready(function() {
             // Habilitar/deshabilitar campos de edición según checkbox
@@ -376,7 +559,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                 
                 // Actualizar contador de seleccionados
                 const cantidadSeleccionados = $('.check-editar:checked').length;
-                $('#contador-seleccionados').text('(' + cantidadSeleccionados + ' seleccionados)');
+                $('#contador-seleccionados').html('<i class="bi bi-check2-square me-1"></i> (' + cantidadSeleccionados + ' seleccionados)');
             });
             
             // Validación antes de enviar
@@ -410,5 +593,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
             });
         });
     </script>
+
+    <script>
+        const fondosData = <?php echo json_encode($fondos_js, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputIdFondos = document.getElementById('id_fondos');
+            const selectNombreFondo = document.getElementById('nombre_fondo');
+
+            function cargarNombreDesdeId() {
+                const id = parseInt(inputIdFondos.value, 10);
+                if (!isNaN(id) && fondosData[id] !== undefined) {
+                    selectNombreFondo.value = String(id);
+                } else {
+                    selectNombreFondo.value = '';
+                }
+            }
+
+            function cargarIdDesdeNombre() {
+                inputIdFondos.value = selectNombreFondo.value;
+            }
+
+            inputIdFondos.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    cargarNombreDesdeId();
+                }
+            });
+
+            inputIdFondos.addEventListener('blur', cargarNombreDesdeId);
+            selectNombreFondo.addEventListener('change', cargarIdDesdeNombre);
+        });
+    </script>
+    
 </body>
 </html>

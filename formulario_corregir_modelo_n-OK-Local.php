@@ -56,12 +56,11 @@ if (!defined('ACCESO_SEGURO')) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corregir modelo del activo</title>
-    <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- ESTILOS INSTITUCIONALES -->
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
     <link rel="stylesheet" href="css/formulario_menu_principal.css?v=3" />
 
-    <link href="css/bootstrap-icons/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     
     <script src="js/jquery-3.7.1.min.js"></script>
@@ -72,6 +71,7 @@ if (!defined('ACCESO_SEGURO')) {
 
 
         <div class="container mt-5">
+        <!-- <h2>Usuario: <?php // echo $lognombre." ".$logcodigo;?></h2><br> -->
             <div class="hero-box mb-4 fade-enter">
                 <div class="row align-items-center">
                     <div class="col-md-8">
@@ -113,7 +113,7 @@ if (!defined('ACCESO_SEGURO')) {
             </form>
 
             <!-- Botón flotante Actualizar -->
-            <button type="submit" class="btn-guardar-flotante" form="formCorregir" style="bottom: 240px;" data-tooltip="Actualizar modelos">
+            <button type="submit" class="btn-guardar-flotante" form="formCorregir" data-tooltip="Actualizar modelos">
                 <i class="bi bi-clipboard2-check-fill"></i>
             </button>
 
@@ -186,8 +186,24 @@ if (!defined('ACCESO_SEGURO')) {
         </a>
     </main>
 <?php include 'partials/footer.php'; ?>
+<!-- <footer class="bg-dark text-white pt-4 pb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p class="mb-0">Por favor, asegúrese de ingresar la información solicitada en cada instancia.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <div class="border border-light p-3">
+                    <p class="mb-0">© 2024 Ministerio de Educación Pública. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> -->
 
-<script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function mostrarModal(id) {
     var modal = new bootstrap.Modal(document.getElementById(id));
@@ -216,38 +232,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $(document).ready(function() {
-    function cargarContenidoFondo(id_fondos) {
-        if (!id_fondos || id_fondos == 0) return;
-        $.ajax({
-            url: 'activos_a_corregir_n.php',
-            type: 'POST',
-            data: {id_fondos: id_fondos},
-            success: function(response) {
-                $('#mostraractivos').html(response);
-            }
-        });
-        $.ajax({
-            url: 'modelos_sugeridos_n.php',
-            type: 'POST',
-            data: {id_fondos: id_fondos},
-            success: function(response) {
-                $('#modelos').html(response);
-            }
-        });
-    }
-
     $('#fondos').change(function() {
         var id_fondos = $(this).val();
-        sessionStorage.setItem('fondo_corregir_modelo', id_fondos);
-        cargarContenidoFondo(id_fondos);
+        if (id_fondos != 0) {
+            $.ajax({
+                url: 'activos_a_corregir_n.php',
+                type: 'POST',
+                data: {id_fondos: id_fondos},
+                success: function(response) {
+                    $('#mostraractivos').html(response);
+                }
+            });
+            $.ajax({
+                url: 'modelos_sugeridos_n.php',
+                type: 'POST',
+                data: {id_fondos: id_fondos},
+                success: function(response) {
+                    $('#modelos').html(response);
+                }
+            });
+        }
     });
-
-    var fondoGuardado = sessionStorage.getItem('fondo_corregir_modelo');
-    if (fondoGuardado && fondoGuardado != '0') {
-        $('#fondos').val(fondoGuardado);
-        cargarContenidoFondo(fondoGuardado);
-    }
-    sessionStorage.removeItem('fondo_corregir_modelo');
 
     $('#formCorregir').on('submit', function(event) {
         event.preventDefault();
@@ -274,7 +279,6 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        sessionStorage.setItem('fondo_corregir_modelo', $('#fondos').val());
                         mostrarModal('modalExito');
                     } else {
                         document.getElementById('modalErrorBody').innerHTML = '<div class="alert"><p>Error: ' + (response.error || 'Error desconocido') + '</p></div>';
@@ -287,10 +291,6 @@ $(document).ready(function() {
                 }
             });
         });
-    });
-
-    $('#modalExito').on('hidden.bs.modal', function() {
-        window.location.reload();
     });
 });
 

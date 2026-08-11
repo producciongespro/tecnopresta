@@ -1,17 +1,3 @@
-// =======================================================
-// CONFIGURACIÓN GENERAL
-// =======================================================
-
-// Modo automático: si estás en localhost, se desactiva Azure
-const MODO_LOCAL = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
-
-// Usuario quemado para desarrollo local
-const USUARIO_PRUEBA = "erick.cerdas.gonzalez@mep.go.cr";
-
-// =======================================================
-// CONFIGURACIÓN MSAL (SOLO PRODUCCIÓN)
-// =======================================================
-
 const msalConfig = {
     auth: {
         clientId: "be0e9b41-718d-4d2a-8c2f-d26eba67d767",
@@ -53,11 +39,6 @@ const graphConfig = {
 let myMSALObj = null;
 
 async function initializeMSAL() {
-    if (MODO_LOCAL) {
-        console.log("🔧 MODO LOCAL: MSAL deshabilitado");
-        return;
-    }
-
     try {
         myMSALObj = new msal.PublicClientApplication(msalConfig);
         await myMSALObj.initialize();
@@ -100,11 +81,6 @@ function loadPage() {
     if (window.tipoLoginActivo !== "normal") {
         return;
     }
-
-    if (MODO_LOCAL) {
-        console.log("🔧 Esperando clic en botón Ingresar (modo local)");
-        return;
-    }
     
     // VERIFICACIÓN DE INICIALIZACIÓN AGREGADA
     if (!myMSALObj) {
@@ -137,12 +113,6 @@ function handleResponse(resp) {
 }
 
 function signIn() {
-    if (MODO_LOCAL) {
-        console.log("🔧 Login simulado con:", USUARIO_PRUEBA);
-        login(USUARIO_PRUEBA);
-        return;
-    }
-
     myMSALObj.loginPopup(loginRequest).then(handleResponse).catch(error => {
         console.error(error);
     });
@@ -312,20 +282,14 @@ async function login(username) {
         jsonData = data;
 
         // ✅ OBTENER TOKEN PARA GRAPH API (CORREGIDO)
-        if (!MODO_LOCAL) {
-            console.log("Obteniendo token de acceso para Graph API...");
-            const accessToken = await obtenerTokenAcceso();
-            if (accessToken) {
-                window.sessionStorage.setItem('graphAccessToken', accessToken);
-                console.log("✅ Token de Graph API almacenado correctamente");
-                window.sessionStorage.setItem('graphUser', username);
-            } else {
-                console.warn("No se pudo obtener token de Graph API, pero el login continúa");
-            }
-        } else {
-            window.sessionStorage.setItem('graphAccessToken', 'TOKEN_FAKE_LOCAL');
+        console.log("Obteniendo token de acceso para Graph API...");
+        const accessToken = await obtenerTokenAcceso();
+        if (accessToken) {
+            window.sessionStorage.setItem('graphAccessToken', accessToken);
+            console.log("✅ Token de Graph API almacenado correctamente");
             window.sessionStorage.setItem('graphUser', username);
-            console.log("🔧 MODO LOCAL: token simulado almacenado");
+        } else {
+            console.warn("No se pudo obtener token de Graph API, pero el login continúa");
         }
 
         // Lógica existente para códigos presupuestarios (SIN CAMBIOS)

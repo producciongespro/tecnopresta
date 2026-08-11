@@ -309,7 +309,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar'])) {
               <th>Modelo</th>
               <th>Color</th>
               <th>Acciones</th>
-            </tr>
+            </tr> 
           </thead>
           <tbody>
             <?php foreach ($resultados as $row): ?>

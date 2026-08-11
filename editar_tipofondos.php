@@ -11,6 +11,7 @@ $link = $mysqli;
  
 
 
+
 if (mysqli_connect_errno())
 
 {
@@ -22,7 +23,6 @@ echo "Error de conexion a mysql: " . mysqli_connect_error();
 $logusuario = $_SESSION['cedula'];
 $lognombre = $_SESSION['nombre'];
 $logcodigo = $_SESSION['codigo'];
-
 
 if (!mysqli_set_charset($link, "utf8")) {
     	echo "Error cargando el conjunto de caracteres utf8";

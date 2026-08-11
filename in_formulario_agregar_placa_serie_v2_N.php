@@ -173,7 +173,7 @@ $imagen = $respuesta['imagen'];
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="in_formulario_agregar_modelo_placa_serie.php">
+                        <a class="nav-link" href="in_formulario_agregar_modelo_placa_serie_N.php">
                             <i class="bi bi-arrow-left-circle"></i> Regresar
                         </a>
                     </li>   
@@ -339,7 +339,7 @@ $imagen = $respuesta['imagen'];
             
             // Enviar datos por AJAX
             $.ajax({
-                url: 'guardar_placa.php',
+                url: 'guardar_placa_n.php',
                 type: 'POST',
                 data: $(this).serialize(),
                 dataType: 'json',

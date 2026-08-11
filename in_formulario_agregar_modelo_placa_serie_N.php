@@ -540,7 +540,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar'])) {
     <!-- Modal Crear Nuevo Modelo - VERSIÓN CORREGIDA (CON CAMPO MODELO CON NAME) -->
     <div class="modal fade" id="modalCrearModelo" tabindex="-1" aria-labelledby="modalCrearModeloLabel" aria-hidden="true">
       <div class="modal-dialog">
-        <form method="POST" action="in_crear_modelo.php" class="modal-content">
+        <form method="POST" action="in_crear_modelo_n.php" class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modalCrearModeloLabel">Confirmar Creación de Modelo</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>

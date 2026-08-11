@@ -209,7 +209,7 @@ if (isset($_GET['editar'])) {
     <title>Mantenimiento de Instituciones</title>
     <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .table-container { max-height: 400px; overflow-y: auto; }
         .required:after { content: " *"; color: red; }
@@ -341,6 +341,6 @@ if (isset($_GET['editar'])) {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

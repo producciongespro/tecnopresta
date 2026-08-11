@@ -5,5 +5,10 @@
         "phpoffice/phpspreadsheet": "^1.25",
         "minishlink/web-push": "^7.0",
         "mpdf/mpdf": "^8.2"
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
     }
 }

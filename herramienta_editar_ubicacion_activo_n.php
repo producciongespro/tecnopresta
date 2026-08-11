@@ -67,9 +67,14 @@ $totalRegistros = 0; // Nueva variable para el contador
 // Procesar búsqueda
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar'])) {
     $codigo = mysqli_real_escape_string($link, $_POST['codigo']);
-    $id_fondos = mysqli_real_escape_string($link, $_POST['id_fondos']);
+    $id_lugar = intval($_POST['id_lugar'] ?? 0);
     
-    $query = "SELECT * FROM t_placa WHERE codigo = '$codigo' AND id_fondos = '$id_fondos' ORDER BY placa";
+    if ($id_lugar <= 0) {
+        // "Sin ubicación asignada": id_lugar = 0 o vacío
+        $query = "SELECT * FROM t_placa WHERE codigo = '$codigo' AND (id_lugar = 0 OR id_lugar = '') ORDER BY placa";
+    } else {
+        $query = "SELECT * FROM t_placa WHERE codigo = '$codigo' AND id_lugar = '$id_lugar' ORDER BY placa";
+    }
     $result = mysqli_query($link, $query);
     
     if ($result && mysqli_num_rows($result) > 0) {
@@ -84,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar'])) {
 
 // Procesar actualización
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
-    $updates = $_POST['updates'];
+    $updates = $_POST['updates'] ?? [];
     $actualizacionesExitosas = 0;
     $errores = [];
     
@@ -134,12 +139,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
         $tipoMensaje = "danger";
     }
     
-    // Volver a buscar para mostrar los datos actualizados
-    if (!empty($_POST['codigo']) && !empty($_POST['id_fondos'])) {
+    // Volver a buscar para mostrar los datos actualizados (por código, sin filtro de ubicación)
+    if (!empty($_POST['codigo'])) {
         $codigo = mysqli_real_escape_string($link, $_POST['codigo']);
-        $id_fondos = mysqli_real_escape_string($link, $_POST['id_fondos']);
         
-        $query = "SELECT * FROM t_placa WHERE codigo = '$codigo' AND id_fondos = '$id_fondos' ORDER BY placa";
+        $query = "SELECT * FROM t_placa WHERE codigo = '$codigo' ORDER BY placa";
         $result = mysqli_query($link, $query);
         
         if ($result && mysqli_num_rows($result) > 0) {
@@ -149,16 +153,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
     }
 }
 
-// ==== DATOS DE FONDOS PARA EL SELECTOR DE NOMBRE =====
-$fondos_html = '<option value="">Seleccione el Fondo...</option>';
-$fondos_js = [];
-$query_fondos = $link->query("SELECT id_fondos, fondos FROM t_fondos ORDER BY fondos");
-if ($query_fondos) {
-    while ($fila_fondo = $query_fondos->fetch_assoc()) {
-        $fid_fondo = intval($fila_fondo['id_fondos']);
-        $fondos_js[$fid_fondo] = $fila_fondo['fondos'];
-        $seleccionado = (isset($_POST['id_fondos']) && intval($_POST['id_fondos']) === $fid_fondo) ? ' selected' : '';
-        $fondos_html .= '<option value="' . $fid_fondo . '"' . $seleccionado . '>' . htmlspecialchars($fila_fondo['fondos']) . '</option>';
+// ==== DATOS DE LUGARES PARA EL SELECTOR DE UBICACIÓN =====
+$lugares_html = '<option value="">Seleccione el Lugar...</option>';
+$lugares_html .= '<option value="0"' . ((isset($_POST['id_lugar']) && intval($_POST['id_lugar']) === 0) ? ' selected' : '') . '>Sin ubicación asignada</option>';
+$lugares_js = [0 => 'Sin ubicación asignada'];
+$query_lugares = $link->query("SELECT id_lugar, lugar FROM t_lugar ORDER BY id_lugar");
+if ($query_lugares) {
+    while ($fila_lugar = $query_lugares->fetch_assoc()) {
+        $lid_lugar = intval($fila_lugar['id_lugar']);
+        $lugares_js[$lid_lugar] = $fila_lugar['lugar'];
+        $seleccionado = (isset($_POST['id_lugar']) && intval($_POST['id_lugar']) === $lid_lugar) ? ' selected' : '';
+        $lugares_html .= '<option value="' . $lid_lugar . '"' . $seleccionado . '>' . htmlspecialchars($fila_lugar['lugar']) . '</option>';
     }
 }
 ?>
@@ -381,19 +386,19 @@ if ($query_fondos) {
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label for="id_fondos" class="form-label required-field">ID Fondos</label>
+                                        <label for="id_lugar" class="form-label required-field">ID Ubicación</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
-                                            <input type="number" class="form-control" id="id_fondos" name="id_fondos" required 
-                                                   value="<?php echo isset($_POST['id_fondos']) ? htmlspecialchars($_POST['id_fondos']) : ''; ?>">
+                                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                            <input type="number" class="form-control" id="id_lugar" name="id_lugar" required min="0" max="6"
+                                                   value="<?php echo isset($_POST['id_lugar']) ? htmlspecialchars($_POST['id_lugar']) : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="nombre_fondo" class="form-label">Nombre del Fondo</label>
+                                        <label for="nombre_lugar" class="form-label">Lugar de Ubicación</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-folder2-open"></i></span>
-                                            <select class="form-select" id="nombre_fondo">
-                                                <?php echo $fondos_html; ?>
+                                            <select class="form-select" id="nombre_lugar">
+                                                <?php echo $lugares_html; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -460,8 +465,9 @@ if ($query_fondos) {
 
                         <!-- Formulario de edición -->
                         <form method="POST" id="form-edicion">
+                            <input type="hidden" name="actualizar" value="1">
                             <input type="hidden" name="codigo" value="<?php echo htmlspecialchars($_POST['codigo']); ?>">
-                            <input type="hidden" name="id_fondos" value="<?php echo htmlspecialchars($_POST['id_fondos']); ?>">
+                            <input type="hidden" name="id_lugar" value="<?php echo htmlspecialchars($_POST['id_lugar']); ?>">
                             
                             <div class="table-responsive">
                                 <table class="table table-hover">
@@ -513,7 +519,7 @@ if ($query_fondos) {
                             </div>
                             
                             <div class="mt-3 d-flex align-items-center flex-wrap gap-3">
-                                <button type="submit" name="actualizar" class="btn btn-guardar-mep" id="btn-actualizar" disabled>
+                                <button type="submit" class="btn btn-guardar-mep" id="btn-actualizar" disabled>
                                     <i class="bi bi-save me-1"></i> Actualizar Seleccionados
                                 </button>
                                 <span class="text-muted small" id="contador-seleccionados">
@@ -527,6 +533,25 @@ if ($query_fondos) {
                         </div>
                         <?php endif; ?>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación -->
+    <div class="modal fade" id="modalConfirmacion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="prestamo-modal-header">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i> Confirmar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="prestamo-modal-body">
+                    <p id="confirmacionMensaje"></p>
+                </div>
+                <div class="prestamo-modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarSi">Sí, actualizar</button>
                 </div>
             </div>
         </div>
@@ -589,40 +614,66 @@ if ($query_fondos) {
                     return false;
                 }
                 
+                /* Comentado: se reemplaza por el modal de confirmación (patrón formulario_corregir_modelo_n.php)
                 return confirm('¿Está seguro de que desea actualizar los registros seleccionados?');
+                */
+                mostrarConfirmacion('¿Está seguro de que desea actualizar los registros seleccionados?', function() {
+                    document.getElementById('form-edicion').submit();
+                });
+                return false;
             });
+        });
+
+        // ==== Confirmación mediante modal (patrón formulario_corregir_modelo_n.php) ====
+        var confirmCallback = null;
+
+        function mostrarConfirmacion(mensaje, callback) {
+            document.getElementById('confirmacionMensaje').textContent = mensaje;
+            confirmCallback = callback;
+            var modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+            modal.show();
+        }
+
+        document.getElementById('btnConfirmarSi').addEventListener('click', function() {
+            if (confirmCallback) {
+                confirmCallback();
+                confirmCallback = null;
+            }
+            var modalEl = document.getElementById('modalConfirmacion');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
         });
     </script>
 
     <script>
-        const fondosData = <?php echo json_encode($fondos_js, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+        const lugaresData = <?php echo json_encode($lugares_js, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
-            const inputIdFondos = document.getElementById('id_fondos');
-            const selectNombreFondo = document.getElementById('nombre_fondo');
+            const inputIdLugar = document.getElementById('id_lugar');
+            const selectNombreLugar = document.getElementById('nombre_lugar');
 
             function cargarNombreDesdeId() {
-                const id = parseInt(inputIdFondos.value, 10);
-                if (!isNaN(id) && fondosData[id] !== undefined) {
-                    selectNombreFondo.value = String(id);
+                const id = parseInt(inputIdLugar.value, 10);
+                if (!isNaN(id) && lugaresData[id] !== undefined) {
+                    selectNombreLugar.value = String(id);
                 } else {
-                    selectNombreFondo.value = '';
+                    selectNombreLugar.value = '';
                 }
             }
 
             function cargarIdDesdeNombre() {
-                inputIdFondos.value = selectNombreFondo.value;
+                inputIdLugar.value = selectNombreLugar.value;
             }
 
-            inputIdFondos.addEventListener('keydown', function(event) {
+            inputIdLugar.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
                     cargarNombreDesdeId();
                 }
             });
 
-            inputIdFondos.addEventListener('blur', cargarNombreDesdeId);
-            selectNombreFondo.addEventListener('change', cargarIdDesdeNombre);
+            inputIdLugar.addEventListener('blur', cargarNombreDesdeId);
+            selectNombreLugar.addEventListener('change', cargarIdDesdeNombre);
         });
     </script>
     

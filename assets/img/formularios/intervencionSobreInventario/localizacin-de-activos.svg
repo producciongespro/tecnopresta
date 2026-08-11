@@ -1,0 +1,152 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<!-- Paleta Institucional MEP -->
+
+<linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#164687"></stop>
+<stop offset="100%" stop-color="#021A53"></stop>
+</linearGradient>
+
+<linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#2D67B1"></stop>
+<stop offset="100%" stop-color="#164687"></stop>
+</linearGradient>
+
+<linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#CFAC65"></stop>
+<stop offset="100%" stop-color="#B89243"></stop>
+</linearGradient>
+
+<linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#E2E8F0"></stop>
+<stop offset="100%" stop-color="#C7D0DA"></stop>
+</linearGradient>
+
+<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+<feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+</filter>
+
+</defs>
+
+<!-- Marco -->
+
+<g filter="url(#shadow)">
+<rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Encabezado -->
+
+<g filter="url(#shadow)">
+<rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+<circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Dashboard -->
+
+<g filter="url(#shadow)">
+
+<rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+<!-- Laptop -->
+
+<rect x="170" y="146" width="92" height="56" rx="8" fill="white"></rect>
+
+<rect x="178" y="154" width="76" height="40" rx="4" fill="url(#mepGray)"></rect>
+
+<rect x="184" y="162" width="40" height="4" rx="2" fill="#164687"></rect>
+
+<rect x="184" y="174" width="30" height="4" rx="2" fill="#164687"></rect>
+
+<!-- Etiqueta de placa -->
+
+<rect x="194" y="183" width="44" height="10" rx="4" fill="url(#mepGold)"></rect>
+
+<text x="199" y="191" font-size="6" font-family="Arial" font-weight="bold" fill="white">
+PLACA
+</text>
+
+<!-- Lupa -->
+
+<circle cx="306" cy="176" r="26" fill="white"></circle>
+
+<circle cx="301" cy="171" r="10" stroke="#164687" stroke-width="4"></circle>
+
+<path d="M309 179L319 189" stroke="#164687" stroke-width="4" stroke-linecap="round"></path>
+
+<!-- Conector -->
+
+<path d="M262 174H280" stroke="white" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 6"></path>
+
+</g>
+
+<!-- Búsqueda por Placa -->
+
+<g filter="url(#shadow)">
+
+<circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+<rect x="94" y="340" width="52" height="34" rx="7" fill="white"></rect>
+
+<rect x="102" y="350" width="36" height="6" rx="3" fill="url(#mepGold)"></rect>
+
+<text x="105" y="355" font-size="6" font-family="Arial" font-weight="bold" fill="white">
+PLACA
+</text>
+
+<circle cx="142" cy="380" r="8" fill="white"></circle>
+
+<path d="M147 385L154 392" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Inventario -->
+
+<g filter="url(#shadow)">
+
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+<rect x="228" y="328" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="350" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="372" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="394" width="56" height="14" rx="4" fill="white"></rect>
+
+<circle cx="274" cy="402" r="6" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Búsqueda por Serial -->
+
+<g filter="url(#shadow)">
+
+<circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+<rect x="366" y="336" width="52" height="44" rx="8" fill="white"></rect>
+
+<rect x="374" y="346" width="36" height="4" rx="2" fill="#164687"></rect>
+
+<rect x="374" y="356" width="28" height="4" rx="2" fill="#164687"></rect>
+
+<rect x="374" y="366" width="32" height="4" rx="2" fill="#164687"></rect>
+
+<circle cx="418" cy="332" r="10" fill="url(#mepGold)"></circle>
+
+<path d="M415 332L418 335L423 328" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Base -->
+
+<g filter="url(#shadow)">
+<rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.28"></rect>
+
+</svg>

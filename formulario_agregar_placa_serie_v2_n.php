@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+/*
 $tienellave = ($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 3 || $_SESSION['tipo'] == 4);
 if ($tienellave == false) {
     echo '<script language="javascript">
@@ -8,7 +11,7 @@ if ($tienellave == false) {
           </script>';
     exit();
 }
-
+*/
 require_once("conexion.php");
 $link = $mysqli;
 
@@ -25,8 +28,19 @@ if (!mysqli_set_charset($link, "utf8")) {
 if (!isset($_GET['idx']) || !is_numeric($_GET['idx'])) {
     die("ID de activo no válido");
 }
+
+// === Verificar sesión de usuario Azure ===
+require_once __DIR__ . '/usuarioAzure.php';
+$usuario_azure = obtenerUsuarioSesion();
+
+if (!$usuario_azure) {
+    header("Location: index.html");
+    exit();
+}
+
 //$activo = '405';
 $activo = intval($_GET['idx']);
+//$logcodigo = $_SESSION['codigo'] ?? '';
 $logcodigo = $_SESSION['codigo'] ?? '';
 
 // Consulta para obtener información del activo
@@ -136,7 +150,7 @@ $imagen = $respuesta['imagen'];
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="formulario_busqueda_creacion_activo.php">
+                        <a class="nav-link" href="formulario_busqueda_creacion_activo_n.php">
                             <i class="bi bi-arrow-left-circle"></i> Regresar
                         </a>
                     </li>   
@@ -302,7 +316,7 @@ $imagen = $respuesta['imagen'];
             
             // Enviar datos por AJAX
             $.ajax({
-                url: 'guardar_placa.php',
+                url: 'guardar_placa_n.php',
                 type: 'POST',
                 data: $(this).serialize(),
                 dataType: 'json',

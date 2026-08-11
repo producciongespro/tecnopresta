@@ -127,9 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
     <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         .table-responsive {
             max-height: 500px;
@@ -170,16 +170,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="herramientas.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-all" viewBox="0 0 16 16">
-                <path d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.7 8.7 0 0 0-1.921-.306 7 7 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254l-.042-.028a.147.147 0 0 1 0-.252l.042-.028zM9.3 10.386q.102 0 .223.006c.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96z"/>
-                <path d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254l-.042-.028a.147.147 0 0 1 0-.252l.042-.028 4.012-2.954a.5.5 0 0 0 .106-.699"/>
-                </svg> Regresar</a>
+                <a class="nav-link" href="herramientas.php"><i class="bi bi-reply-all"></i> Regresar</a>
             </li> 
             <li class="nav-item">
-                <a class="nav-link" href="gameover.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
-                <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
-                <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"/>
-                </svg> Cerrar Sesión</a>
+                <a class="nav-link" href="gameover.php"><i class="bi bi-door-open"></i> Cerrar Sesión</a>
             </li>  
             </ul>
         </div>  
@@ -189,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
             <div class="col-lg-10">
                 <div class="card shadow">
                     <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-edit me-2"></i>Edición de Placas y Seriales</h3>
+                        <h3 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edición de Placas y Seriales</h3>
                     </div>
                     <div class="card-body">
                         <!-- Mostrar mensajes -->
@@ -215,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" name="buscar" class="btn btn-primary">
-                                        <i class="fas fa-search me-1"></i> Buscar
+                                        <i class="bi bi-search me-1"></i> Buscar
                                     </button>
                                 </div>
                             </div>
@@ -225,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                         <!-- Contador de registros -->
                         <div class="contador-container">
                             <div class="contador-registros">
-                                <i class="fas fa-database me-2"></i>
+                                <i class="bi bi-database me-2"></i>
                                 Registros encontrados: 
                                 <span id="contador"><?php echo $totalRegistros; ?></span>
                                 <?php if ($totalRegistros == 1): ?>
@@ -285,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                             
                             <div class="mt-3">
                                 <button type="submit" name="actualizar" class="btn btn-success" id="btn-actualizar" disabled>
-                                    <i class="fas fa-save me-1"></i> Actualizar Seleccionados
+                                    <i class="bi bi-save me-1"></i> Actualizar Seleccionados
                                 </button>
                                 <span class="ms-2 text-muted" id="contador-seleccionados">
                                     (0 seleccionados)
@@ -294,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
                         </form>
                         <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar'])): ?>
                         <div class="alert alert-warning mt-3">
-                            <i class="fas fa-exclamation-triangle me-2"></i> No se encontraron registros con los criterios de búsqueda proporcionados.
+                            <i class="bi bi-exclamation-triangle me-2"></i> No se encontraron registros con los criterios de búsqueda proporcionados.
                         </div>
                         <?php endif; ?>
                     </div>
@@ -304,9 +298,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
     </div>
 
     <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function() {
             // Habilitar/deshabilitar campos de edición según checkbox

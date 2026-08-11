@@ -32,13 +32,13 @@ if (!$usuario_azure) {
     echo json_encode(['success' => false, 'message' => 'Sesion invalida']);
     exit;
 }
-
+/*
 if (!esUsuarioRoot()) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Acceso no autorizado']);
     exit;
 }
-
+*/
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 if (!$action) {

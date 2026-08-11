@@ -28,14 +28,14 @@ if (!$usuario_azure) {
     echo json_encode(['success' => false, 'message' => 'Sesion invalida']);
     exit;
 }
-
+/*
 // Solo Root puede acceder a este endpoint
 if (!esUsuarioRoot()) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Acceso no autorizado']);
     exit;
 }
-
+*/
 try {
     $conexionBD = BD::crearInstancia();
 

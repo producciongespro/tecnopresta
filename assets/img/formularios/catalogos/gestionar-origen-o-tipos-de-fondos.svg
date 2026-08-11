@@ -1,0 +1,160 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<!-- Paleta Institucional MEP -->
+
+<linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#164687"></stop>
+<stop offset="100%" stop-color="#021A53"></stop>
+</linearGradient>
+
+<linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#2D67B1"></stop>
+<stop offset="100%" stop-color="#164687"></stop>
+</linearGradient>
+
+<linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#D8B36A"></stop>
+<stop offset="100%" stop-color="#B68A35"></stop>
+</linearGradient>
+
+<linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#E7ECF2"></stop>
+<stop offset="100%" stop-color="#C9D3DE"></stop>
+</linearGradient>
+
+<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+<feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+</filter>
+
+</defs>
+
+<!-- Marco -->
+
+<g filter="url(#shadow)">
+<rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Encabezado -->
+
+<g filter="url(#shadow)">
+<rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+<circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Panel Principal -->
+
+<g filter="url(#shadow)">
+
+<rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+<!-- Documento de Fondo -->
+
+<rect x="165" y="140" width="68" height="84" rx="8" fill="white"></rect>
+
+<rect x="178" y="156" width="40" height="5" rx="2.5" fill="#164687"></rect>
+
+<rect x="178" y="171" width="30" height="5" rx="2.5" fill="#164687"></rect>
+
+<rect x="178" y="186" width="35" height="5" rx="2.5" fill="#164687"></rect>
+
+<!-- Símbolo Monetario -->
+
+<circle cx="200" cy="205" r="10" fill="url(#mepGold)"></circle>
+
+<path d="M200 198V212" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+<path d="M195 201C195 198 205 198 205 201
+C205 204 195 204 195 207
+C195 210 205 210 205 207" stroke="white" stroke-width="2"></path>
+
+<!-- Conector -->
+
+<path d="M233 182H270" stroke="white" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"></path>
+
+<!-- Catálogo -->
+
+<rect x="280" y="144" width="60" height="76" rx="10" fill="white"></rect>
+
+<rect x="292" y="158" width="34" height="4" rx="2" fill="#164687"></rect>
+
+<rect x="292" y="171" width="26" height="4" rx="2" fill="#164687"></rect>
+
+<rect x="292" y="184" width="30" height="4" rx="2" fill="#164687"></rect>
+
+<!-- Lápiz -->
+
+<path d="M313 198L325 186L331 192L319 204L311 206Z" fill="url(#mepGold)"></path>
+
+</g>
+
+<!-- Crear Fondos -->
+
+<g filter="url(#shadow)">
+
+<circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+<circle cx="120" cy="350" r="18" fill="white"></circle>
+
+<path d="M120 342V358" stroke="#164687" stroke-width="3" stroke-linecap="round"></path>
+
+<path d="M112 350H128" stroke="#164687" stroke-width="3" stroke-linecap="round"></path>
+
+<circle cx="146" cy="386" r="9" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Catálogo Presupuestario -->
+
+<g filter="url(#shadow)">
+
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+<rect x="228" y="326" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="348" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="370" width="56" height="14" rx="4" fill="white"></rect>
+
+<rect x="228" y="392" width="56" height="14" rx="4" fill="white"></rect>
+
+<circle cx="276" cy="399" r="6" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Fondos Tecnológicos -->
+
+<g filter="url(#shadow)">
+
+<circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+<!-- Laptop -->
+
+<rect x="372" y="340" width="40" height="24" rx="4" fill="white"></rect>
+
+<rect x="368" y="365" width="48" height="6" rx="3" fill="white"></rect>
+
+<!-- Moneda -->
+
+<circle cx="418" cy="332" r="10" fill="url(#mepGold)"></circle>
+
+<path d="M418 326V338" stroke="white" stroke-width="2" stroke-linecap="round"></path>
+
+<path d="M414 329C414 327 422 327 422 329
+C422 331 414 331 414 333
+C414 335 422 335 422 333" stroke="white" stroke-width="1.8"></path>
+
+</g>
+
+<!-- Base -->
+
+<g filter="url(#shadow)">
+<rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja Institucional -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.28"></rect>
+
+</svg>

@@ -35,12 +35,13 @@ if (!$usuario_azure) {
     header('Location: index.html');
     exit;
 }
-
+/*
 // Redirigir si no es Root
 if (!esUsuarioRoot()) {
     header('Location: navegar.php?ruta=formulario_menu_principal.php');
     exit;
 }
+*/
 
 // Construir ruta de regreso
 $ruta_regreso = 'navegar.php?ruta=formulario_menu_principal.php';

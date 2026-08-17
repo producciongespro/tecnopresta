@@ -1,0 +1,137 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Main Remote Support Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Laptop / Remote Access -->
+  <rect x="176" y="150" width="90" height="58" rx="8" fill="white"></rect>
+
+  <rect x="164" y="214" width="114" height="8" rx="4" fill="white"></rect>
+
+  <!-- Remote Connection -->
+  <circle cx="306" cy="180" r="26" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M292 180C292 172 298 166 306 166C314 166 320 172 320 180" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"></path>
+
+  <path d="M298 180C298 176 301 172 306 172C311 172 314 176 314 180" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"></path>
+
+  <circle cx="306" cy="184" r="4" fill="white"></circle>
+
+  <!-- Connection Line -->
+  <path d="M266 180H280" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Assigned Technical Tickets -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Ticket -->
+  <path d="M92 342H148C152 342 156 346 156 350V356C150 356 146 360 146 366C146 372 150 376 156 376V382C156 386 152 390 148 390H92C88 390 84 386 84 382V376C90 376 94 372 94 366C94 360 90 356 84 356V350C84 346 88 342 92 342Z" fill="white"></path>
+
+  <rect x="102" y="356" width="30" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="102" y="370" width="22" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Review Indicator -->
+  <circle cx="142" cy="340" r="9" fill="url(#mepGoldSoft)"></circle>
+
+</g>
+
+<!-- Remote Assistance -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Screen -->
+  <rect x="228" y="332" width="56" height="42" rx="6" fill="white"></rect>
+
+  <!-- Headset -->
+  <path d="M240 354C240 344 246 338 256 338C266 338 272 344 272 354" stroke="url(#mepBlue)" stroke-width="3" fill="none"></path>
+
+  <rect x="238" y="352" width="5" height="10" rx="2" fill="url(#mepBlue)"></rect>
+
+  <rect x="269" y="352" width="5" height="10" rx="2" fill="url(#mepBlue)"></rect>
+
+  <!-- Assistance Badge -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Escalation to On-Site Support -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Educational Center -->
+  <path d="M390 336L364 348H416L390 336Z" fill="white"></path>
+
+  <rect x="374" y="350" width="8" height="18" rx="2" fill="white"></rect>
+
+  <rect x="386" y="350" width="8" height="18" rx="2" fill="white"></rect>
+
+  <rect x="398" y="350" width="8" height="18" rx="2" fill="white"></rect>
+
+  <rect x="360" y="372" width="60" height="6" rx="3" fill="white"></rect>
+
+  <!-- Escalation Arrow -->
+  <path d="M366 392H414" stroke="url(#mepGoldSoft)" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M404 384L414 392L404 400" stroke="url(#mepGoldSoft)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.35"></rect>
+
+</svg>

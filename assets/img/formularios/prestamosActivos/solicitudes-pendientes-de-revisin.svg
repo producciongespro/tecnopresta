@@ -1,0 +1,155 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Colores institucionales -->
+  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#192952"></stop>
+    <stop offset="100%" stop-color="#0035A0"></stop>
+  </linearGradient>
+
+  <linearGradient id="goldMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#F2DAB1"></stop>
+  </linearGradient>
+
+  <linearGradient id="orangeMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F59E0B"></stop>
+    <stop offset="100%" stop-color="#FBBF24"></stop>
+  </linearGradient>
+
+  <linearGradient id="greenMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#34D399"></stop>
+    <stop offset="100%" stop-color="#059669"></stop>
+  </linearGradient>
+
+  <linearGradient id="redMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#EF4444"></stop>
+    <stop offset="100%" stop-color="#DC2626"></stop>
+  </linearGradient>
+
+  <linearGradient id="lightMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#FFFFFF"></stop>
+    <stop offset="100%" stop-color="#F8FAFC"></stop>
+  </linearGradient>
+
+  <!-- sombra -->
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.16"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- CONTENEDOR PRINCIPAL -->
+<g filter="url(#shadow)">
+
+  <rect x="92" y="78" width="328" height="348" rx="32" fill="url(#blueMain)"></rect>
+
+  <rect x="118" y="104" width="276" height="296" rx="24" fill="url(#lightMain)"></rect>
+
+</g>
+
+<!-- HEADER -->
+<g filter="url(#shadow)">
+
+  <rect x="188" y="54" width="136" height="54" rx="16" fill="url(#blueMain)"></rect>
+
+  <circle cx="256" cy="81" r="7" fill="white"></circle>
+
+</g>
+
+<!-- PANEL CENTRAL -->
+<g filter="url(#shadow)">
+
+  <rect x="146" y="138" width="220" height="224" rx="26" fill="white" stroke="#D9D9D9" stroke-width="4"></rect>
+
+</g>
+
+<!-- LISTA DE SOLICITUDES -->
+<g filter="url(#shadow)">
+
+  <!-- solicitud 1 -->
+  <rect x="170" y="170" width="172" height="44" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
+
+  <circle cx="194" cy="192" r="12" fill="url(#orangeMain)"></circle>
+
+  <path d="M194 186V192L198 196" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <rect x="218" y="184" width="74" height="7" rx="3.5" fill="#CBD5E1"></rect>
+
+  <rect x="218" y="197" width="48" height="5" rx="2.5" fill="#D6DCE5"></rect>
+
+</g>
+
+<g filter="url(#shadow)">
+
+  <!-- solicitud 2 -->
+  <rect x="170" y="228" width="172" height="44" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
+
+  <circle cx="194" cy="250" r="12" fill="url(#orangeMain)"></circle>
+
+  <path d="M194 244V250L198 254" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <rect x="218" y="242" width="80" height="7" rx="3.5" fill="#CBD5E1"></rect>
+
+  <rect x="218" y="255" width="52" height="5" rx="2.5" fill="#D6DCE5"></rect>
+
+</g>
+
+<!-- PANEL DE REVISIÓN -->
+<g filter="url(#shadow)">
+
+  <rect x="182" y="294" width="148" height="42" rx="14" fill="url(#blueMain)"></rect>
+
+  <!-- check -->
+  <circle cx="218" cy="315" r="12" fill="url(#greenMain)"></circle>
+
+  <path d="M213 315L217 319L224 311" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- x -->
+  <circle cx="292" cy="315" r="12" fill="url(#redMain)"></circle>
+
+  <path d="M287 310L297 320" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M297 310L287 320" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- divisor -->
+  <line x1="256" y1="304" x2="256" y2="326" stroke="#5B6B91" stroke-width="2"></line>
+
+</g>
+
+<!-- BADGE SUPERIOR -->
+<g filter="url(#shadow)">
+
+  <circle cx="348" cy="146" r="28" fill="url(#goldMain)"></circle>
+
+  <!-- clipboard -->
+  <rect x="338" y="136" width="20" height="24" rx="4" fill="#192952"></rect>
+
+  <rect x="343" y="130" width="10" height="8" rx="4" fill="#192952"></rect>
+
+  <!-- reloj -->
+  <circle cx="356" cy="158" r="7" fill="white"></circle>
+
+  <path d="M356 154V158L359 160" stroke="#192952" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- FOOTER -->
+<g filter="url(#shadow)">
+
+  <rect x="164" y="382" width="184" height="40" rx="16" fill="url(#blueMain)"></rect>
+
+  <!-- mini reloj -->
+  <circle cx="192" cy="402" r="8" fill="url(#goldMain)"></circle>
+
+  <path d="M192 398V402L195 404" stroke="#192952" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- líneas -->
+  <rect x="214" y="392" width="72" height="7" rx="3.5" fill="white"></rect>
+
+  <rect x="214" y="404" width="50" height="6" rx="3" fill="#D6DCE5"></rect>
+
+</g>
+
+</svg>

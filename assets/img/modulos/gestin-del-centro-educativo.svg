@@ -1,0 +1,149 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Centro Educativo + Usuarios -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Escuela -->
+  <rect x="220" y="148" width="72" height="54" rx="6" fill="white"></rect>
+
+  <polygon points="256,134 210,160 302,160" fill="url(#mepGold)"></polygon>
+
+  <rect x="246" y="176" width="20" height="26" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="228" y="170" width="10" height="10" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="274" y="170" width="10" height="10" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Usuario asociado -->
+  <circle cx="186" cy="182" r="14" fill="url(#mepGold)"></circle>
+
+  <circle cx="186" cy="176" r="4" fill="white"></circle>
+
+  <path d="M178 188C180 184 183 182 186 182C189 182 192 184 194 188" stroke="white" stroke-width="2" stroke-linecap="round"></path>
+
+  <!-- Relación -->
+  <path d="M200 182H220" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Indicador de gestión -->
+  <circle cx="324" cy="182" r="14" fill="url(#mepGold)"></circle>
+
+  <path d="M324 174V190" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M316 182H332" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Información Institucional -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <rect x="96" y="334" width="48" height="56" rx="8" fill="white"></rect>
+
+  <rect x="106" y="348" width="28" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="106" y="360" width="24" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="106" y="372" width="30" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+</g>
+
+<!-- Administración del Centro -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Organigrama -->
+  <circle cx="256" cy="338" r="8" fill="white"></circle>
+
+  <circle cx="238" cy="376" r="7" fill="white"></circle>
+
+  <circle cx="274" cy="376" r="7" fill="white"></circle>
+
+  <path d="M256 346V362" stroke="white" stroke-width="3"></path>
+
+  <path d="M238 362H274" stroke="white" stroke-width="3"></path>
+
+  <path d="M238 362V370M274 362V370" stroke="white" stroke-width="2"></path>
+
+  <!-- Confirmación -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Asociación Usuario-Centro -->
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Usuario -->
+  <circle cx="380" cy="352" r="10" fill="white"></circle>
+
+  <path d="M368 372C372 362 376 358 380 358C384 358 388 362 392 372" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Escuela -->
+  <rect x="396" y="344" width="22" height="18" rx="3" fill="white"></rect>
+
+  <polygon points="407,334 392,344 422,344" fill="white"></polygon>
+
+  <!-- Vinculación -->
+  <path d="M388 352H396" stroke="url(#mepGold)" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Indicador -->
+  <circle cx="420" cy="336" r="9" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja lateral -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.30"></rect>
+
+</svg>

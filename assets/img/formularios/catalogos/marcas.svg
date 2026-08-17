@@ -1,0 +1,127 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Top Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Main Brand Catalog Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Brand Tag -->
+  <path d="M188 154H274L316 196L274 238H188C176 238 166 228 166 216V176C166 164 176 154 188 154Z" fill="white"></path>
+
+  <circle cx="194" cy="196" r="8" fill="url(#mepBlue)"></circle>
+
+  <!-- Check / Certification -->
+  <path d="M224 196L238 210L266 182" stroke="url(#mepGoldSoft)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Brand Lines -->
+  <rect x="300" y="162" width="28" height="8" rx="4" fill="#D2B06C"></rect>
+
+  <rect x="300" y="180" width="38" height="8" rx="4" fill="white" opacity="0.95"></rect>
+
+  <rect x="300" y="198" width="24" height="8" rx="4" fill="white" opacity="0.85"></rect>
+
+</g>
+
+<!-- Technology Brand -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Laptop -->
+  <rect x="96" y="336" width="48" height="30" rx="5" fill="white"></rect>
+
+  <rect x="90" y="370" width="60" height="8" rx="4" fill="white"></rect>
+
+  <!-- Brand Badge -->
+  <circle cx="142" cy="334" r="10" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M138 334L141 337L146 330" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Brand Registry -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Catalog Card -->
+  <rect x="232" y="332" width="48" height="62" rx="8" fill="white"></rect>
+
+  <rect x="242" y="346" width="28" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="360" width="22" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="374" width="18" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Seal -->
+  <circle cx="256" cy="408" r="12" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M251 408L255 412L262 404" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Brand Portfolio -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Multiple Tags -->
+  <path d="M372 340H392L404 352L392 364H372C367 364 364 361 364 356V348C364 343 367 340 372 340Z" fill="white"></path>
+
+  <path d="M384 366H404L416 378L404 390H384C379 390 376 387 376 382V374C376 369 379 366 384 366Z" fill="white" opacity="0.85"></path>
+
+  <circle cx="376" cy="352" r="3" fill="url(#mepBlue)"></circle>
+
+  <circle cx="388" cy="378" r="3" fill="url(#mepBlue)"></circle>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.40"></rect>
+
+</svg>

@@ -1,0 +1,174 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#B89243"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Dashboard Principal -->
+
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Asignación Regional Principal -->
+
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Soportista Central -->
+
+  <circle cx="256" cy="156" r="18" fill="white"></circle>
+
+  <circle cx="256" cy="150" r="5" fill="url(#mepBlueSoft)"></circle>
+
+  <path d="M245 168
+           C248 162 252 160 256 160
+           C260 160 264 162 267 168" stroke="url(#mepBlueSoft)" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <!-- Dirección Regional 1 -->
+
+  <path d="M184 198L170 206V224H198V206Z" fill="white"></path>
+
+  <rect x="180" y="210" width="8" height="14" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Dirección Regional 2 -->
+
+  <path d="M256 198L242 206V224H270V206Z" fill="white"></path>
+
+  <rect x="252" y="210" width="8" height="14" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Dirección Regional 3 -->
+
+  <path d="M328 198L314 206V224H342V206Z" fill="white"></path>
+
+  <rect x="324" y="210" width="8" height="14" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Líneas de Asignación -->
+
+  <path d="M244 172L188 196" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M256 176V194" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M268 172L324 196" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Nodo de distribución -->
+
+  <circle cx="256" cy="184" r="8" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Asignar Soportista -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <circle cx="118" cy="352" r="16" fill="white"></circle>
+
+  <circle cx="118" cy="346" r="4" fill="url(#mepBlueSoft)"></circle>
+
+  <path d="M109 362
+           C112 356 115 354 118 354
+           C121 354 124 356 127 362" stroke="url(#mepBlueSoft)" stroke-width="2.3" stroke-linecap="round"></path>
+
+  <circle cx="146" cy="336" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M146 330V342" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M140 336H152" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Administración Regional -->
+
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <rect x="232" y="332" width="48" height="56" rx="6" fill="white"></rect>
+
+  <rect x="242" y="346" width="26" height="3" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="358" width="20" height="3" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="370" width="24" height="3" rx="1.5" fill="url(#mepBlueSoft)"></rect>
+
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Regionales Educativas -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Regional Central -->
+
+  <circle cx="392" cy="344" r="8" fill="white"></circle>
+
+  <!-- Regionales Hijas -->
+
+  <circle cx="374" cy="378" r="6" fill="white"></circle>
+
+  <circle cx="392" cy="388" r="6" fill="white"></circle>
+
+  <circle cx="410" cy="378" r="6" fill="white"></circle>
+
+  <!-- Conexiones -->
+
+  <path d="M392 352L374 372" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M392 352L392 382" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M392 352L410 372" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Base -->
+
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja Institucional -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.30"></rect>
+
+</svg>

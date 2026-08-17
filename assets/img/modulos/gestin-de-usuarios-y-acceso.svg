@@ -1,0 +1,132 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Top Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Main Access Management Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Central User -->
+  <circle cx="256" cy="168" r="20" fill="white"></circle>
+
+  <path d="M226 218C232 192 244 184 256 184C268 184 280 192 286 218" fill="white"></path>
+
+  <!-- Permission Nodes -->
+  <circle cx="196" cy="184" r="12" fill="#D2B06C"></circle>
+
+  <circle cx="316" cy="184" r="12" fill="#D2B06C"></circle>
+
+  <!-- Connections -->
+  <path d="M214 184H236" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M276 184H298" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+  <!-- Check -->
+  <path d="M192 184L196 188L202 180" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Key -->
+  <circle cx="316" cy="184" r="4" fill="white"></circle>
+
+  <path d="M320 184H330" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M326 184V178" stroke="white" stroke-width="2" stroke-linecap="round"></path>
+
+</g>
+
+<!-- User Management -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Multiple Users -->
+  <circle cx="120" cy="346" r="12" fill="white"></circle>
+
+  <circle cx="102" cy="356" r="8" fill="white" opacity="0.9"></circle>
+
+  <circle cx="138" cy="356" r="8" fill="white" opacity="0.9"></circle>
+
+  <path d="M98 386C102 370 110 364 120 364C130 364 138 370 142 386" fill="white"></path>
+
+</g>
+
+<!-- Roles -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Shield -->
+  <path d="M256 330L282 340V360C282 380 270 394 256 400C242 394 230 380 230 360V340L256 330Z" fill="url(#mepBlue)"></path>
+
+  <!-- Star -->
+  <path d="M256 346L260 354L268 355L262 361L264 370L256 366L248 370L250 361L244 355L252 354Z" fill="white"></path>
+
+  <!-- Role Lines -->
+  <rect x="236" y="410" width="40" height="8" rx="4" fill="url(#mepBlueSoft)"></rect>
+
+</g>
+
+<!-- Access Control -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Lock -->
+  <rect x="372" y="356" width="36" height="30" rx="6" fill="white"></rect>
+
+  <path d="M378 356V344C378 334 384 328 390 328C396 328 402 334 402 344V356" stroke="white" stroke-width="5" stroke-linecap="round"></path>
+
+  <!-- Keyhole -->
+  <circle cx="390" cy="370" r="4" fill="url(#mepBlue)"></circle>
+
+  <rect x="388" y="372" width="4" height="8" rx="2" fill="url(#mepBlue)"></rect>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.45"></rect>
+
+</svg>

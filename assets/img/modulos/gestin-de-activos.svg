@@ -1,0 +1,146 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Dashboard principal -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Encabezado -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Ecosistema de Activos Tecnológicos -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Computadora portátil -->
+  <rect x="170" y="152" width="58" height="36" rx="5" fill="white"></rect>
+
+  <rect x="176" y="158" width="46" height="24" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="164" y="190" width="70" height="8" rx="4" fill="white"></rect>
+
+  <!-- Tablet -->
+  <rect x="246" y="144" width="34" height="58" rx="6" fill="white"></rect>
+
+  <rect x="252" y="152" width="22" height="40" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <circle cx="263" cy="196" r="2.5" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Proyector -->
+  <rect x="300" y="158" width="52" height="28" rx="6" fill="white"></rect>
+
+  <circle cx="336" cy="172" r="8" fill="url(#mepGold)"></circle>
+
+  <circle cx="336" cy="172" r="4" fill="white"></circle>
+
+  <rect x="308" y="194" width="36" height="4" rx="2" fill="white"></rect>
+
+  <!-- Línea inferior -->
+  <path d="M180 214H332" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.45"></path>
+
+</g>
+
+<!-- Registro -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <rect x="96" y="334" width="48" height="56" rx="8" fill="white"></rect>
+
+  <rect x="106" y="348" width="28" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+  <rect x="106" y="360" width="24" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+  <rect x="106" y="372" width="30" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Nuevo activo -->
+  <circle cx="148" cy="336" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M148 331V341" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M143 336H153" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Control y Actualización -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Equipo -->
+  <rect x="230" y="334" width="52" height="34" rx="6" fill="white"></rect>
+
+  <rect x="238" y="342" width="36" height="18" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Flechas de actualización -->
+  <path d="M238 388C244 396 268 396 274 388" stroke="url(#mepBlue)" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M274 388L268 383" stroke="url(#mepBlue)" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Validación -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Inventario Controlado -->
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Escudo -->
+  <path d="M392 330L416 340V360C416 375 406 386 392 392C378 386 368 375 368 360V340L392 330Z" fill="white"></path>
+
+  <!-- Código de inventario -->
+  <rect x="380" y="348" width="24" height="14" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="384" y="352" width="16" height="2" rx="1" fill="white"></rect>
+
+  <rect x="384" y="357" width="12" height="2" rx="1" fill="white"></rect>
+
+  <!-- Placa -->
+  <circle cx="420" cy="336" r="9" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja lateral institucional -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.30"></rect>
+
+</svg>

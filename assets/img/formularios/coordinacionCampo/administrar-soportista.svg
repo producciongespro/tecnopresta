@@ -1,0 +1,174 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#B89243"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Dashboard Principal -->
+
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Administración de Soportistas -->
+
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Soportista Principal -->
+
+  <circle cx="256" cy="164" r="18" fill="white"></circle>
+
+  <circle cx="256" cy="158" r="5" fill="url(#mepBlueSoft)"></circle>
+
+  <path d="M245 176
+           C248 170 252 168 256 168
+           C260 168 264 170 267 176" stroke="url(#mepBlueSoft)" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <!-- Engranaje administración -->
+
+  <circle cx="256" cy="208" r="16" fill="url(#mepGold)"></circle>
+
+  <circle cx="256" cy="208" r="6" fill="white"></circle>
+
+  <rect x="254" y="188" width="4" height="8" rx="2" fill="url(#mepGold)"></rect>
+  <rect x="254" y="220" width="4" height="8" rx="2" fill="url(#mepGold)"></rect>
+  <rect x="236" y="206" width="8" height="4" rx="2" fill="url(#mepGold)"></rect>
+  <rect x="268" y="206" width="8" height="4" rx="2" fill="url(#mepGold)"></rect>
+
+  <!-- Áreas de soporte -->
+
+  <!-- Mesa de Servicio -->
+
+  <rect x="182" y="150" width="36" height="24" rx="4" fill="white"></rect>
+
+  <rect x="188" y="156" width="24" height="12" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Soporte Virtual -->
+
+  <rect x="294" y="148" width="30" height="40" rx="4" fill="white"></rect>
+
+  <rect x="299" y="154" width="20" height="24" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Soporte en Sitio -->
+
+  <path d="M198 206
+           L186 214
+           V226
+           H210
+           V214
+           Z" fill="white"></path>
+
+  <rect x="193" y="214" width="10" height="12" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Conexiones -->
+
+  <path d="M220 162H236" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M276 162H292" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M220 214H238" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Asignación -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <circle cx="120" cy="352" r="18" fill="white"></circle>
+
+  <circle cx="120" cy="346" r="5" fill="url(#mepBlueSoft)"></circle>
+
+  <path d="M110 362C114 356 117 354 120 354C123 354 126 356 130 362" stroke="url(#mepBlueSoft)" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <circle cx="148" cy="336" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M148 330V342" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M142 336H154" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Gestión -->
+
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <circle cx="242" cy="350" r="9" fill="white"></circle>
+
+  <circle cx="270" cy="350" r="9" fill="white"></circle>
+
+  <rect x="236" y="382" width="40" height="8" rx="4" fill="url(#mepBlueSoft)"></rect>
+
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Distribución de Soportistas -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <circle cx="392" cy="350" r="10" fill="white"></circle>
+
+  <circle cx="374" cy="376" r="8" fill="white"></circle>
+
+  <circle cx="410" cy="376" r="8" fill="white"></circle>
+
+  <path d="M392 360L374 370" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M392 360L410 370" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Base -->
+
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja Institucional -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.30"></rect>
+
+</svg>

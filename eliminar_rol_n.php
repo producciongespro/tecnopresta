@@ -124,6 +124,10 @@ $nrol = mysqli_fetch_array($qr2)['rol'];
 
 mysqli_query($link, "UPDATE usuarios_roles SET eliminado = 1 WHERE id = $xeliminar");
 
+// Desactivar los ámbitos del prestador (soft delete, conserva histórico)
+mysqli_query($link, "UPDATE t_ambitos_prestador SET eliminado = 1, updated_at = NOW()
+                     WHERE usuarios_roles_id = $xeliminar AND eliminado = 0");
+
 verificacion($xmail, $cedula, $nrol, $correo, $passemail, $estafecha);
 
 mysqli_close($link);

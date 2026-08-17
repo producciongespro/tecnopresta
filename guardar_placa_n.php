@@ -29,7 +29,7 @@ $placa = trim($_POST['placa'] ?? '');
 $serial = trim($_POST['serial'] ?? '');
 $id_activo = intval($_POST['id_activo'] ?? 0);
 $id_fondos = intval($_POST['id_fondos'] ?? 0);
-$codigo = $_SESSION['codigo'] ?? '';
+$codigo = $usuario_azure['codigoPresu'] ?? '';
 
 // Validaciones básicas
 if (empty($placa) || empty($serial) || $id_activo <= 0 || $id_fondos <= 0) {

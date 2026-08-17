@@ -1,0 +1,142 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Main Service Desk Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Inbox Tray -->
+  <rect x="178" y="170" width="88" height="42" rx="8" fill="white"></rect>
+
+  <path d="M178 190H212L220 202H224L232 190H266" stroke="url(#mepBlue)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Incoming Ticket -->
+  <path d="M222 142V164" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M214 156L222 164L230 156" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Classification Symbol -->
+  <circle cx="314" cy="184" r="22" fill="url(#mepGoldSoft)"></circle>
+
+  <rect x="304" y="174" width="8" height="8" rx="2" fill="white"></rect>
+
+  <rect x="316" y="174" width="8" height="8" rx="2" fill="white"></rect>
+
+  <rect x="304" y="186" width="8" height="8" rx="2" fill="white"></rect>
+
+  <rect x="316" y="186" width="8" height="8" rx="2" fill="white"></rect>
+
+</g>
+
+<!-- Inbox -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Mail Tray -->
+  <rect x="90" y="346" width="60" height="34" rx="6" fill="white"></rect>
+
+  <path d="M90 350L120 370L150 350" stroke="url(#mepBlue)" stroke-width="3" fill="none"></path>
+
+  <!-- New Item Indicator -->
+  <circle cx="146" cy="338" r="9" fill="url(#mepGoldSoft)"></circle>
+
+</g>
+
+<!-- Ticket Review -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Ticket Document -->
+  <rect x="230" y="328" width="52" height="70" rx="8" fill="white"></rect>
+
+  <rect x="242" y="344" width="26" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="358" width="18" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="372" width="22" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Review Lens -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGoldSoft)"></circle>
+
+  <circle cx="280" cy="406" r="3" fill="none" stroke="white" stroke-width="1.8"></circle>
+
+  <path d="M283 409L286 412" stroke="white" stroke-width="1.8" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Ticket Classification -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Classification Tree -->
+  <circle cx="390" cy="338" r="7" fill="white"></circle>
+
+  <circle cx="372" cy="378" r="7" fill="white"></circle>
+
+  <circle cx="408" cy="378" r="7" fill="white"></circle>
+
+  <path d="M390 345V360" stroke="white" stroke-width="3"></path>
+
+  <path d="M372 360H408" stroke="white" stroke-width="3"></path>
+
+  <path d="M372 360V371" stroke="white" stroke-width="3"></path>
+
+  <path d="M408 360V371" stroke="white" stroke-width="3"></path>
+
+  <!-- Classification Badge -->
+  <circle cx="418" cy="336" r="9" fill="url(#mepGoldSoft)"></circle>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.35"></rect>
+
+</svg>

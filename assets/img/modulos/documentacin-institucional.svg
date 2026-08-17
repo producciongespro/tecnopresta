@@ -1,0 +1,127 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Encabezado -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Documentación Institucional -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Documento principal -->
+  <rect x="214" y="136" width="84" height="96" rx="10" fill="white"></rect>
+
+  <!-- Esquina doblada -->
+  <path d="M278 136V156H298" fill="none" stroke="url(#mepGray)" stroke-width="3"></path>
+
+  <!-- Líneas documento -->
+  <rect x="228" y="164" width="40" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+  <rect x="228" y="178" width="54" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+  <rect x="228" y="192" width="48" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Sello institucional -->
+  <circle cx="286" cy="208" r="12" fill="url(#mepGold)"></circle>
+
+  <path d="M281 208L285 212L292 204" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Actas -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Carpeta -->
+  <path d="M90 340H114L122 332H150V382H90V340Z" fill="white"></path>
+
+  <rect x="102" y="350" width="34" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="102" y="362" width="28" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+</g>
+
+<!-- Certificaciones -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Certificado -->
+  <rect x="228" y="330" width="56" height="70" rx="8" fill="white"></rect>
+
+  <rect x="238" y="346" width="32" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+  <rect x="238" y="358" width="24" height="4" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Sello -->
+  <circle cx="256" cy="382" r="10" fill="url(#mepGold)"></circle>
+
+  <!-- Validación -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Documentos Firmados -->
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Documento -->
+  <rect x="372" y="334" width="40" height="52" rx="6" fill="white"></rect>
+
+  <!-- Firma -->
+  <path d="M380 370C386 360 392 380 400 368C404 362 408 366 410 372" stroke="url(#mepGold)" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- Carga -->
+  <path d="M392 346V328" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M384 336L392 328L400 336" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Acento lateral -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.30"></rect>
+
+</svg>

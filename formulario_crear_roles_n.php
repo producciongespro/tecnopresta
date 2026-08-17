@@ -62,6 +62,19 @@ $lognombre = $_SESSION['nombre'];
 $logcodigo = $_SESSION['codigo'];
 */
 $logcodigo = $usuario_azure['codigoPresu'] ?? '';
+
+// Lugares con activos del centro (para los ámbitos del prestador)
+$lugares_ambito = array();
+$resLugares = $link->query("SELECT DISTINCT l.id_lugar, l.lugar
+    FROM t_lugar l
+    INNER JOIN t_placa p ON p.id_lugar = l.id_lugar
+    WHERE p.codigo = '$logcodigo' AND p.activo = 1
+    ORDER BY l.id_lugar");
+if ($resLugares) {
+    while ($filaL = $resLugares->fetch_assoc()) {
+        $lugares_ambito[] = $filaL;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -382,6 +395,18 @@ $(document).ready(function () {
                   <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Código de su institución — asignado automáticamente</small>
                 </div>
 
+                <!-- Ámbitos de Préstamo (solo rol Prestador) -->
+                <div class="mb-4" id="ambitoSection" style="display:none;">
+                  <div class="form-section-title"><i class="bi bi-diagram-3 me-1"></i> Ámbitos de Préstamo</div>
+                  <div class="role-hint"><i class="bi bi-info-circle me-1"></i> S&oacute;lo aplica para el rol Prestador. Defina las categor&iacute;as (&aacute;mbitos) de lugares cuyos art&iacute;culos este funcionario podr&aacute; prestar.</div>
+                  <div id="ambitosContainer"></div>
+                  <button type="button" class="btn btn-sm btn-outline-primary mt-1" id="btnAgregarAmbito">
+                    <i class="bi bi-plus-circle me-1"></i> Agregar &aacute;mbito
+                  </button>
+                  <div class="invalid-feedback-custom" id="ambitoError">Debe agregar al menos un &aacute;mbito con nombre y un lugar seleccionado.</div>
+                  <input type="hidden" name="ambitos_json" id="ambitos_json" value="">
+                </div>
+
                 <input type="hidden" name="edit_id" id="edit_id" value="">
 
                 <div class="d-flex gap-2">
@@ -409,17 +434,20 @@ $(document).ready(function () {
             <table class="table table-hover table-mep align-middle mb-0">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>C&eacute;dula o Similar</th>
                   <th>Correo MEP</th>
                   <th>Rol</th>
+                  <th>&Aacute;mbito(s)</th>
                   <th class="text-center">Editar</th>
                   <th class="text-center">Eliminar</th>
                 </tr>
               </thead>
               <tbody class="BusquedaRapida">
               <?php
-              $consulta = mysqli_query($link, "SELECT ur.id, u.cedula, u.correo AS nombre, ur.codigo_presu, r.rol, ur.rol_id
+              $consulta = mysqli_query($link, "SELECT ur.id, u.cedula, u.correo AS nombre, ur.codigo_presu, r.rol, ur.rol_id,
+                      (SELECT GROUP_CONCAT(ap.nombre SEPARATOR ', ')
+                       FROM t_ambitos_prestador ap
+                       WHERE ap.usuarios_roles_id = ur.id AND ap.eliminado = 0) AS ambitos
                   FROM usuarios_roles ur
                       INNER JOIN usuarios u ON u.id = ur.usuario_id
                       INNER JOIN t_roles r ON r.id_rol = ur.rol_id
@@ -435,10 +463,16 @@ $(document).ready(function () {
                     data-rol-id="<?php echo $programas['rol_id'] ?>"
                     data-cedula="<?php echo htmlspecialchars($programas['cedula']) ?>"
                     data-email-prefix="<?php echo htmlspecialchars($email_prefix) ?>">
-                  <td><?php echo $programas['id'] ?></td>
                   <td><?php echo htmlspecialchars($programas['cedula']) ?></td>
                   <td><?php echo htmlspecialchars($programas['nombre']) ?></td>
                   <td><span class="badge" style="background: var(--mep-primary);"><?php echo htmlspecialchars($programas['rol']) ?></span></td>
+                  <td>
+                  <?php if (!empty($programas['ambitos'])): ?>
+                    <span class="badge text-bg-light border text-dark text-wrap" style="white-space: normal;"><?php echo htmlspecialchars($programas['ambitos']) ?></span>
+                  <?php else: ?>
+                    <span class="text-muted small">&mdash;</span>
+                  <?php endif; ?>
+                  </td>
                   <td class="text-center">
                   <?php if ($programas['rol_id'] != 1): ?>
                     <a class="btn btn-sm btn-outline-primary border-0" href="#" onclick="cargarEditar(<?php echo $programas['id'] ?>); return false;">
@@ -492,12 +526,124 @@ $(document).ready(function () {
     var btnGuardar = document.getElementById('btnGuardar');
     var btnCancelar = document.getElementById('btnCancelar');
 
+    var ambitoSection = document.getElementById('ambitoSection');
+    var ambitoContainer = document.getElementById('ambitosContainer');
+    var ambitoError = document.getElementById('ambitoError');
+    var ambitosJsonInput = document.getElementById('ambitos_json');
+    var btnAgregarAmbito = document.getElementById('btnAgregarAmbito');
+    var lugaresAmbito = <?php echo json_encode($lugares_ambito); ?>;
+    var contadorAmbito = 0;
+
+    function renderLugaresCheckbox(cardIdx, seleccionados) {
+      var html = '';
+      var selec = (seleccionados || []).map(Number);
+      lugaresAmbito.forEach(function(l) {
+        var idLugar = Number(l.id_lugar);
+        var checked = (selec.indexOf(idLugar) !== -1) ? ' checked' : '';
+        var idCb = 'lugar_' + cardIdx + '_' + idLugar;
+        html += '<div class="form-check">' +
+          '<input class="form-check-input ambito-lugar" type="checkbox" value="' + idLugar + '" id="' + idCb + '"' + checked + '>' +
+          '<label class="form-check-label small" for="' + idCb + '">' + l.lugar + '</label></div>';
+      });
+      return html;
+    }
+
+    function agregarAmbito(datos) {
+      datos = datos || {};
+      var idx = contadorAmbito++;
+      var nombre = datos.nombre || '';
+      var seleccionados = datos.lugares || [];
+      var card = document.createElement('div');
+      card.className = 'ambito-card border rounded p-3 mb-3';
+      card.setAttribute('data-index', idx);
+      card.innerHTML =
+        '<div class="d-flex justify-content-between align-items-center mb-2">' +
+          '<label class="form-label fw-semibold mb-0">Ámbito #' + (idx + 1) + '</label>' +
+          '<button type="button" class="btn btn-sm btn-outline-danger border-0 quitar-ambito" title="Quitar ámbito"><i class="bi bi-x-lg"></i></button>' +
+        '</div>' +
+        '<div class="mb-2">' +
+          '<label class="form-label small mb-1">Nombre del ámbito</label>' +
+          '<input type="text" class="form-control ambito-nombre" placeholder="Ej: Equipo INCO" value="' + nombre.replace(/"/g, '&quot;') + '">' +
+        '</div>' +
+        '<div class="small fw-semibold mb-1">Lugares (art&iacute;culos que podr&aacute; prestar)</div>' +
+        renderLugaresCheckbox(idx, seleccionados);
+      ambitoContainer.appendChild(card);
+      card.querySelector('.quitar-ambito').addEventListener('click', function() {
+        card.remove();
+        reindexarAmbitos();
+      });
+    }
+
+    function reindexarAmbitos() {
+      var cards = document.querySelectorAll('#ambitosContainer .ambito-card');
+      contadorAmbito = cards.length;
+      cards.forEach(function(c, i) {
+        c.querySelector('label.mb-0').textContent = 'Ámbito #' + (i + 1);
+      });
+    }
+
+    function recolectarAmbitos() {
+      var ambitos = [];
+      document.querySelectorAll('#ambitosContainer .ambito-card').forEach(function(card) {
+        var nombre = card.querySelector('.ambito-nombre').value.trim();
+        var lugares = [];
+        card.querySelectorAll('.ambito-lugar:checked').forEach(function(cb) {
+          lugares.push(parseInt(cb.value));
+        });
+        ambitos.push({ nombre: nombre, lugares: lugares });
+      });
+      ambitosJsonInput.value = JSON.stringify(ambitos);
+      return ambitos;
+    }
+
+    function limpiarAmbitos() {
+      ambitoContainer.innerHTML = '';
+      contadorAmbito = 0;
+      ambitosJsonInput.value = '';
+    }
+
+    function toggleAmbitoSection(rolId) {
+      if (String(rolId) === '3') {
+        ambitoSection.style.display = '';
+        if (contadorAmbito === 0) agregarAmbito();
+      } else {
+        ambitoSection.style.display = 'none';
+        limpiarAmbitos();
+      }
+    }
+
+    function cargarAmbitos(urId) {
+      limpiarAmbitos();
+      fetch('traer_ambitos_usuario.php?usuarios_roles_id=' + urId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var ambitos = data.ambitos || [];
+          if (ambitos.length === 0) {
+            agregarAmbito();
+          } else {
+            ambitos.forEach(function(a) {
+              agregarAmbito({ nombre: a.nombre, lugares: a.lugares });
+            });
+          }
+        })
+        .catch(function() {
+          agregarAmbito();
+        });
+    }
+
+    btnAgregarAmbito.addEventListener('click', function() {
+      agregarAmbito();
+    });
+
     function cargarEditar(id) {
       var row = document.querySelector('tr[data-id="' + id + '"]');
       if (!row) return;
 
       var cedula = row.getAttribute('data-cedula');
       var emailPrefix = row.getAttribute('data-email-prefix');
+      if (emailPrefix.indexOf('@') !== -1) {
+        emailPrefix = emailPrefix.split('@')[0];
+      }
       var rolId = row.getAttribute('data-rol-id');
 
       cedulaInput.value = cedula;
@@ -512,6 +658,11 @@ $(document).ready(function () {
           rolInput.value = rolId;
         }
       });
+
+      toggleAmbitoSection(rolId);
+      if (String(rolId) === '3') {
+        cargarAmbitos(id);
+      }
 
       editIdInput.value = id;
       btnGuardar.innerHTML = '<i class="bi bi-pencil-square"></i> Actualizar';
@@ -535,6 +686,9 @@ $(document).ready(function () {
       editIdInput.value = '';
       btnGuardar.innerHTML = '<i class="bi bi-floppy"></i> Guardar';
       btnCancelar.style.display = 'none';
+
+      ambitoSection.style.display = 'none';
+      limpiarAmbitos();
 
       limpiarError(cedulaInput, cedulaError);
       limpiarError(emailInput, emailError);
@@ -586,6 +740,7 @@ $(document).ready(function () {
       radio.addEventListener('change', function() {
         rolInput.value = this.value;
         limpiarError(null, rolError, roleOptions);
+        toggleAmbitoSection(this.value);
       });
     });
 
@@ -627,6 +782,17 @@ $(document).ready(function () {
       if (!rol) {
         mostrarError(null, rolError, roleOptions);
         valido = false;
+      }
+
+      if (rol === '3') {
+        var ambitos = recolectarAmbitos();
+        var ambitoOk = ambitos.length > 0 && ambitos.every(function(a) {
+          return a.nombre !== '' && a.lugares.length > 0;
+        });
+        if (!ambitoOk) {
+          mostrarError(null, ambitoError, ambitoContainer);
+          valido = false;
+        }
       }
 
       var cedula = cedulaInput.value.trim();

@@ -1,0 +1,154 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta MEP -->
+
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#B89243"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#BCC4CC"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Marco principal -->
+
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Encabezado -->
+
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Panel principal -->
+
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Selector de Rol -->
+
+  <rect x="162" y="144" width="70" height="34" rx="8" fill="white"></rect>
+
+  <circle cx="178" cy="161" r="7" fill="url(#mepGold)"></circle>
+
+  <path d="M189 157H214" stroke="#164687" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M214 161L220 167L226 161" stroke="#164687" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Relación -->
+
+  <path d="M232 161H278" stroke="white" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 6"></path>
+
+  <!-- Formularios -->
+
+  <rect x="286" y="138" width="56" height="70" rx="8" fill="white"></rect>
+
+  <rect x="296" y="152" width="34" height="4" rx="2" fill="#164687"></rect>
+
+  <rect x="296" y="166" width="26" height="4" rx="2" fill="#164687"></rect>
+
+  <rect x="296" y="180" width="30" height="4" rx="2" fill="#164687"></rect>
+
+  <!-- Permisos -->
+
+  <circle cx="340" cy="138" r="12" fill="url(#mepGold)"></circle>
+
+  <path d="M336 138L339 141L345 134" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Roles -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <circle cx="120" cy="344" r="10" fill="white"></circle>
+
+  <circle cx="102" cy="374" r="8" fill="white"></circle>
+
+  <circle cx="138" cy="374" r="8" fill="white"></circle>
+
+  <path d="M120 354L102 368" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <path d="M120 354L138 368" stroke="white" stroke-width="2.5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Matriz de permisos -->
+
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <rect x="228" y="330" width="16" height="16" rx="3" fill="white"></rect>
+
+  <rect x="268" y="330" width="16" height="16" rx="3" fill="white"></rect>
+
+  <rect x="228" y="360" width="16" height="16" rx="3" fill="white"></rect>
+
+  <rect x="268" y="360" width="16" height="16" rx="3" fill="white"></rect>
+
+  <rect x="228" y="390" width="16" height="16" rx="3" fill="url(#mepGold)"></rect>
+
+  <path d="M232 398L236 402L242 394" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Seguridad y acceso -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <path d="M392 330
+           L414 338
+           V360
+           C414 378 404 390 392 394
+           C380 390 370 378 370 360
+           V338
+           Z" fill="white"></path>
+
+  <path d="M384 360L390 366L401 352" stroke="#164687" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <circle cx="418" cy="332" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M414 332L417 335L422 328" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Base institucional -->
+
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja corporativa -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.28"></rect>
+
+</svg>

@@ -1,0 +1,140 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Top Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Educational Center -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- School Roof -->
+  <path d="M256 140L190 176H322L256 140Z" fill="white"></path>
+
+  <!-- Main Building -->
+  <rect x="202" y="176" width="108" height="46" rx="4" fill="white"></rect>
+
+  <!-- Door -->
+  <rect x="246" y="192" width="20" height="30" rx="3" fill="url(#mepBlue)"></rect>
+
+  <!-- Windows -->
+  <rect x="214" y="188" width="14" height="14" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="284" y="188" width="14" height="14" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Flag -->
+  <path d="M324 152V204" stroke="#D2B06C" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M324 152L346 160L324 168Z" fill="#D2B06C"></path>
+
+</g>
+
+<!-- Educational Institutions -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- School Building -->
+  <path d="M120 330L92 346H148L120 330Z" fill="white"></path>
+
+  <rect x="98" y="346" width="44" height="34" rx="3" fill="white"></rect>
+
+  <rect x="116" y="356" width="8" height="24" rx="2" fill="url(#mepBlue)"></rect>
+
+  <rect x="104" y="352" width="6" height="6" rx="1" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="130" y="352" width="6" height="6" rx="1" fill="url(#mepBlueSoft)"></rect>
+
+</g>
+
+<!-- User Assignment -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- User -->
+  <circle cx="256" cy="346" r="16" fill="url(#mepBlue)"></circle>
+
+  <path d="M232 388C236 366 246 358 256 358C266 358 276 366 280 388" fill="url(#mepBlue)"></path>
+
+  <!-- Assignment Arrow -->
+  <path d="M238 408H274" stroke="#BC9A56" stroke-width="5" stroke-linecap="round"></path>
+
+  <path d="M266 400L274 408L266 416" stroke="#BC9A56" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Multi-Center Network -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Central Node -->
+  <circle cx="390" cy="360" r="10" fill="white"></circle>
+
+  <!-- Connected Centers -->
+  <circle cx="370" cy="338" r="7" fill="white"></circle>
+
+  <circle cx="410" cy="338" r="7" fill="white"></circle>
+
+  <circle cx="370" cy="382" r="7" fill="white"></circle>
+
+  <circle cx="410" cy="382" r="7" fill="white"></circle>
+
+  <!-- Connections -->
+  <path d="M390 360L370 338" stroke="white" stroke-width="3"></path>
+
+  <path d="M390 360L410 338" stroke="white" stroke-width="3"></path>
+
+  <path d="M390 360L370 382" stroke="white" stroke-width="3"></path>
+
+  <path d="M390 360L410 382" stroke="white" stroke-width="3"></path>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.45"></rect>
+
+</svg>

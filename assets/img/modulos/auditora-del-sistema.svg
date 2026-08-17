@@ -1,0 +1,126 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Top Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Central Audit Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="150" y="122" width="212" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Timeline -->
+  <path d="M190 182H318" stroke="white" stroke-width="6" stroke-linecap="round"></path>
+
+  <!-- Timeline Nodes -->
+  <circle cx="206" cy="182" r="10" fill="white"></circle>
+  <circle cx="256" cy="182" r="10" fill="#D2B06C"></circle>
+  <circle cx="306" cy="182" r="10" fill="white"></circle>
+
+  <!-- Activity Lines -->
+  <rect x="186" y="206" width="48" height="8" rx="4" fill="white" opacity="0.9"></rect>
+  <rect x="242" y="206" width="52" height="8" rx="4" fill="white" opacity="0.8"></rect>
+  <rect x="302" y="206" width="26" height="8" rx="4" fill="white" opacity="0.7"></rect>
+
+</g>
+
+<!-- Access Logs -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- User -->
+  <circle cx="120" cy="342" r="14" fill="white"></circle>
+
+  <path d="M98 382C102 364 112 356 120 356C128 356 138 364 142 382" fill="white"></path>
+
+  <!-- Small Clock -->
+  <circle cx="152" cy="392" r="16" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M152 384V392L158 396" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Change History -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Document -->
+  <rect x="232" y="334" width="48" height="56" rx="8" fill="white"></rect>
+
+  <rect x="242" y="348" width="28" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="362" width="20" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Refresh Arrows -->
+  <path d="M236 404C242 396 252 394 262 398" stroke="#BC9A56" stroke-width="5" stroke-linecap="round"></path>
+
+  <path d="M276 412C270 420 260 422 250 418" stroke="#BC9A56" stroke-width="5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Deletion Control -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Trash -->
+  <rect x="372" y="344" width="36" height="42" rx="6" fill="white"></rect>
+
+  <rect x="366" y="336" width="48" height="8" rx="4" fill="white"></rect>
+
+  <rect x="382" y="326" width="16" height="8" rx="4" fill="white"></rect>
+
+  <!-- Shield -->
+  <circle cx="418" cy="390" r="14" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M412 390L416 394L424 386" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.55"></rect>
+
+</svg>

@@ -1,0 +1,126 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- MEP Palette -->
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2B5DA1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGoldSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D2B06C"></stop>
+    <stop offset="100%" stop-color="#BC9A56"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#B3BAC1"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.14"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Main Dashboard -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Header -->
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Main Inventory Review Panel -->
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Educational Center -->
+  <path d="M206 154L256 174L306 154V164L256 184L206 164V154Z" fill="white"></path>
+
+  <rect x="226" y="188" width="60" height="36" rx="6" fill="white"></rect>
+
+  <rect x="250" y="198" width="12" height="26" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Inventory Review -->
+  <circle cx="314" cy="196" r="20" fill="url(#mepGoldSoft)"></circle>
+
+  <circle cx="310" cy="192" r="9" fill="none" stroke="white" stroke-width="4"></circle>
+
+  <path d="M318 200L326 208" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+</g>
+
+<!-- Inventory Consultation -->
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Inventory List -->
+  <rect x="98" y="336" width="44" height="48" rx="6" fill="white"></rect>
+
+  <rect x="106" y="348" width="28" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="106" y="362" width="22" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="106" y="376" width="26" height="5" rx="2.5" fill="url(#mepBlueSoft)"></rect>
+
+</g>
+
+<!-- Review of Records & Certifications -->
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <!-- Official Document -->
+  <rect x="230" y="328" width="52" height="72" rx="8" fill="white"></rect>
+
+  <rect x="242" y="344" width="28" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="358" width="20" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <rect x="242" y="372" width="24" height="6" rx="3" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Validation Seal -->
+  <circle cx="282" cy="408" r="10" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Inventory Verification -->
+<g filter="url(#shadow)">
+
+  <circle cx="390" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Asset -->
+  <rect x="368" y="340" width="44" height="30" rx="5" fill="white"></rect>
+
+  <rect x="362" y="374" width="56" height="6" rx="3" fill="white"></rect>
+
+  <!-- Verification Check -->
+  <circle cx="414" cy="338" r="11" fill="url(#mepGoldSoft)"></circle>
+
+  <path d="M409 338L413 342L419 334" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Bottom Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Decorative Accent -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGoldSoft)" opacity="0.35"></rect>
+
+</svg>

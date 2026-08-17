@@ -1,0 +1,93 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Azul institucional -->
+  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#192952"></stop>
+    <stop offset="100%" stop-color="#0035A0"></stop>
+  </linearGradient>
+
+  <!-- Dorado institucional -->
+  <linearGradient id="goldMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#F2DAB1"></stop>
+  </linearGradient>
+
+  <!-- Shadow -->
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.15"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- CARD PRINCIPAL -->
+<g filter="url(#shadow)">
+
+  <!-- Fondo principal -->
+  <rect x="120" y="90" width="270" height="320" rx="28" fill="url(#blueMain)"></rect>
+
+  <!-- Interior -->
+  <rect x="145" y="115" width="220" height="270" rx="22" fill="white"></rect>
+
+</g>
+
+<!-- CLIP SUPERIOR -->
+<g filter="url(#shadow)">
+  <rect x="205" y="60" width="100" height="55" rx="16" fill="url(#blueMain)"></rect>
+
+  <circle cx="255" cy="86" r="7" fill="white"></circle>
+</g>
+
+<!-- ELEMENTOS ESTANDARIZADOS -->
+<!-- Laptop 1 -->
+<g filter="url(#shadow)">
+
+  <rect x="175" y="175" width="70" height="45" rx="8" fill="url(#goldMain)"></rect>
+
+  <rect x="181" y="181" width="58" height="30" rx="5" fill="white"></rect>
+
+  <rect x="167" y="220" width="86" height="10" rx="5" fill="#64748B"></rect>
+
+</g>
+
+<!-- Laptop 2 -->
+<g filter="url(#shadow)">
+
+  <rect x="265" y="175" width="70" height="45" rx="8" fill="url(#goldMain)"></rect>
+
+  <rect x="271" y="181" width="58" height="30" rx="5" fill="white"></rect>
+
+  <rect x="257" y="220" width="86" height="10" rx="5" fill="#64748B"></rect>
+
+</g>
+
+<!-- GRID / ESTÁNDAR -->
+<g>
+
+  <!-- líneas horizontales -->
+  <rect x="180" y="270" width="150" height="8" rx="4" fill="#CBD5E1"></rect>
+  <rect x="180" y="290" width="150" height="8" rx="4" fill="#CBD5E1"></rect>
+  <rect x="180" y="310" width="150" height="8" rx="4" fill="#CBD5E1"></rect>
+
+  <!-- checks -->
+  <circle cx="160" cy="274" r="8" fill="#22C55E"></circle>
+  <circle cx="160" cy="294" r="8" fill="#22C55E"></circle>
+  <circle cx="160" cy="314" r="8" fill="#22C55E"></circle>
+
+</g>
+
+<!-- ICONO CENTRAL ESTÁNDAR -->
+<g filter="url(#shadow)">
+
+  <circle cx="255" cy="150" r="24" fill="url(#goldMain)"></circle>
+
+  <!-- símbolo grid -->
+  <rect x="245" y="140" width="8" height="8" rx="2" fill="#192952"></rect>
+  <rect x="257" y="140" width="8" height="8" rx="2" fill="#192952"></rect>
+  <rect x="245" y="152" width="8" height="8" rx="2" fill="#192952"></rect>
+  <rect x="257" y="152" width="8" height="8" rx="2" fill="#192952"></rect>
+
+</g>
+
+</svg>

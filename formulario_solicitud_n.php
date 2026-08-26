@@ -8,15 +8,13 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
+/*
 if (!defined('ACCESO_SEGURO')) {
     http_response_code(403);
     exit('Acceso directo no permitido');
 }
-$ruta_regreso = 'navegar.php?ruta=formulario_solicitud_canasta_n.php';
-if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
-    $ruta_regreso .= '&subsistema_id=' . intval($_GET['subsistema_id'] ?? 0)
-    . '&modulo_id=' . intval($_GET['modulo_id'] ?? 0);
-}
+*/
+$ruta_regreso = 'formulario_solicitud_canasta_n.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -434,6 +432,6 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     <script src="gijgo/gijgo.min.js" type="text/javascript"></script>
     <script src="gijgo/messages.es-es.js" type="text/javascript"></script>
 
-    <script src="js/formulario_solicitud_n.js?version=1"></script>
+    <script src="js/formulario_solicitud_n.js?version=2"></script>
 </body>
 </html>

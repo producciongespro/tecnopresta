@@ -149,10 +149,9 @@ if ($sid && $mid) {
                 <h4 class="mb-1 fw-bold" style="color: var(--mep-primary);">
                     Buscar Activos y Alias
                 </h4>
-                <small class="text-muted">
-                    <!-- <a href="navegar.php?ruta=ayuda_n.php#pretwo" class="text-decoration-none me-2"><i class="bi bi-lifebuoy"></i> Ayuda</a> -->
+                <!-- <small class="text-muted">                    
                     <a href="contactenos_n.php?rep=Error en formulario buscar alias html" class="text-decoration-none"><i class="bi bi-envelope"></i> Reportar Incidencia / Error</a>
-                </small>
+                </small> -->
             </div>
         </div>
     </div>
@@ -228,6 +227,6 @@ if ($sid && $mid) {
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_buscar_alias_n.js?version=3"></script>
+    <script src="js/formulario_buscar_alias_n.js?version=5"></script>
 </body>
 </html>

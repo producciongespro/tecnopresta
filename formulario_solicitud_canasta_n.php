@@ -8,10 +8,12 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
+/*
 if (!defined('ACCESO_SEGURO')) {
     http_response_code(403);
     exit('Acceso directo no permitido');
 }
+*/
 $ruta_regreso = 'navegar.php?ruta=formulario_buscar_alias_n.php';
 if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     $ruta_regreso .= '&subsistema_id=' . intval($_GET['subsistema_id'] ?? 0)
@@ -111,11 +113,11 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="badge rounded-pill bg-light text-dark fs-6 px-3 py-2" id="contador">0</span>
-                <small>
+                <!-- <small>
                     <a href="contactenos_n.php?rep=Error en formulario solicitud canasta" class="text-white text-decoration-none opacity-75">
                         <i class="bi bi-envelope"></i> Reportar
                     </a>
-                </small>
+                </small> -->
             </div>
         </div>
 
@@ -253,6 +255,6 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_solicitud_canasta_n.js?version=1"></script>
+    <script src="js/formulario_solicitud_canasta_n.js?version=2"></script>
 </body>
 </html>

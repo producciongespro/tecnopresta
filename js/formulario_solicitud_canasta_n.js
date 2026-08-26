@@ -102,7 +102,7 @@ function login() {
 function solicitud() {       
   
   window.sessionStorage.setItem('botonEnviaSolicitud',false);
-  window.location.href = 'navegar.php?ruta=formulario_solicitud_n.php';
+  window.location.href = 'formulario_solicitud_n.php';
 
   return false;
 }

@@ -20,6 +20,16 @@
         ); // Combina nombre y apellidos para mostrar en el header
 
     $dependencia = $usuario_azure['dependencia'] ?? 'Dependencia no disponible'; // Muestra la dependencia del usuario o un mensaje por defecto
+
+    // ================== ROL DEL USUARIO ==================
+    $rolesUsuario = $usuario_azure['roles'] ?? [];
+    $rolNombre = '';
+    foreach ($rolesUsuario as $rol) {
+        if (!empty($rol['rol'])) {
+            $rolNombre = $rol['rol'];
+            break;
+        }
+    }
 ?>
 
 <!-- Este Script es para tener acceso a la función de OBTENER FOTO DE AZURE -->
@@ -43,6 +53,7 @@
                     <div class="ms-3">
                         <div>MINISTERIO DE EDUCACI&Oacute;N P&Uacute;BLICA</div>
                         <div class="gov-text">GOBIERNO DE COSTA RICA</div>
+                        <div class="gov-text" style="font-size: small;">DIRECCI&Oacute;N DE RECURSOS TECNOL&Oacute;GICOS EN EDUCACI&Oacute;N</div>
                         <!-- <div class="unit-text">TecnoPresta -->
                         <div class="gov-text" style="font-size: medium;">
                             <span style="color: #fff" font-size="2.25rem">Tecno<span style="color: var(--mep-gold)">Presta</span></span>
@@ -61,10 +72,16 @@
                         class="d-inline-flex align-items-center text-white dropdown-toggle"  
                         data-bs-toggle="dropdown" 
                         data-bs-display="static"  
-                        aria-expanded="false"                                                
+                        aria-expanded="false"
+                        style="text-decoration: none;"
                     >                        
                         <!-- Nombre -->
-                        <span class="me-2 text-white-50"> <?= htmlspecialchars($nombreCompleto) ?></span>
+                        <span class="me-2 text-white-50">
+                            <?= htmlspecialchars($nombreCompleto) ?>
+                            <?php if ($rolNombre): ?>
+                                <br><small class="opacity-75"><?= htmlspecialchars($rolNombre) ?></small>
+                            <?php endif; ?>
+                        </span>
                         <!-- FOTO Avatar -->
                         <img 
                             id="fotoUsuarioHeader"
@@ -93,7 +110,11 @@
                                     <!-- <div class="fw-bold"> -->
                                         <?= htmlspecialchars($nombreCompleto) ?>
                                     </div>
-                                    
+                                    <?php if ($rolNombre): ?>
+                                        <small class="text-muted fw-semibold">
+                                            <i class="bi bi-shield-check me-1"></i><?= htmlspecialchars($rolNombre) ?>
+                                        </small><br>
+                                    <?php endif; ?>
                                     <small class="text-muted">
                                         <?= htmlspecialchars($dependencia) ?>
                                     </small>

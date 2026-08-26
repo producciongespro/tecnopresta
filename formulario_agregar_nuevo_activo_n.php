@@ -7,7 +7,7 @@ require_once("conexion.php");
 $link = $mysqli;
 
 if (mysqli_connect_errno()) {
-    echo "Error de conexión a MySQL: " . mysqli_connect_error();
+    echo "Error de conexion a MySQL: " . mysqli_connect_error();
     exit;
 }
 mysqli_set_charset($link, "utf8");
@@ -45,18 +45,11 @@ while ($row = $res->fetch_assoc()) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-   <!-- Bootstrap 5 CSS -->
-  <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-
-  <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/formulario_menu_principal.css" />
   <link rel="stylesheet" href="assets/css/nueva-identidad.css"/>
   <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
-
-  <!-- Select2 CSS -->
-  <link href="select2/select2.min.css" rel="stylesheet" />
-  <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"> -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 
   <title>TecnoPresta | Registro de Nuevo Activo</title>
 
@@ -103,15 +96,8 @@ while ($row = $res->fetch_assoc()) {
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .info-item strong {
-      color: var(--mep-blue);
-      font-size: 0.82rem;
-    }
-
-    .info-item span {
-      font-size: 0.88rem;
-      color: #2c3e50;
-    }
+    .info-item strong { color: var(--mep-blue); font-size: 0.82rem; }
+    .info-item span { font-size: 0.88rem; color: #2c3e50; }
 
     .search-results-wrap {
       max-height: 420px;
@@ -124,8 +110,7 @@ while ($row = $res->fetch_assoc()) {
     .search-results-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
     .result-img {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       object-fit: contain;
       border-radius: 6px;
       background: #f4f7fb;
@@ -171,10 +156,7 @@ while ($row = $res->fetch_assoc()) {
       text-decoration: none;
     }
 
-    .btn-volver:hover {
-      background: rgba(255,255,255,0.15);
-      color: #fff;
-    }
+    .btn-volver:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
     .form-control, .form-select {
       border-radius: 8px;
@@ -189,36 +171,78 @@ while ($row = $res->fetch_assoc()) {
       box-shadow: 0 0 0 3px rgba(0, 56, 118, 0.1);
     }
 
-    .form-label {
-      font-weight: 600;
-      color: #1f3b57;
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-    }
+    .form-label { font-weight: 600; color: #1f3b57; font-size: 0.85rem; margin-bottom: 4px; }
 
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #8a9aa8;
-    }
-
+    .empty-state { text-align: center; padding: 40px 20px; color: #8a9aa8; }
     .empty-state .bi { font-size: 2.5rem; opacity: 0.4; }
 
     .select2-container--default .select2-selection--single {
-      height: 38px;
-      padding-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      height: 38px; padding-top: 5px; border-radius: 8px; border: 1px solid #e2e8f0;
+    }
+    .select2-container--default .select2-selection--single:focus {
+      border-color: var(--mep-blue); box-shadow: 0 0 0 3px rgba(0, 56, 118, 0.1);
     }
 
-    .select2-container--default .select2-selection--single:focus {
-      border-color: var(--mep-blue);
-      box-shadow: 0 0 0 3px rgba(0, 56, 118, 0.1);
+    .btn-disponibilidad::before { content: "Regresar" !important; }
+
+    /* ── Paleta de colores ── */
+    .color-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 0;
+    }
+
+    .color-swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #dee2e6;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .color-swatch.selected {
+      border-color: var(--mep-gold);
+      box-shadow: 0 0 0 3px rgba(200,169,81,0.4);
+      transform: scale(1.1);
+    }
+
+    .color-swatch.selected::after {
+      content: '\f26a';
+      font-family: 'bootstrap-icons';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .color-swatch-label {
+      font-size: 0.7rem;
+      color: #6c757d;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .color-name-display {
+      font-weight: 600;
+      color: var(--mep-blue);
+      font-size: 0.9rem;
+      margin-top: 8px;
     }
 
     @media (max-width: 768px) {
       .asset-detail-card .row.g-0 { flex-direction: column; }
       .asset-detail-card .col-md-4 { text-align: center; margin-bottom: 1rem; }
+      .color-swatch { width: 44px; height: 44px; }
     }
   </style>
 </head>
@@ -226,14 +250,14 @@ while ($row = $res->fetch_assoc()) {
   <?php include 'partials/header.php'; ?>
   <main class="flex-grow-1">
     <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="btn-disponibilidad"
-       style="bottom: 100px;" title="Volver a Módulos del Sistema">
+       style="bottom: 100px;" title="Regresar">
       <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
 
     <div class="container mt-4">
 
       <!-- ════════════════════════════════════════════════════════
-           FASE 1: BÚSQUEDA / SELECCIÓN
+           FASE 1: BUSQUEDA / SELECCION
            ════════════════════════════════════════════════════════ -->
       <div id="fase-busqueda">
 
@@ -248,26 +272,26 @@ while ($row = $res->fetch_assoc()) {
               <div>
                 <h6 class="alert-heading mb-2">Pasos para registrar tu activo</h6>
                 <ol class="mb-0">
-                  <li class="mb-1">Opcionalmente seleccione un <strong>fondo presupuestario</strong> para filtrar.</li>
-                  <li class="mb-1">Escriba un texto de búsqueda (clase, marca o modelo) y haga clic en <strong>Buscar</strong>.</li>
-                  <li class="mb-1">De los resultados, haga clic en <strong>Seleccionar</strong> sobre el activo deseado.</li>
-                  <li>Complete la placa, serial y confirme el origen presupuestario.</li>
+                  <li class="mb-1">Escriba un texto de busqueda (tipo, marca o modelo) y haga clic en <strong>Buscar</strong>.</li>
+                  <li class="mb-1">Opcionalmente, seleccione un <strong>fondo presupuestario</strong> para filtrar.</li>
+                  <li class="mb-1">De los resultados, haga clic en <strong>Seleccionar</strong> sobre el modelo deseado.</li>
+                  <li>Seleccione el color, ingrese placa, serial y confirme el registro.</li>
                 </ol>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Card de búsqueda -->
+        <!-- Card de busqueda -->
         <div class="card">
           <div class="card-header" style="background:linear-gradient(135deg,var(--mep-blue),var(--mep-blue2));color:#fff;">
-            <h5 class="mb-0"><i class="bi bi-search me-2"></i>Buscar Activo Existente</h5>
+            <h5 class="mb-0"><i class="bi bi-search me-2"></i>Buscar Activo</h5>
           </div>
           <div class="card-body">
 
-            <!-- Fondo presupuestario -->
             <div class="row g-3 mb-3">
-              <div class="col-md-5">
+              <!-- Fondo presupuestario (OPCIONAL) -->
+              <div class="col-md-4">
                 <label class="form-label">Fondo Presupuestario <small class="text-muted">(opcional)</small></label>
                 <select id="fondo_select" class="form-select" style="width:100%;">
                   <option value="">Todos los fondos</option>
@@ -276,11 +300,21 @@ while ($row = $res->fetch_assoc()) {
                   <?php endforeach; ?>
                 </select>
               </div>
-              <div class="col-md-5">
-                <label class="form-label">Buscar por clase, marca o modelo</label>
-                <input type="text" id="input_busqueda" class="form-control"
-                       placeholder="Ej: Computadora, Dell, OptiPlex...">
+
+              <!-- Cuadro de busqueda unico -->
+              <div class="col-md-6">
+                <label class="form-label">Buscar tipo, marca o modelo</label>
+                <div class="input-group">
+                  <span class="input-group-text" style="background:var(--mep-blue);color:#fff;border-color:var(--mep-blue);border-radius:8px 0 0 8px;">
+                    <i class="bi bi-search"></i>
+                  </span>
+                  <input type="text" id="input_busqueda" class="form-control"
+                         placeholder="Ej: Computadora, Dell, OptiPlex..."
+                         style="border-radius:0 8px 8px 0;">
+                </div>
               </div>
+
+              <!-- Boton buscar -->
               <div class="col-md-2 d-flex align-items-end">
                 <button type="button" id="btnBuscar" class="btn btn-primary w-100">
                   <i class="bi bi-search me-1"></i> Buscar
@@ -295,7 +329,7 @@ while ($row = $res->fetch_assoc()) {
         <div id="contenedor_resultados" class="card mt-4" style="display:none;">
           <div class="card-header d-flex justify-content-between align-items-center"
                style="background:linear-gradient(135deg,var(--mep-blue),var(--mep-blue2));color:#fff;">
-            <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Resultados de Búsqueda</h5>
+            <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Resultados de Busqueda</h5>
             <span class="badge bg-light text-primary" id="badge_total">0</span>
           </div>
           <div class="card-body p-0">
@@ -304,11 +338,10 @@ while ($row = $res->fetch_assoc()) {
                 <thead class="table-light">
                   <tr>
                     <th style="width:60px;"></th>
-                    <th>Clase</th>
+                    <th>Tipo</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Color</th>
-                    <th style="width:130px;">Acción</th>
+                    <th style="width:130px;">Accion</th>
                   </tr>
                 </thead>
                 <tbody id="resultados_body"></tbody>
@@ -317,18 +350,18 @@ while ($row = $res->fetch_assoc()) {
           </div>
         </div>
 
-        <!-- Mensaje vacío -->
+        <!-- Mensaje vacio -->
         <div id="mensaje_vacio" class="card mt-4" style="display:none;">
           <div class="card-body">
             <div class="empty-state">
               <i class="bi bi-search d-block mb-2"></i>
               <p class="mb-1 fw-bold" style="color:#1f3b57;">No se encontraron resultados</p>
               <p class="mb-0" style="font-size:0.88rem;" id="texto_vacio">
-                No se encontraron activos que coincidan con la búsqueda.
+                No se encontraron modelos que coincidan con la busqueda.
               </p>
-              <button type="button" id="btnMostrarTodos" class="btn btn-outline-primary mt-3" style="display:none;">
-                <i class="bi bi-eye me-1"></i> Mostrar todos los activos
-              </button>
+              <p class="mb-0 mt-2 text-muted" style="font-size:0.82rem;">
+                Intente con otros terminos o contacte al administrador del sistema.
+              </p>
             </div>
           </div>
         </div>
@@ -336,7 +369,7 @@ while ($row = $res->fetch_assoc()) {
       </div>
 
       <!-- ════════════════════════════════════════════════════════
-           FASE 2: REGISTRO DE PLACA / SERIAL
+           FASE 2: REGISTRO DE PLACA / SERIAL / COLOR
            ════════════════════════════════════════════════════════ -->
       <div id="fase-registro">
 
@@ -348,7 +381,7 @@ while ($row = $res->fetch_assoc()) {
               <span>ACTIVO SELECCIONADO</span>
             </div>
             <button type="button" id="btnVolverBusqueda" class="btn-volver">
-              <i class="bi bi-arrow-left"></i> Volver a búsqueda
+              <i class="bi bi-arrow-left"></i> Volver a busqueda
             </button>
           </div>
           <div class="row g-0 p-3">
@@ -367,12 +400,12 @@ while ($row = $res->fetch_assoc()) {
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="info-item">
-                      <strong><i class="bi bi-tag me-1 text-primary"></i> Clase:</strong>
-                      <span id="detalle_clase"></span>
+                      <strong><i class="bi bi-tag me-1 text-primary"></i> Tipo:</strong>
+                      <span id="detalle_clase">-</span>
                     </div>
                     <div class="info-item">
                       <strong><i class="bi bi-building me-1 text-primary"></i> Marca:</strong>
-                      <span id="detalle_marca"></span>
+                      <span id="detalle_marca">-</span>
                     </div>
                   </div>
                   <div class="col-sm-6">
@@ -380,15 +413,11 @@ while ($row = $res->fetch_assoc()) {
                       <strong><i class="bi bi-upc-scan me-1 text-primary"></i> Modelo:</strong>
                       <span id="detalle_modelo"></span>
                     </div>
-                    <div class="info-item">
-                      <strong><i class="bi bi-palette me-1 text-primary"></i> Color:</strong>
-                      <span id="detalle_color"></span>
-                    </div>
                   </div>
                 </div>
                 <div class="alert alert-light mt-3 d-flex align-items-center mb-0">
                   <i class="bi bi-exclamation-triangle-fill text-warning me-2 fs-5"></i>
-                  <small class="text-muted">Verifique la información antes de registrar placa y serial.</small>
+                  <small class="text-muted">Verifique la informacion antes de registrar placa y serial.</small>
                 </div>
               </div>
             </div>
@@ -403,12 +432,21 @@ while ($row = $res->fetch_assoc()) {
           <div class="card-body">
             <form id="formRegistro">
               <input type="hidden" id="hidden_id_activo" name="id_activo" value="">
+              <input type="hidden" id="hidden_id_modelo" name="modelo_id" value="">
+              <input type="hidden" id="colorHex" name="color_hex" value="">
 
               <div class="row g-3">
 
+                <!-- Paleta de colores -->
+                <div class="col-12">
+                  <label class="form-label">Color del activo <span class="text-danger">*</span></label>
+                  <div class="color-palette" id="colorPalette"></div>
+                  <div class="color-name-display" id="colorNombre">Ningun color seleccionado</div>
+                </div>
+
                 <!-- Placa -->
                 <div class="col-md-6">
-                  <label for="input_placa" class="form-label">Placa</label>
+                  <label for="input_placa" class="form-label">Placa <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" id="input_placa" name="placa"
                          placeholder="Ingrese la placa del activo" required maxlength="50"
                          style="text-transform:uppercase;">
@@ -416,15 +454,15 @@ while ($row = $res->fetch_assoc()) {
 
                 <!-- Serial -->
                 <div class="col-md-6">
-                  <label for="input_serial" class="form-label">Serial</label>
+                  <label for="input_serial" class="form-label">Serial <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" id="input_serial" name="serial"
                          placeholder="Ingrese el serial del activo" required maxlength="50"
                          style="text-transform:uppercase;">
                 </div>
 
                 <!-- Origen Presupuestario -->
-                <div class="col-md-12">
-                  <label for="fondo_registro" class="form-label">Origen Presupuestario</label>
+                <div class="col-md-6">
+                  <label for="fondo_registro" class="form-label">Origen Presupuestario <span class="text-danger">*</span></label>
                   <select class="form-select" id="fondo_registro" name="id_fondos" required style="width:100%;">
                     <option value="">Seleccione el origen presupuestario</option>
                     <?php foreach ($fondos as $f): ?>
@@ -434,13 +472,13 @@ while ($row = $res->fetch_assoc()) {
                 </div>
 
                 <!-- Botones -->
-                <div class="col-12 mt-4">
-                  <div class="d-flex justify-content-center gap-3">
+                <div class="col-md-6 d-flex align-items-end">
+                  <div class="d-flex gap-3 w-100 justify-content-end">
                     <button type="button" id="btnVolverBusqueda2" class="btn btn-outline-secondary px-4">
                       <i class="bi bi-arrow-left me-1"></i> Volver
                     </button>
                     <button type="submit" class="btn btn-primary px-5" id="btnGuardar">
-                      <i class="bi bi-save me-1"></i> Guardar Registro
+                      <i class="bi bi-save me-1"></i> Registrar
                     </button>
                   </div>
                 </div>
@@ -457,52 +495,89 @@ while ($row = $res->fetch_assoc()) {
 
   <?php include 'partials/footer.php'; ?>
 
-  <!-- jQuery -->
   <script src="js/jquery-3.7.1.min.js"></script>
-  <!-- Bootstrap 5 JS -->
-  <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
-  
-  <!-- Select2 JS -->
-  <script src="select2/select2.min.js"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-
-  <!-- SweetAlert2 JS -->
-  <script src="sweetalert2/sweetalert2.all.min.js"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
   <script>
   $(document).ready(function() {
 
-    // ── Select2 ──
+    // ════════════════════════════════════════════════════════════
+    // PALETA DE 12 COLORES BASICOS
+    // ════════════════════════════════════════════════════════════
+    var COLORES = [
+      { nombre: 'Negro',   hex: '#424242' },
+      { nombre: 'Blanco',  hex: '#F5F5F5' },
+      { nombre: 'Gris',    hex: '#9E9E9E' },
+      { nombre: 'Rojo',    hex: '#E53935' },
+      { nombre: 'Azul',    hex: '#1E88E5' },
+      { nombre: 'Verde',   hex: '#43A047' },
+      { nombre: 'Amarillo', hex: '#FDD835' },
+      { nombre: 'Naranja', hex: '#FB8C00' },
+      { nombre: 'Marron',  hex: '#6D4C41' },
+      { nombre: 'Rosa',    hex: '#EC407A' },
+      { nombre: 'Morado',  hex: '#8E24AA' },
+      { nombre: 'Beige',   hex: '#D7CCC8' }
+    ];
+
+    // Renderizar swatches
+    COLORES.forEach(function(c) {
+      var borderColor = (c.hex === '#F5F5F5' || c.hex === '#FDD835' || c.hex === '#D7CCC8')
+                         ? '#ccc' : c.hex;
+      var swatch = $(
+        '<div class="text-center">' +
+          '<div class="color-swatch" data-hex="' + c.hex + '" data-nombre="' + c.nombre + '" ' +
+            'style="background:' + c.hex + '; border-color:' + borderColor + ';" ' +
+            'title="' + c.nombre + '"></div>' +
+        '</div>'
+      );
+      $('#colorPalette').append(swatch);
+    });
+
+    // Seleccionar color
+    $(document).on('click', '.color-swatch', function() {
+      $('.color-swatch').removeClass('selected');
+      $(this).addClass('selected');
+      $('#colorHex').val($(this).data('hex'));
+      $('#colorNombre').text($(this).data('nombre') + ' (' + $(this).data('hex') + ')');
+    });
+
+    // ════════════════════════════════════════════════════════════
+    // SELECT2
+    // ════════════════════════════════════════════════════════════
     $('#fondo_select').select2({
       placeholder: "Todos los fondos",
       allowClear: true,
-      width: '100%',
-      language: { noResults: function(){ return "No se encontraron resultados"; } }
+      width: '100%'
     });
 
     $('#fondo_registro').select2({
       placeholder: "Seleccione el origen presupuestario",
       allowClear: true,
-      width: '100%',
-      language: { noResults: function(){ return "No se encontraron resultados"; } }
+      width: '100%'
     });
 
-    // ── Auto-buscar al cambiar fondo ──
+    // ════════════════════════════════════════════════════════════
+    // BUSQUEDA
+    // ════════════════════════════════════════════════════════════
+
+    // Auto-buscar al cambiar fondo (si ya hay algo escrito o solo fondo)
     $('#fondo_select').on('change', function() {
-      var valor = $(this).val();
-      console.log('[FONDO] Cambio detectado, valor:', valor);
-      if (valor) {
+      var busqueda = $('#input_busqueda').val().trim();
+      if (busqueda !== '' || $(this).val()) {
         ejecutarBusqueda();
+      } else {
+        limpiarResultados();
       }
     });
 
-    // ── Buscar ──
+    // Buscar con boton
     $('#btnBuscar').on('click', function() {
       ejecutarBusqueda();
     });
 
+    // Buscar con Enter
     $('#input_busqueda').on('keypress', function(e) {
       if (e.which === 13) {
         e.preventDefault();
@@ -510,41 +585,40 @@ while ($row = $res->fetch_assoc()) {
       }
     });
 
-    // ── Mostrar todos (fallback cuando fondo no tiene resultados) ──
-    $(document).on('click', '#btnMostrarTodos', function() {
-      console.log('[FALLBACK] Mostrar todos clicked');
-      $('#fondo_select').val(null).trigger('change');
-      $('#input_busqueda').val('');
-      ejecutarBusqueda();
+    // Limpiar resultados cuando se borra el texto de busqueda
+    $('#input_busqueda').on('input', function() {
+      if ($(this).val().trim() === '' && (!$('#fondo_select').val() || $('#fondo_select').val() === '')) {
+        limpiarResultados();
+      }
     });
 
+    function limpiarResultados() {
+      $('#contenedor_resultados').hide();
+      $('#mensaje_vacio').hide();
+      $('#resultados_body').empty();
+      $('#badge_total').text('0');
+    }
+
     function ejecutarBusqueda() {
-      var idFondos = $('#fondo_select').val();
+      var idFondos = $('#fondo_select').val() || 0;
       var busqueda = $('#input_busqueda').val().trim();
 
-      console.log('[BUSQUEDA] idFondos:', idFondos, '| busqueda:', busqueda);
-
-      if (!idFondos && busqueda === '') {
-        console.log('[BUSQUEDA] Sin datos, mostrando alerta');
-        Swal.fire('Atención', 'Seleccione un fondo o escriba un texto de búsqueda.', 'info');
+      // Al menos uno de los dos debe tener datos
+      if (idFondos == 0 && busqueda === '') {
+        Swal.fire('Atencion', 'Escriba un termino de busqueda o seleccione un fondo.', 'info');
         return;
       }
-
-      var fondoParaEnviar = (idFondos && idFondos !== '') ? idFondos : 0;
-      console.log('[BUSQUEDA] Enviando fondo:', fondoParaEnviar, 'texto:', busqueda);
 
       $('#btnBuscar').prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i> Buscando...');
       $('#contenedor_resultados').hide();
       $('#mensaje_vacio').hide();
-      $('#btnMostrarTodos').hide();
 
       $.ajax({
         url: 'ajax/ajax_buscar_activos_nuevo_n.php',
         type: 'POST',
-        data: { id_fondos: fondoParaEnviar, busqueda: busqueda },
+        data: { id_fondos: idFondos, busqueda: busqueda },
         dataType: 'json',
         success: function(response) {
-          console.log('[AJAX] Respuesta:', response);
           $('#btnBuscar').prop('disabled', false).html('<i class="bi bi-search me-1"></i> Buscar');
           $('#resultados_body').empty();
 
@@ -552,20 +626,23 @@ while ($row = $res->fetch_assoc()) {
             $('#badge_total').text(response.total);
 
             response.resultados.forEach(function(row) {
+              var clase  = row.clase || '-';
+              var marca  = row.marca || '-';
+              var imagen = row.imagen || 'default.png';
+
               var tr = '<tr>' +
-                '<td class="text-center"><img src="img/' + escHtml(row.imagen) + '" class="result-img" alt=""></td>' +
-                '<td>' + escHtml(row.clase) + '</td>' +
-                '<td>' + escHtml(row.marca) + '</td>' +
-                '<td>' + escHtml(row.modelo) + '</td>' +
-                '<td>' + escHtml(row.color) + '</td>' +
+                '<td class="text-center"><img src="img/' + escHtml(imagen) + '" class="result-img" alt=""></td>' +
+                '<td>' + escHtml(clase) + '</td>' +
+                '<td>' + escHtml(marca) + '</td>' +
+                '<td><strong>' + escHtml(row.modelo) + '</strong></td>' +
                 '<td>' +
-                  '<button class="btn-seleccionar btn-seleccionar-activo" ' +
-                    'data-id="' + row.id_activo + '" ' +
-                    'data-clase="' + escAttr(row.clase) + '" ' +
-                    'data-marca="' + escAttr(row.marca) + '" ' +
+                  '<button class="btn-seleccionar btn-seleccionar-modelo" ' +
+                    'data-id_activo="' + row.id_activo + '" ' +
+                    'data-id_modelo="' + row.id_modelo + '" ' +
+                    'data-clase="' + escAttr(clase) + '" ' +
+                    'data-marca="' + escAttr(marca) + '" ' +
                     'data-modelo="' + escAttr(row.modelo) + '" ' +
-                    'data-color="' + escAttr(row.color) + '" ' +
-                    'data-imagen="' + escAttr(row.imagen) + '">' +
+                    'data-imagen="' + escAttr(imagen) + '">' +
                     '<i class="bi bi-check-circle"></i> Seleccionar' +
                   '</button>' +
                 '</td>' +
@@ -574,59 +651,54 @@ while ($row = $res->fetch_assoc()) {
             });
 
             $('#contenedor_resultados').show(300);
-
-            $('html, body').animate({
-              scrollTop: $('#contenedor_resultados').offset().top - 20
-            }, 500);
+            $('html, body').animate({ scrollTop: $('#contenedor_resultados').offset().top - 20 }, 500);
 
           } else {
-            console.log('[AJAX] Sin resultados');
-            var fondoSeleccionado = $('#fondo_select').val();
-            var texto = 'No se encontraron activos que coincidan con la búsqueda.';
-            if (fondoSeleccionado && fondoSeleccionado !== '') {
-              texto = 'No se encontraron activos vinculados a este fondo presupuestario. ' +
-                      'Esto puede deberse a que los activos aún no tienen asignado su modelo en el catálogo maestro.';
-              $('#btnMostrarTodos').show();
-            }
-            $('#texto_vacio').text(texto);
+            var msg = response.mensaje || 'No se encontraron modelos que coincidan con la busqueda.';
+            $('#texto_vacio').text(msg);
             $('#mensaje_vacio').show(300, function() {
-              $('html, body').animate({
-                scrollTop: $('#mensaje_vacio').offset().top - 20
-              }, 400);
+              $('html, body').animate({ scrollTop: $('#mensaje_vacio').offset().top - 20 }, 400);
             });
           }
         },
-        error: function(xhr, status, error) {
-          console.error('[AJAX] Error:', status, error, xhr.responseText);
+        error: function() {
           $('#btnBuscar').prop('disabled', false).html('<i class="bi bi-search me-1"></i> Buscar');
-          Swal.fire('Error', 'No se pudo realizar la búsqueda. Intente de nuevo.', 'error');
+          Swal.fire('Error', 'No se pudo realizar la busqueda. Intente de nuevo.', 'error');
         }
       });
     }
 
-    // ── Seleccionar activo ──
-    $(document).on('click', '.btn-seleccionar-activo', function() {
-      var idActivo = $(this).data('id');
-      var clase    = $(this).data('clase');
-      var marca    = $(this).data('marca');
-      var modelo   = $(this).data('modelo');
-      var color    = $(this).data('color');
-      var imagen   = $(this).data('imagen');
+    // ════════════════════════════════════════════════════════════
+    // SELECCIONAR MODELO -> FASE 2
+    // ════════════════════════════════════════════════════════════
+    $(document).on('click', '.btn-seleccionar-modelo', function() {
+      var idActivo   = $(this).data('id_activo');
+      var idModelo   = $(this).data('id_modelo');
+      var clase      = $(this).data('clase');
+      var marca      = $(this).data('marca');
+      var modelo     = $(this).data('modelo');
+      var imagen     = $(this).data('imagen');
       var fondoActual = $('#fondo_select').val();
 
       $('#detalle_imagen').attr('src', 'img/' + imagen);
       $('#detalle_clase').text(clase);
       $('#detalle_marca').text(marca);
       $('#detalle_modelo').text(modelo);
-      $('#detalle_color').text(color);
       $('#detalle_titulo').text(clase + ' ' + marca + ' ' + modelo);
       $('#hidden_id_activo').val(idActivo);
+      $('#hidden_id_modelo').val(idModelo);
 
+      // Auto-llenar fondo de registro
       if (fondoActual && fondoActual !== '') {
         $('#fondo_registro').val(fondoActual).trigger('change');
       } else {
         $('#fondo_registro').val('').trigger('change');
       }
+
+      // Reset color palette
+      $('.color-swatch').removeClass('selected');
+      $('#colorHex').val('');
+      $('#colorNombre').text('Ningun color seleccionado');
 
       $('#fase-busqueda').slideUp(300, function() {
         $('#fase-registro').slideDown(300, function() {
@@ -635,24 +707,47 @@ while ($row = $res->fetch_assoc()) {
       });
     });
 
-    // ── Volver a búsqueda ──
+    // ════════════════════════════════════════════════════════════
+    // VOLVER A BUSQUEDA
+    // ════════════════════════════════════════════════════════════
     $('#btnVolverBusqueda, #btnVolverBusqueda2').on('click', function() {
       $('#fase-registro').slideUp(300, function() {
         $('#fase-busqueda').slideDown(300);
         $('#formRegistro')[0].reset();
+        $('#hidden_id_activo').val('');
+        $('#hidden_id_modelo').val('');
         $('#fondo_registro').val('').trigger('change');
+        $('.color-swatch').removeClass('selected');
+        $('#colorHex').val('');
+        $('#colorNombre').text('Ningun color seleccionado');
       });
     });
 
-    // ── Guardar registro ──
+    // ════════════════════════════════════════════════════════════
+    // GUARDAR REGISTRO
+    // ════════════════════════════════════════════════════════════
     $('#formRegistro').on('submit', function(e) {
       e.preventDefault();
 
-      var placa    = $('#input_placa').val().trim();
-      var serial   = $('#input_serial').val().trim();
-      var idFondos = $('#fondo_registro').val();
-      var idActivo = $('#hidden_id_activo').val();
+      var idActivo  = $('#hidden_id_activo').val();
+      var modeloId  = $('#hidden_id_modelo').val();
+      var colorHex  = $('#colorHex').val();
+      var placa     = $('#input_placa').val().trim();
+      var serial    = $('#input_serial').val().trim();
+      var idFondos  = $('#fondo_registro').val();
 
+      if (!idActivo || idActivo === '') {
+        Swal.fire('Error', 'No se ha seleccionado un activo valido.', 'error');
+        return;
+      }
+      if (!modeloId || modeloId === '') {
+        Swal.fire('Error', 'No se ha seleccionado un modelo valido.', 'error');
+        return;
+      }
+      if (!colorHex || colorHex === '') {
+        Swal.fire('Campos requeridos', 'Debe seleccionar un color para el activo.', 'warning');
+        return;
+      }
       if (!placa || !serial || !idFondos) {
         Swal.fire('Campos requeridos', 'Debe completar placa, serial y origen presupuestario.', 'warning');
         return;
@@ -666,12 +761,14 @@ while ($row = $res->fetch_assoc()) {
       });
 
       $.ajax({
-        url: 'guardar_placa_n.php',
+        url: 'ajax/ajax_registro_activo_n.php',
         type: 'POST',
         data: {
+          id_activo: idActivo,
+          modelo_id: modeloId,
+          color_hex: colorHex,
           placa: placa,
           serial: serial,
-          id_activo: idActivo,
           id_fondos: idFondos
         },
         dataType: 'json',
@@ -679,15 +776,21 @@ while ($row = $res->fetch_assoc()) {
           Swal.close();
           if (response.success) {
             Swal.fire({
-              title: '¡Registro Exitoso!',
+              title: 'Registro Exitoso!',
               html: response.message +
                     '<br><small class="text-muted">Placa: <strong>' + escHtml(placa) +
-                    '</strong> | Serial: <strong>' + escHtml(serial) + '</strong></small>',
+                    '</strong> | Serial: <strong>' + escHtml(serial) +
+                    '</strong> | Color: <strong>' + escHtml(colorNombre(colorHex)) + '</strong></small>',
               icon: 'success',
               confirmButtonText: 'Aceptar'
             }).then(function() {
               $('#formRegistro')[0].reset();
+              $('#hidden_id_activo').val('');
+              $('#hidden_id_modelo').val('');
               $('#fondo_registro').val('').trigger('change');
+              $('.color-swatch').removeClass('selected');
+              $('#colorHex').val('');
+              $('#colorNombre').text('Ningun color seleccionado');
               $('#fase-registro').slideUp(300, function() {
                 $('#fase-busqueda').slideDown(300);
               });
@@ -710,12 +813,14 @@ while ($row = $res->fetch_assoc()) {
         },
         error: function(xhr, status, error) {
           Swal.close();
-          Swal.fire('Error', 'Ocurrió un error al procesar la solicitud: ' + error, 'error');
+          Swal.fire('Error', 'Ocurrio un error al procesar la solicitud: ' + error, 'error');
         }
       });
     });
 
-    // ── Helpers ──
+    // ════════════════════════════════════════════════════════════
+    // HELPERS
+    // ════════════════════════════════════════════════════════════
     function escHtml(str) {
       if (!str) return '';
       var div = document.createElement('div');
@@ -726,6 +831,14 @@ while ($row = $res->fetch_assoc()) {
     function escAttr(str) {
       if (!str) return '';
       return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function colorNombre(hex) {
+      if (!hex) return '';
+      for (var i = 0; i < COLORES.length; i++) {
+        if (COLORES[i].hex.toUpperCase() === hex.toUpperCase()) return COLORES[i].nombre;
+      }
+      return hex;
     }
 
   });

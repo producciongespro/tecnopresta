@@ -143,7 +143,8 @@ function formularioCanasta() {
   
   if ((jsonDataincludes && jsonDataincludes.length>0) || (jsonDataincludesActivo && jsonDataincludesActivo.length>0)) {
 
-    window.location.href = "navegar.php?ruta=formulario_solicitud_canasta_n.php" + getModuleParams();
+    // window.location.href = "navegar.php?ruta=formulario_solicitud_canasta_n.php" + getModuleParams();
+    window.location.href = "formulario_solicitud_canasta_n.php";
   
   } else {
 
@@ -169,7 +170,8 @@ function botonEnviaSolicitud(jsonArray, cantidad) {
   
   window.sessionStorage.setItem('postSolicitud',json);
   window.sessionStorage.setItem('botonEnviaSolicitud',true);
-  window.location.assign('navegar.php?ruta=formulario_solicitud_canasta_n.php' + getModuleParams());
+  // window.location.assign('navegar.php?ruta=formulario_solicitud_canasta_n.php' + getModuleParams());
+  window.location.assign('formulario_solicitud_canasta_n.php');
   return true;
   
 }
@@ -183,8 +185,8 @@ function botonEnviaSolicitudActivo(jsonArray) {
   
   window.sessionStorage.setItem('postSolicitudActivo',json);
   window.sessionStorage.setItem('botonEnviaSolicitud',true);
-  window.location.assign('navegar.php?ruta=formulario_solicitud_n.php' + getModuleParams());
-
+  // window.location.assign('navegar.php?ruta=formulario_solicitud_n.php' + getModuleParams());
+  window.location.assign('formulario_solicitud_n.php');
   return true;
   
 }

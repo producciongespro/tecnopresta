@@ -57,10 +57,10 @@ if ($subsistema_id > 0 && $modulo_id > 0) {
     $ruta_regreso .= '&subsistema_id=' . $subsistema_id . '&modulo_id=' . $modulo_id;
 }
 ?>
-<!doctype html>
+<!doctype html> 
 <html lang="es">
   <head>
-    <!-- Required meta tags -->
+    <!-- Required meta tags --> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

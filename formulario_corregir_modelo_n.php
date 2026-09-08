@@ -59,7 +59,7 @@ if (!defined('ACCESO_SEGURO')) {
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <!-- ESTILOS INSTITUCIONALES -->
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
-    <link rel="stylesheet" href="css/formulario_menu_principal.css?v=3" />
+    <link rel="stylesheet" href="css/formulario_menu_principal.css?v=4" />
 
     <link href="css/bootstrap-icons/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -113,7 +113,7 @@ if (!defined('ACCESO_SEGURO')) {
             </form>
 
             <!-- Botón flotante Actualizar -->
-            <button type="submit" class="btn-guardar-flotante" form="formCorregir" style="bottom: 240px;" data-tooltip="Actualizar modelos">
+            <button type="submit" class="btn-guardar-flotante" form="formCorregir" style="bottom: 170px;" data-tooltip="Actualizar modelos">
                 <i class="bi bi-clipboard2-check-fill"></i>
             </button>
 
@@ -175,10 +175,10 @@ if (!defined('ACCESO_SEGURO')) {
         </div>
 
         <!-- Botón flotante Importar Modelo -->
-        <a href="formulario_importar_modelo_general_n.php" class="btn-disponibilidad"
+        <!-- <a href="formulario_importar_modelo_general_n.php" class="btn-disponibilidad"
             style="bottom: 170px;" data-tooltip="Importar modelo">
                 <i class="bi bi-journal-arrow-down"></i>
-        </a>
+        </a> -->
         <!-- Botón flotante Volver -->
         <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="btn-disponibilidad" 
             style="bottom: 100px;" data-tooltip="Regresar">

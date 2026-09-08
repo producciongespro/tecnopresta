@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#021A53" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo blanco -->
+  <rect width="512" height="512" fill="#FFFFFF"/>
+
+  <!-- CLIPBOARD / PORTAPAPELES (Altura reducida en 1/4) -->
+  <!-- Marco exterior del clipboard -->
+  <rect x="146" y="94" width="220" height="324" rx="20" fill="#021A53" filter="url(#shadow)"/>
+  
+  <!-- Clip superior -->
+  <rect x="206" y="83" width="100" height="26" rx="8" fill="#021A53"/>
+  <circle cx="256" cy="96" r="6" fill="#FFFFFF"/>
+
+  <!-- Hoja de papel blanca -->
+  <rect x="166" y="135" width="180" height="272" rx="8" fill="#FFFFFF"/>
+
+  <!-- Línea dorada superior (título) -->
+  <rect x="186" y="150" width="140" height="10" rx="3" fill="#CFAC65"/>
+
+  <!-- CONTENEDOR ALIAS (símbolo central) -->
+  <!-- Caja contenedor principal (representa el alias) -->
+  <rect x="196" y="184" width="120" height="70" rx="6" fill="#2D67B1" opacity="0.2" stroke="#2D67B1" stroke-width="2"/>
+  
+  <!-- Líneas divisorias internas (secciones del alias) -->
+  <line x1="216" y1="203" x2="296" y2="203" stroke="#2D67B1" stroke-width="1.5" opacity="0.5"/>
+  <line x1="216" y1="221" x2="296" y2="221" stroke="#2D67B1" stroke-width="1.5" opacity="0.5"/>
+  <line x1="216" y1="240" x2="296" y2="240" stroke="#2D67B1" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Activos electrónicos dentro del contenedor (pequeños rectángulos) -->
+  <rect x="206" y="191" width="18" height="8" rx="1" fill="#164687"/>
+  <rect x="230" y="191" width="18" height="8" rx="1" fill="#164687"/>
+  <rect x="254" y="191" width="18" height="8" rx="1" fill="#164687"/>
+  
+  <rect x="206" y="210" width="18" height="8" rx="1" fill="#164687"/>
+  <rect x="230" y="210" width="18" height="8" rx="1" fill="#164687"/>
+  <rect x="254" y="210" width="18" height="8" rx="1" fill="#164687"/>
+  
+  <rect x="206" y="229" width="18" height="8" rx="1" fill="#164687"/>
+  <rect x="230" y="229" width="18" height="8" rx="1" fill="#164687"/>
+
+  <!-- Símbolo de EDICIÓN (lápiz) superpuesto en la esquina del contenedor -->
+  <g transform="translate(276, 233)">
+    <!-- Cuerpo del lápiz -->
+    <path d="M 0 0 L 18 18 L 22 14 L 4 -4 Z" fill="#CFAC65"/>
+    <!-- Punta del lápiz -->
+    <path d="M 18 18 L 22 14 L 26 18 L 22 22 Z" fill="#B89243"/>
+    <!-- Clip del lápiz -->
+    <rect x="8" y="-2" width="6" height="8" rx="1" fill="#021A53" opacity="0.6"/>
+  </g>
+
+  <!-- Líneas de texto adicionales en la hoja -->
+  <rect x="186" y="270" width="140" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="280" width="120" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="290" width="130" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="300" width="100" height="6" rx="2" fill="#D7DBDF"/>
+  
+  <rect x="186" y="315" width="140" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="325" width="120" height="6" rx="2" fill="#D7DBDF"/>
+
+  <!-- Icono de laptop/computadora en esquina inferior derecha -->
+  <g transform="translate(296, 372)">
+    <!-- Pantalla -->
+    <rect x="0" y="0" width="40" height="28" rx="3" fill="#021A53"/>
+    <rect x="4" y="4" width="32" height="20" rx="1" fill="#2D67B1"/>
+    <!-- Base -->
+    <rect x="-6" y="28" width="52" height="6" rx="2" fill="#164687"/>
+    <!-- Detalle de teclado -->
+    <rect x="-2" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="6" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="14" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="22" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+  </g>
+</svg>

@@ -1826,6 +1826,107 @@ body {
     }
 }
 
+/* ── Encabezado fijo (Corregir Modelo) ── */
+#mostraractivos {
+    max-height: 520px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+#mostraractivos .activos-table {
+    overflow: visible;
+}
+
+#mostraractivos .activos-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(135deg, var(--mep-primary), var(--mep-secondary));
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#mostraractivos .activos-table thead th {
+    background: transparent;
+}
+
+/* ── Encabezado fijo + formato (Cambiar Origen Presupuestario) ── */
+#mostrarActivos {
+    max-height: 520px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+#mostrarActivos .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: visible;
+    margin-bottom: 0;
+}
+
+#mostrarActivos .table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(135deg, var(--mep-primary), var(--mep-secondary));
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#mostrarActivos .table thead th {
+    background: transparent;
+    --bs-table-bg: transparent;
+    color: #fff;
+    border: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#mostrarActivos .table tbody tr {
+    background: #fff;
+}
+
+#mostrarActivos .table tbody tr:hover {
+    background: #f8faff;
+}
+
+#mostrarActivos .table tbody td {
+    padding: 0.6rem 0.5rem;
+    vertical-align: middle;
+    font-size: 0.88rem;
+    color: #2c3e50;
+}
+
+/* ── Encabezado fijo (Activos Destinados al Préstamo) ── */
+.activos-wrapper:has(.activos-table) {
+    max-height: 520px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.activos-wrapper:has(.activos-table) .activos-table {
+    overflow: visible;
+}
+
+.activos-wrapper:has(.activos-table) .activos-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(135deg, var(--mep-primary), var(--mep-secondary));
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.activos-wrapper:has(.activos-table) .activos-table thead th {
+    background: transparent;
+    color: #fff;
+}
+
 /* ── Botón flotante Guardar Cambios ── */
 .btn-guardar-flotante {
     position: fixed;

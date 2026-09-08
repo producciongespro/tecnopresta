@@ -74,7 +74,7 @@ $activado = 1;
 
   <!-- MEP Institutional Styles -->
   <link rel="stylesheet" href="assets/css/nueva-identidad.css">
-  <link rel="stylesheet" href="css/formulario_menu_principal.css?v=6" />
+  <link rel="stylesheet" href="css/formulario_menu_principal.css?v=7" />
 </head>
 <body class="layout-page">
     <?php include 'partials/header.php'; ?>

@@ -32,6 +32,12 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
         . '&modulo_id=' . intval($_GET['modulo_id']);
 }
 
+$ruta_ticket = 'ticket_administrativo_n.php';
+if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
+    $ruta_ticket .= '?subsistema_id=' . intval($_GET['subsistema_id'])
+                  . '&modulo_id=' . intval($_GET['modulo_id']);
+}
+
 $fondos = [];
 $res = $link->query("SELECT id_fondos, fondos FROM t_fondos ORDER BY fondos");
 while ($row = $res->fetch_assoc()) {
@@ -175,6 +181,69 @@ while ($row = $res->fetch_assoc()) {
 
     .empty-state { text-align: center; padding: 40px 20px; color: #8a9aa8; }
     .empty-state .bi { font-size: 2.5rem; opacity: 0.4; }
+
+    .ticket-panel {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      background: #f4f7fb;
+      border: 1px dashed var(--mep-blue);
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .ticket-example {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-left: 3px solid var(--mep-gold);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: #2c3e50;
+    }
+
+    .ticket-example-item { margin-bottom: 8px; }
+    .ticket-example-item:last-child { margin-bottom: 0; }
+
+    .ticket-example-label {
+      display: block;
+      font-weight: 700;
+      color: var(--mep-blue);
+      font-size: 0.82rem;
+      margin-bottom: 2px;
+    }
+
+    .limpiar-fondo-aviso {
+      max-width: 560px;
+      margin: 0 auto;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .btn-ticket {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mep-blue);
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-ticket:hover {
+      background: var(--mep-gold);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(200,169,81,0.3);
+    }
 
     .select2-container--default .select2-selection--single {
       height: 38px; padding-top: 5px; border-radius: 8px; border: 1px solid #e2e8f0;
@@ -359,9 +428,47 @@ while ($row = $res->fetch_assoc()) {
               <p class="mb-0" style="font-size:0.88rem;" id="texto_vacio">
                 No se encontraron modelos que coincidan con la busqueda.
               </p>
-              <p class="mb-0 mt-2 text-muted" style="font-size:0.82rem;">
-                Intente con otros terminos o contacte al administrador del sistema.
+            </div>
+
+            <div class="alert alert-warning limpiar-fondo-aviso mb-4" id="aviso_limpiar_fondo" style="display:none;">
+              <i class="bi bi-funnel-fill me-2"></i>
+              <strong>Sin resultados con el filtro de fondo presupuestario seleccionado.</strong><br>
+              Para abarcar un ambito mas amplio, limpie el filtro de <strong>Fondo Presupuestario</strong> y
+              vuelva a realizar la busqueda.
+            </div>
+
+            <div class="ticket-panel mt-4" id="panel_ticket">
+              <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-ticket-detailed fs-4 me-2" style="color:var(--mep-blue);"></i>
+                <strong class="mb-0" style="color:#1f3b57;">El activo no tiene modelo?</strong>
+              </div>
+              <p class="mb-3" style="font-size:0.9rem;">
+                Si el activo que desea ingresar no cuenta con un modelo registrado, puede crear un
+                ticket para que el administrador registre el modelo solicitado.
+                A continuacion se muestra un ejemplo de como deberia quedar el ticket:
               </p>
+
+              <div class="ticket-example mb-3">
+                <div class="ticket-example-item">
+                  <span class="ticket-example-label">Asunto:</span>
+                  <span>Solicitud de nuevo modelo de activo</span>
+                </div>
+                <div class="ticket-example-item">
+                  <span class="ticket-example-label">Detalle:</span>
+                  <span>
+                    Solicitamos el registro del siguiente modelo de activo que no se encuentra en el catalogo:<br>
+                    Marca: HP<br>
+                    Modelo: ProBook 450 G8<br>
+                    Descripcion breve: Computadora portatil de 15.6&quot;, procesador Intel Core i5, 8 GB RAM.
+                  </span>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <a href="<?= htmlspecialchars($ruta_ticket) ?>" class="btn-ticket">
+                  <i class="bi bi-ticket-detailed me-2"></i>Crear Ticket
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -572,6 +679,15 @@ while ($row = $res->fetch_assoc()) {
       }
     });
 
+    // Al limpiar el fondo, la lista debe quedar retraida (cerrada)
+    // Se cierra con retraso porque Select2 reabre la lista tras el evento de limpieza
+    $('#fondo_select').on('select2:clear', function() {
+      var $el = $(this);
+      setTimeout(function() {
+        $el.select2('close');
+      }, 100);
+    });
+
     // Buscar con boton
     $('#btnBuscar').on('click', function() {
       ejecutarBusqueda();
@@ -597,6 +713,8 @@ while ($row = $res->fetch_assoc()) {
       $('#mensaje_vacio').hide();
       $('#resultados_body').empty();
       $('#badge_total').text('0');
+      $('#aviso_limpiar_fondo').hide();
+      $('#panel_ticket').hide();
     }
 
     function ejecutarBusqueda() {
@@ -656,6 +774,18 @@ while ($row = $res->fetch_assoc()) {
           } else {
             var msg = response.mensaje || 'No se encontraron modelos que coincidan con la busqueda.';
             $('#texto_vacio').text(msg);
+
+            if (busqueda !== '' && idFondos != 0) {
+              $('#aviso_limpiar_fondo').show();
+              $('#panel_ticket').hide();
+            } else if (busqueda !== '') {
+              $('#panel_ticket').show();
+              $('#aviso_limpiar_fondo').hide();
+            } else {
+              $('#panel_ticket').hide();
+              $('#aviso_limpiar_fondo').hide();
+            }
+
             $('#mensaje_vacio').show(300, function() {
               $('html, body').animate({ scrollTop: $('#mensaje_vacio').offset().top - 20 }, 400);
             });

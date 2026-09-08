@@ -899,7 +899,10 @@ if ($sid) {
         // Pre-seleccionar el rol actual
         renderizarListaRoles(detalle.rol_id);
 
-        // Resetear/activar advertencia Root si el rol actual es Root
+        // Resetear/activar advertencia Root si el rol actual es Root.
+        // El campo de confirmacion siempre inicia VACIO: el usuario debe
+        // digitar ROOT manualmente para poder guardar, incluso si el rol
+        // actual ya es Root.
         const esRootActual = parseInt(detalle.rol_id) === 1;
         const banner = document.getElementById('rootWarningBanner');
         const confirmGroup = document.getElementById('rootConfirmGroup');
@@ -909,7 +912,7 @@ if ($sid) {
             document.getElementById('rootCountActual').textContent = datos.root_count;
             banner.classList.add('visible');
             confirmGroup.classList.add('visible');
-            inputConfirm.value = 'ROOT';
+            inputConfirm.value = '';
             errorText.style.display = 'none';
         } else {
             banner.classList.remove('visible');
@@ -918,7 +921,9 @@ if ($sid) {
             errorText.style.display = 'none';
         }
 
-        document.getElementById('btnGuardarAsignacion').disabled = false;
+        // Si el rol actual es Root, guardar queda deshabilitado hasta que el
+        // usuario escriba ROOT en el campo de confirmacion.
+        document.getElementById('btnGuardarAsignacion').disabled = esRootActual;
         mostrarModal('modalAsignarRol');
     }
 

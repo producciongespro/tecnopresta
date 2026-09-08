@@ -8,7 +8,8 @@
  *
  * Acciones soportadas:
  *   - crear:  INSERT formulario + INSERT permisos
- *   - editar: UPDATE formulario + reemplazar permisos
+ *   - editar: UPDATE formulario + reemplazar permisos (soporta mover a otro
+ *             subsistema/modulo, validando integridad y reubicando el icono)
  *   - toggle: activar/desactivar formulario
  *
  * Seguridad:
@@ -71,9 +72,15 @@ function nombreModuloACarpeta($nombre) {
         $nombre
     );
     $nombre = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombre);
+    if ($nombre === false) {
+        $nombre = '';
+    }
 
     // Eliminar preposiciones y articulos comunes
     $nombre = preg_replace('/\b(de|del|la|las|los|el|un|una|y|del)\b/i', '', $nombre);
+    if ($nombre === null) {
+        $nombre = '';
+    }
 
     // Dividir en palabras, descartando vacias
     $palabras = array_filter(preg_split('/\s+/', $nombre));
@@ -92,6 +99,10 @@ function nombreModuloACarpeta($nombre) {
             $resultado .= ucfirst($palabra);
         }
     }
+
+    // Sanitizar: solo letras y numeros ASCII (evita rutas invalidas por normalizacion
+    // Unicode NFD o bytes residuales de iconv, p.ej. comillas o acentos combinados)
+    $resultado = preg_replace('/[^a-z0-9]/i', '', $resultado);
 
     return $resultado ?: 'sinModulo';
 }
@@ -165,8 +176,136 @@ function procesarSubidaSVG($nombreFormulario, $rutaExistente = null, $nombreModu
     return $rutaRelativa . '/' . $filename;
 }
 
+/**
+ * Valida que el modulo destino exista, este activo y que el subsistema indicado
+ * corresponda al modulo (evita formularios huerfanos o cruces inconsistentes).
+ */
+function validarModuloDestino(PDO $conexionBD, int $modulo_id, int $subsistema_id = 0): array {
+    $stmt = $conexionBD->prepare("
+        SELECT m.id, m.nombre, m.eliminado AS modulo_eliminado, m.subsistema_id,
+               s.eliminado AS subsistema_eliminado
+        FROM modulos m
+        INNER JOIN subsistemas s ON s.id = m.subsistema_id
+        WHERE m.id = ?
+    ");
+    $stmt->execute([$modulo_id]);
+    $modulo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$modulo) {
+        echo json_encode(['success' => false, 'message' => 'El módulo destino no existe']);
+        exit;
+    }
+    if ((int)$modulo['modulo_eliminado'] === 1) {
+        echo json_encode(['success' => false, 'message' => 'El módulo destino está desactivado']);
+        exit;
+    }
+    if ((int)$modulo['subsistema_eliminado'] === 1) {
+        echo json_encode(['success' => false, 'message' => 'El subsistema del módulo destino está desactivado']);
+        exit;
+    }
+    if ($subsistema_id > 0 && (int)$modulo['subsistema_id'] !== $subsistema_id) {
+        echo json_encode(['success' => false, 'message' => 'El módulo seleccionado no pertenece al subsistema indicado']);
+        exit;
+    }
+    return $modulo;
+}
+
+/**
+ * Verifica que no exista otro formulario con el mismo nombre dentro del modulo destino
+ * (respeta la restriccion unica uq_formularios_mod_nombre).
+ */
+function validarNombreUnicoEnModulo(PDO $conexionBD, int $modulo_id, string $nombre, int $excluir_id = 0): void {
+    $sql = "SELECT COUNT(*) FROM formularios WHERE modulo_id = ? AND nombre = ?";
+    $params = [$modulo_id, $nombre];
+    if ($excluir_id > 0) {
+        $sql .= " AND id <> ?";
+        $params[] = $excluir_id;
+    }
+    $stmt = $conexionBD->prepare($sql);
+    $stmt->execute($params);
+    if ((int)$stmt->fetchColumn() > 0) {
+        echo json_encode(['success' => false, 'message' => 'Ya existe un formulario con ese nombre en el módulo destino']);
+        exit;
+    }
+}
+
+/**
+ * Reubica el archivo SVG del formulario hacia la carpeta del nuevo modulo.
+ * - Resuelve el archivo fisico real (maneja rutas de la BD que difieren del slug en disco).
+ * - Copia (no mueve) el archivo a la carpeta destino para no dejar el origen inconsistente
+ *   si la transaccion falla; el origen se elimina solo si la transaccion es exitosa.
+ * Retorna la ruta relativa nueva, o null si no se pudo reubicar.
+ */
+function reubicarIconoFormulario(PDO $conexionBD, int $formulario_id, string $imagenActual, int $nuevo_modulo_id, string $nuevo_modulo_nombre): ?string {
+    if (empty($imagenActual) || !is_string($imagenActual)) {
+        return $imagenActual;
+    }
+
+    // Ruta base absoluta de los iconos
+    $dirBase = __DIR__ . '/assets/img/formularios';
+    if (!is_dir($dirBase)) {
+        return $imagenActual;
+    }
+
+    // Normalizar la ruta relativa (quitar barra inicial y normalizar separadores)
+    $rutaRelativa = ltrim(str_replace('\\', '/', $imagenActual), '/');
+    $archivoOrigenAbs = __DIR__ . '/' . $rutaRelativa;
+
+    // Si la ruta guardada no existe en disco, intentar resolver por el slug del nombre
+    if (!file_exists($archivoOrigenAbs)) {
+        $stmt = $conexionBD->prepare("SELECT nombre FROM formularios WHERE id = ?");
+        $stmt->execute([$formulario_id]);
+        $nombreFormulario = $stmt->fetchColumn();
+        if ($nombreFormulario) {
+            $slug = slugifyNombreFormulario($nombreFormulario);
+            $candidatos = glob($dirBase . '/*/' . $slug . '.svg');
+            if ($candidatos) {
+                $archivoOrigenAbs = $candidatos[0];
+                $rutaRelativa = 'assets/img/formularios/' . basename(dirname($candidatos[0])) . '/' . basename($candidatos[0]);
+            }
+        }
+        if (!file_exists($archivoOrigenAbs)) {
+            return $imagenActual; // No se encuentra el archivo; conservar ruta (fallback)
+        }
+    }
+
+    // Carpeta destino segun el nombre real del nuevo modulo (resuelto desde BD
+    // para no depender del encoding del valor enviado desde el navegador)
+    $stmtMod = $conexionBD->prepare("SELECT nombre FROM modulos WHERE id = ?");
+    $stmtMod->execute([$nuevo_modulo_id]);
+    $nombreModuloDestino = $stmtMod->fetchColumn();
+    $carpetaDestino = nombreModuloACarpeta($nombreModuloDestino ?: $nuevo_modulo_nombre);
+    $dirDestino = $dirBase . '/' . $carpetaDestino;
+    if (!is_dir($dirDestino)) {
+        if (!mkdir($dirDestino, 0755, true)) {
+            return $imagenActual;
+        }
+    }
+
+    $nombreArchivo = basename($archivoOrigenAbs);
+    $destinoAbs = $dirDestino . '/' . $nombreArchivo;
+
+    // Evitar sobrescribir: si ya existe un archivo con el mismo nombre, anexar sufijo
+    if (file_exists($destinoAbs)) {
+        $info = pathinfo($nombreArchivo);
+        $destinoAbs = $dirDestino . '/' . $info['filename'] . '-' . $formulario_id . '.' . ($info['extension'] ?? 'svg');
+    }
+
+    if (!copy($archivoOrigenAbs, $destinoAbs)) {
+        return $imagenActual;
+    }
+
+    $nuevaRuta = 'assets/img/formularios/' . $carpetaDestino . '/' . basename($destinoAbs);
+
+    // Registrar el origen para limpiarlo tras el commit exitoso
+    $GLOBALS['__icono_origen_pendiente'][] = $archivoOrigenAbs;
+
+    return $nuevaRuta;
+}
+
 try {
     $conexionBD = BD::crearInstancia();
+    $GLOBALS['__icono_origen_pendiente'] = [];
 
     switch ($action) {
 
@@ -175,6 +314,7 @@ try {
         // ============================================================
         case 'crear':
             $modulo_id = isset($_POST['modulo_id']) ? (int)$_POST['modulo_id'] : 0;
+            $subsistema_id = isset($_POST['subsistema_id']) ? (int)$_POST['subsistema_id'] : 0;
             $modulo_nombre = trim($_POST['modulo_nombre'] ?? '');
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
@@ -191,6 +331,11 @@ try {
                 echo json_encode(['success' => false, 'message' => 'Debe seleccionar un modulo']);
                 exit;
             }
+
+            // Validar que el modulo destino exista, este activo y corresponda al subsistema
+            validarModuloDestino($conexionBD, $modulo_id, $subsistema_id);
+            // Validar que no exista otro formulario con el mismo nombre en el modulo destino
+            validarNombreUnicoEnModulo($conexionBD, $modulo_id, $nombre);
 
             // Procesar SVG
             $imagen = null;
@@ -235,6 +380,7 @@ try {
         case 'editar':
             $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
             $modulo_id = isset($_POST['modulo_id']) ? (int)$_POST['modulo_id'] : 0;
+            $subsistema_id = isset($_POST['subsistema_id']) ? (int)$_POST['subsistema_id'] : 0;
             $modulo_nombre = trim($_POST['modulo_nombre'] ?? '');
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
@@ -256,10 +402,20 @@ try {
                 exit;
             }
 
-            // Obtener imagen actual del formulario
-            $stmtImg = $conexionBD->prepare("SELECT imagen FROM formularios WHERE id = ?");
+            // Validar que el modulo destino exista, este activo y corresponda al subsistema
+            validarModuloDestino($conexionBD, $modulo_id, $subsistema_id);
+            // Validar que no exista otro formulario con el mismo nombre en el modulo destino
+            validarNombreUnicoEnModulo($conexionBD, $modulo_id, $nombre, $id);
+
+            // Obtener imagen y modulo actual del formulario
+            $stmtImg = $conexionBD->prepare("SELECT imagen, modulo_id FROM formularios WHERE id = ?");
             $stmtImg->execute([$id]);
-            $imagenActual = $stmtImg->fetchColumn();
+            $filaActual = $stmtImg->fetch(PDO::FETCH_ASSOC);
+            $imagenActual = $filaActual ? $filaActual['imagen'] : null;
+            $moduloActualId = $filaActual ? (int)$filaActual['modulo_id'] : 0;
+
+            // Determinar si hubo moviemiento de modulo
+            $huboMovimiento = ($moduloActualId > 0 && $moduloActualId !== $modulo_id);
 
             // Procesar SVG (si no se sube archivo, conserva la imagen actual)
             try {
@@ -267,6 +423,19 @@ try {
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
                 exit;
+            }
+
+            // Si hubo movimiento y no se subio un icono nuevo, reubicar el existente
+            if ($huboMovimiento && $imagen === $imagenActual) {
+                try {
+                    $imagenReubicada = reubicarIconoFormulario($conexionBD, $id, (string)$imagenActual, $modulo_id, $modulo_nombre);
+                    if ($imagenReubicada !== null && $imagenReubicada !== $imagenActual) {
+                        $imagen = $imagenReubicada;
+                    }
+                } catch (Exception $e) {
+                    // No rompemos el movimiento; se conserva la ruta original
+                    $imagen = $imagenActual;
+                }
             }
 
             $conexionBD->beginTransaction();
@@ -317,9 +486,23 @@ try {
 
             $conexionBD->commit();
 
+            // Limpiar iconos origen reubicados solo tras commit exitoso
+            if (!empty($GLOBALS['__icono_origen_pendiente'])) {
+                foreach ($GLOBALS['__icono_origen_pendiente'] as $origen) {
+                    if (is_string($origen) && file_exists($origen)) {
+                        @unlink($origen);
+                    }
+                }
+                $GLOBALS['__icono_origen_pendiente'] = [];
+            }
+
+            $mensaje = $huboMovimiento
+                ? 'Formulario actualizado y movido correctamente'
+                : 'Formulario actualizado correctamente';
+
             echo json_encode([
                 'success' => true,
-                'message' => 'Formulario actualizado correctamente'
+                'message' => $mensaje
             ]);
             break;
 
@@ -356,6 +539,15 @@ try {
 } catch (Exception $e) {
     if (isset($conexionBD) && $conexionBD->inTransaction()) {
         $conexionBD->rollBack();
+    }
+    // Red de seguridad: duplicado por restricciones unicas (uq_formularios_mod_nombre / uq_formularios_ruta)
+    if ($e->getCode() === 23000) {
+        http_response_code(409);
+        echo json_encode([
+            'success' => false,
+            'message' => 'No se pudo guardar: ya existe un formulario con ese nombre o ruta en el destino'
+        ]);
+        exit;
     }
     http_response_code(500);
     echo json_encode([

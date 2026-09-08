@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#021A53" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo blanco -->
+  <rect width="512" height="512" fill="#FFFFFF"/>
+
+  <!-- CLIPBOARD / PORTAPAPELES -->
+  <!-- Marco exterior del clipboard -->
+  <rect x="146" y="94" width="220" height="324" rx="20" fill="#021A53" filter="url(#shadow)"/>
+  
+  <!-- Clip superior -->
+  <rect x="206" y="83" width="100" height="26" rx="8" fill="#021A53"/>
+  <circle cx="256" cy="96" r="6" fill="#FFFFFF"/>
+
+  <!-- Hoja de papel blanca -->
+  <rect x="166" y="135" width="180" height="272" rx="8" fill="#FFFFFF"/>
+
+  <!-- Línea dorada superior (título) -->
+  <rect x="186" y="150" width="140" height="10" rx="3" fill="#CFAC65"/>
+
+  <!-- CONTENEDOR ALIAS NUEVO (símbolo central) -->
+  <!-- Caja contenedor con borde punteado (indica que es nuevo/está vacío) -->
+  <rect x="196" y="184" width="120" height="70" rx="6" fill="#2D67B1" opacity="0.1" stroke="#2D67B1" stroke-width="2" stroke-dasharray="6,4"/>
+  
+  <!-- Líneas divisorias internas tenues (estructura del contenedor) -->
+  <line x1="216" y1="203" x2="296" y2="203" stroke="#2D67B1" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,3"/>
+  <line x1="216" y1="221" x2="296" y2="221" stroke="#2D67B1" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,3"/>
+  <line x1="216" y1="240" x2="296" y2="240" stroke="#2D67B1" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,3"/>
+
+  <!-- Activo fantasma (indica qué tipo de elementos irá dentro) -->
+  <rect x="206" y="191" width="18" height="8" rx="1" fill="#164687" opacity="0.3"/>
+  <rect x="230" y="191" width="18" height="8" rx="1" fill="#164687" opacity="0.3"/>
+
+  <!-- Símbolo de CREACIÓN (Botón Plus dorado) superpuesto en la esquina -->
+  <circle cx="300" cy="238" r="18" fill="#CFAC65" filter="url(#shadow)"/>
+  <path d="M 300 228 L 300 248 M 290 238 L 310 238" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Líneas de texto adicionales en la hoja -->
+  <rect x="186" y="270" width="140" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="280" width="120" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="290" width="130" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="300" width="100" height="6" rx="2" fill="#D7DBDF"/>
+  
+  <rect x="186" y="315" width="140" height="6" rx="2" fill="#D7DBDF"/>
+  <rect x="186" y="325" width="120" height="6" rx="2" fill="#D7DBDF"/>
+
+  <!-- Icono de laptop/computadora en esquina inferior derecha -->
+  <g transform="translate(296, 372)">
+    <!-- Pantalla -->
+    <rect x="0" y="0" width="40" height="28" rx="3" fill="#021A53"/>
+    <rect x="4" y="4" width="32" height="20" rx="1" fill="#2D67B1"/>
+    <!-- Base -->
+    <rect x="-6" y="28" width="52" height="6" rx="2" fill="#164687"/>
+    <!-- Detalle de teclado -->
+    <rect x="-2" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="6" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="14" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+    <rect x="22" y="30" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.4"/>
+  </g>
+</svg>

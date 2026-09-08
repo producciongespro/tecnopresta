@@ -1,0 +1,154 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2E3E5C"/>
+    <stop offset="100%" stop-color="#1F2C45"/>
+  </linearGradient>
+
+  <linearGradient id="blueLight" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#3B82F6"/>
+    <stop offset="100%" stop-color="#2563EB"/>
+  </linearGradient>
+
+  <linearGradient id="grayMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#94A3B8"/>
+    <stop offset="100%" stop-color="#64748B"/>
+  </linearGradient>
+
+  <linearGradient id="screenMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="100%" stop-color="#0F172A"/>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.14"/>
+  </filter>
+</defs>
+
+<!-- Central About / Help Panel -->
+<g filter="url(#shadow)">
+  <rect x="116" y="92" width="280" height="188" rx="18"
+        fill="white" stroke="#24324A" stroke-width="6"/>
+
+  <!-- Browser / Online Manual Header -->
+  <rect x="116" y="92" width="280" height="38" rx="18" fill="url(#blueMain)"/>
+  <rect x="116" y="112" width="280" height="18" fill="url(#blueMain)"/>
+  <circle cx="139" cy="111" r="5" fill="white" opacity="0.9"/>
+  <circle cx="157" cy="111" r="5" fill="white" opacity="0.65"/>
+  <circle cx="175" cy="111" r="5" fill="white" opacity="0.4"/>
+</g>
+
+<!-- Developer Group / About -->
+<g>
+  <rect x="145" y="148" width="92" height="92" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+
+  <!-- Group of Developers -->
+  <circle cx="191" cy="172" r="13" fill="url(#blueMain)"/>
+  <circle cx="170" cy="180" r="9" fill="#64748B"/>
+  <circle cx="212" cy="180" r="9" fill="#64748B"/>
+
+  <path d="M169 210C169 193 180 186 191 186C202 186 213 193 213 210"
+        fill="url(#blueMain)"/>
+  <path d="M154 210C154 198 161 191 170 191C177 191 182 195 185 202V210H154Z"
+        fill="#64748B"/>
+  <path d="M197 202C200 195 205 191 212 191C221 191 228 198 228 210H197V202Z"
+        fill="#64748B"/>
+
+  <!-- Information badge -->
+  <circle cx="222" cy="218" r="12" fill="white" stroke="#3B82F6" stroke-width="3"/>
+  <path d="M222 216V224" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="222" cy="212" r="1.8" fill="#3B82F6"/>
+</g>
+
+<!-- Developer Information -->
+<g>
+  <rect x="258" y="148" width="107" height="12" rx="6" fill="url(#blueMain)"/>
+  <rect x="258" y="171" width="84" height="9" rx="4.5" fill="#CBD5E1"/>
+  <rect x="258" y="190" width="96" height="9" rx="4.5" fill="#E2E8F0"/>
+  <rect x="258" y="209" width="72" height="9" rx="4.5" fill="#CBD5E1"/>
+
+  <!-- Developer / system details -->
+  <circle cx="269" cy="240" r="7" fill="#3B82F6"/>
+  <path d="M266 240L268 242L272 237" stroke="white" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="283" y="236" width="68" height="8" rx="4" fill="#E2E8F0"/>
+</g>
+
+<!-- Online Manual / HTML indicator -->
+<g>
+  <rect x="145" y="258" width="220" height="9" rx="4.5" fill="#E2E8F0"/>
+</g>
+
+<!-- About / Developer Circle -->
+<g filter="url(#shadow)">
+  <circle cx="100" cy="340" r="52" fill="url(#blueMain)"/>
+  <circle cx="100" cy="340" r="31" stroke="white" stroke-width="3"/>
+
+  <!-- People -->
+  <circle cx="100" cy="329" r="9" fill="white"/>
+  <circle cx="86" cy="334" r="6" fill="white" opacity="0.9"/>
+  <circle cx="114" cy="334" r="6" fill="white" opacity="0.9"/>
+  <path d="M84 353C84 340 91 335 100 335C109 335 116 340 116 353"
+        stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <path d="M75 352C75 344 79 340 85 340C89 340 92 342 94 346"
+        stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M106 346C108 342 111 340 115 340C121 340 125 344 125 352"
+        stroke="white" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Info -->
+  <circle cx="122" cy="365" r="10" fill="url(#blueLight)" stroke="white" stroke-width="2"/>
+  <path d="M122 361V369" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="122" cy="357.5" r="1.5" fill="white"/>
+</g>
+
+<!-- Verified / Official System -->
+<g filter="url(#shadow)">
+  <path d="M256 314L304 332V368C304 394 284 414 256 424C228 414 208 394 208 368V332L256 314Z"
+        fill="url(#blueMain)"/>
+  <path d="M238 368L250 380L276 350"
+        stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Online Manual Circle -->
+<g filter="url(#shadow)">
+  <circle cx="412" cy="340" r="52" fill="url(#blueMain)"/>
+
+  <!-- Open book -->
+  <path d="M384 324C394 320 404 322 412 328V366C404 360 394 358 384 362V324Z"
+        fill="white"/>
+  <path d="M440 324C430 320 420 322 412 328V366C420 360 430 358 440 362V324Z"
+        fill="white"/>
+
+  <!-- Globe -->
+  <circle cx="412" cy="355" r="18" stroke="#2E3E5C" stroke-width="3" fill="white"/>
+  <path d="M394 355H430M412 337V373"
+        stroke="#2E3E5C" stroke-width="2.5"/>
+  <path d="M400 343C407 348 417 348 424 343M400 367C407 362 417 362 424 367"
+        stroke="#2E3E5C" stroke-width="2.5" fill="none"/>
+</g>
+
+<!-- Bottom Online HTML Manual -->
+<g filter="url(#shadow)">
+  <rect x="176" y="438" width="160" height="32" rx="10" fill="url(#screenMain)"/>
+
+  <!-- Browser document -->
+  <rect x="197" y="446" width="52" height="17" rx="4" fill="white" opacity="0.96"/>
+  <circle cx="203" cy="451" r="2" fill="#3B82F6"/>
+  <rect x="209" y="449" width="31" height="4" rx="2" fill="#CBD5E1"/>
+  <rect x="202" y="456" width="38" height="3" rx="1.5" fill="#E2E8F0"/>
+
+  <!-- HTML code -->
+  <path d="M266 449L259 454L266 459M282 449L289 454L282 459M276 447L272 461"
+        stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Information / About Badge -->
+<g filter="url(#shadow)">
+  <circle cx="432" cy="438" r="30" fill="url(#blueMain)" stroke="white" stroke-width="4"/>
+  <circle cx="432" cy="438" r="13" stroke="white" stroke-width="3"/>
+  <path d="M432 434V447" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="432" cy="429" r="2" fill="white"/>
+</g>
+
+</svg>

@@ -57,9 +57,6 @@ if (mysqli_num_rows($consulta) > 0) {
                 <th>Color</th>
                 <th>Placa</th>
                 <th>Serial</th>
-                <th colspan="4"><button class="btn btn-dark btn-lg btn-block" type="submit" name="btnActualizar" id="btnActualizar">
-                    <i class="bi bi-clipboard2-check-fill"></i> Actualizar
-                </button></th>
             </tr>
         </thead>
         <tbody class="BusquedaRapida">';

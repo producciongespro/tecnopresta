@@ -30,6 +30,7 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
+$cedula_actual = $usuario_azure['cedula'] ?? '';
 
 // ==== CONSTRUIR RUTA DE REGRESO =====
 $ruta_regreso = 'navegar.php?ruta=formulario_menu_principal.php';
@@ -68,7 +69,8 @@ $lugares_ambito = array();
 $resLugares = $link->query("SELECT DISTINCT l.id_lugar, l.lugar
     FROM t_lugar l
     INNER JOIN t_placa p ON p.id_lugar = l.id_lugar
-    WHERE p.codigo = '$logcodigo' AND p.activo = 1
+    WHERE p.codigo = '$logcodigo' AND p.activo = 1 AND l.activo = 1
+      AND l.id_lugar <> 15
     ORDER BY l.id_lugar");
 if ($resLugares) {
     while ($filaL = $resLugares->fetch_assoc()) {
@@ -483,7 +485,7 @@ $(document).ready(function () {
                   <?php endif; ?>
                   </td>
                   <td class="text-center">
-                  <?php if ($programas['rol_id'] != 1): ?>
+                  <?php if ($programas['rol_id'] != 1 && $programas['cedula'] != $cedula_actual): ?>
                     <a class="btn btn-sm btn-outline-danger border-0" href="#" onclick="confirmarEliminacion(<?php echo $programas['id'] ?>); return false;">
                       <span class="icon icon-bin"></span>
                     </a>

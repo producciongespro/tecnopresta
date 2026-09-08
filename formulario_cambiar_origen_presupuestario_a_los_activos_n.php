@@ -64,7 +64,7 @@ $logcodigo = $_SESSION['codigo'];
 
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
-    <link rel="stylesheet" href="css/formulario_menu_principal.css" />
+    <link rel="stylesheet" href="css/formulario_menu_principal.css?v=8"/>
 
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
@@ -124,7 +124,7 @@ $logcodigo = $_SESSION['codigo'];
                         ?>
                 </select>
             </div>
-            <form action="actualizar_origen_presupuestario_n.php" method="POST">
+            <form action="actualizar_origen_presupuestario_n.php" method="POST" id="formCambiarOrigen">
                 <input type="hidden" name="subsistema_id" value="<?= intval($_GET['subsistema_id'] ?? 0) ?>">
                 <input type="hidden" name="modulo_id" value="<?= intval($_GET['modulo_id'] ?? 0) ?>">
                 <!-- Select para elegir el nuevo fondo presupuestario -->
@@ -135,19 +135,69 @@ $logcodigo = $_SESSION['codigo'];
                 <div id="mostrarActivos">
                     <!-- Aquí se cargarán los activos asociados al origen seleccionado -->
                 </div>
-                    <!-- Botón para enviar el formulario 
-                    <button type="submit" class="btn btn-primary my-3">Actualizar Origen Presupuestario</button> -->
                 </form>
             </div>
+
+            <!-- Botón flotante Actualizar -->
+            <button type="submit" class="btn-guardar-flotante" form="formCambiarOrigen" style="bottom: 170px; display: none;" data-tooltip="Actualizar">
+                <i class="bi bi-clipboard2-check-fill"></i>
+            </button>
         </main>
     <!-- Botón flotante Volver -->
     <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="btn-disponibilidad" 
         style="bottom: 100px;" data-tooltip="Regresar">
             <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
+
+    <!-- Modal Éxito -->
+    <div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="prestamo-modal-header">
+                    <h5 class="modal-title"><i class="bi bi-check-circle me-2"></i>Resultado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <p class="fw-semibold" style="color: var(--mep-primary); font-size: 1.1rem;">¡Cambios realizados!</p>
+                    <p class="text-muted">El origen presupuestario de los activos seleccionados fue actualizado correctamente.</p>
+                    <img src="img/listo.png" style="width: 5rem; margin-top: 10px;">
+                </div>
+                <div class="prestamo-modal-footer">
+                    <button type="button" class="btn btn-mep-primary" id="btnAceptarExito">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error -->
+    <div class="modal fade" id="modalError" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="prestamo-modal-header">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Atención</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <p class="fw-semibold" style="color: var(--mep-primary);" id="modalErrorTexto">Error al realizar los cambios.</p>
+                    <img src="img/mensaje.png" style="width: 5rem; margin-top: 10px;">
+                </div>
+                <div class="prestamo-modal-footer">
+                    <button type="button" class="btn btn-mep-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php include 'partials/footer.php'; ?>
 
     <script>
+        function mostrarModal(id) {
+            var el = document.getElementById(id);
+            if (el) {
+                var modal = new bootstrap.Modal(el);
+                modal.show();
+            }
+        }
+
         $(document).ready(function () {
             // Evento cuando se selecciona un origen presupuestario
             $('#origenPresupuestario').change(function () {
@@ -171,9 +221,50 @@ $logcodigo = $_SESSION['codigo'];
                         data: { id_fondos: idOrigen },
                         success: function (response) {
                             $('#mostrarActivos').html(response);
+                            $('.btn-guardar-flotante[form="formCambiarOrigen"]').toggle(response.indexOf('<table') !== -1);
                         }
                     });
                 }
+            });
+
+            // Enviar vía AJAX
+            $('#formCambiarOrigen').submit(function (e) {
+                e.preventDefault();
+
+                if ($('input[name="idsplacas[]"]:checked').length === 0) {
+                    document.getElementById('modalErrorTexto').innerText = 'No hay ningún activo seleccionado.';
+                    mostrarModal('modalError');
+                    return;
+                }
+
+                if (!$('[name="nuevoFondo"]').val()) {
+                    document.getElementById('modalErrorTexto').innerText = 'No se seleccionó un nuevo fondo presupuestario.';
+                    mostrarModal('modalError');
+                    return;
+                }
+
+                $.post($(this).attr('action'), $(this).serialize(), function (resp) {
+                    if (resp.success) {
+                        mostrarModal('modalExito');
+                    } else {
+                        document.getElementById('modalErrorTexto').innerText = resp.error || 'Error al actualizar los activos.';
+                        mostrarModal('modalError');
+                    }
+                }, 'json').fail(function () {
+                    document.getElementById('modalErrorTexto').innerText = 'Error de conexión con el servidor.';
+                    mostrarModal('modalError');
+                });
+            });
+
+            // Regresar al formulario preservando la navegación tras el éxito
+            $('#btnAceptarExito').on('click', function () {
+                var url = 'navegar.php?ruta=formulario_cambiar_origen_presupuestario_a_los_activos_n.php';
+                var subsistema = $('input[name="subsistema_id"]').val();
+                var modulo = $('input[name="modulo_id"]').val();
+                if (subsistema > 0 && modulo > 0) {
+                    url += '&subsistema_id=' + subsistema + '&modulo_id=' + modulo;
+                }
+                window.location.href = url;
             });
         });
     </script>

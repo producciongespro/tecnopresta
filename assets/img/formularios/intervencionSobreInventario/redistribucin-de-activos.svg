@@ -1,0 +1,89 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#192952"/>
+      <stop offset="100%" stop-color="#0035A0"/>
+    </linearGradient>
+
+    <linearGradient id="goldAccent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#CFAC65"/>
+      <stop offset="100%" stop-color="#F2DAB1"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo transparente -->
+
+  <!-- CLIPBOARD / REGISTRO DE DISTRIBUCIÓN -->
+  <g filter="url(#shadow)">
+    <rect x="150" y="120" width="200" height="260" rx="26" fill="url(#blueMain)"/>
+    <rect x="170" y="140" width="160" height="220" rx="18" fill="white"/>
+  </g>
+
+  <!-- CLIP -->
+  <rect x="210" y="90" width="100" height="60" rx="16" fill="url(#blueMain)"/>
+  <circle cx="260" cy="110" r="8" fill="white"/>
+
+  <!-- DATOS DEL REGISTRO -->
+  <rect x="190" y="180" width="110" height="10" rx="5" fill="#CFAC65"/>
+  <rect x="190" y="205" width="82" height="10" rx="5" fill="#E5E7EB"/>
+
+  <!-- DOS CENTROS EDUCATIVOS -->
+  <g filter="url(#shadow)">
+    <!-- Centro origen -->
+    <rect x="188" y="238" width="54" height="52" rx="10" fill="url(#blueMain)"/>
+    <path d="M215 246L195 257H235L215 246Z" fill="white"/>
+    <rect x="199" y="260" width="7" height="18" rx="2" fill="white"/>
+    <rect x="212" y="260" width="7" height="18" rx="2" fill="white"/>
+    <rect x="225" y="260" width="7" height="18" rx="2" fill="white"/>
+    <rect x="195" y="280" width="40" height="4" rx="2" fill="white"/>
+
+    <!-- Centro destino -->
+    <rect x="278" y="238" width="54" height="52" rx="10" fill="url(#goldAccent)"/>
+    <path d="M305 246L285 257H325L305 246Z" fill="#192952"/>
+    <rect x="289" y="260" width="7" height="18" rx="2" fill="#192952"/>
+    <rect x="302" y="260" width="7" height="18" rx="2" fill="#192952"/>
+    <rect x="315" y="260" width="7" height="18" rx="2" fill="#192952"/>
+    <rect x="285" y="280" width="40" height="4" rx="2" fill="#192952"/>
+  </g>
+
+  <!-- FLECHA DE TRANSFERENCIA ENTRE CENTROS -->
+  <g>
+    <path d="M247 264H273" stroke="#192952" stroke-width="7" stroke-linecap="round"/>
+    <path d="M265 253L278 264L265 275" fill="#192952"/>
+  </g>
+
+  <!-- PORTÁTIL / ACTIVO TECNOLÓGICO EN MOVIMIENTO -->
+  <g filter="url(#shadow)">
+    <rect x="218" y="304" width="76" height="45" rx="8" fill="url(#goldAccent)"/>
+    <rect x="222" y="308" width="68" height="34" rx="6" fill="white"/>
+
+    <!-- Código de barras -->
+    <g transform="translate(241,316)" fill="#192952">
+      <rect x="0" y="0" width="2" height="16"/>
+      <rect x="4" y="0" width="1" height="16"/>
+      <rect x="7" y="0" width="3" height="16"/>
+      <rect x="12" y="0" width="1" height="16"/>
+      <rect x="15" y="0" width="2" height="16"/>
+      <rect x="19" y="0" width="1" height="16"/>
+      <rect x="22" y="0" width="3" height="16"/>
+      <rect x="27" y="0" width="1" height="16"/>
+      <rect x="30" y="0" width="2" height="16"/>
+    </g>
+
+    <rect x="210" y="349" width="92" height="12" rx="6" fill="#64748B"/>
+  </g>
+
+  <!-- FLECHAS DE DISTRIBUCIÓN HACIA LOS CENTROS -->
+  <g stroke="url(#blueMain)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M225 306C215 300 213 294 215 290"/>
+    <path d="M287 306C297 300 299 294 297 290"/>
+  </g>
+
+  <!-- Puntas de flecha -->
+  <path d="M207 296L215 286L220 299" fill="#192952"/>
+  <path d="M305 296L297 286L292 299" fill="#192952"/>
+</svg>

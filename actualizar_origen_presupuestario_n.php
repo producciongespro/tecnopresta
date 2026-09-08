@@ -26,8 +26,10 @@ if (!$link->set_charset("utf8")) {
 require_once __DIR__ . '/usuarioAzure.php';
 $usuario_azure = obtenerUsuarioSesion();
 
+header('Content-Type: application/json; charset=utf-8');
+
 if (!$usuario_azure) {
-    header("Location: index.html");
+    echo json_encode(['success' => false, 'error' => 'No autenticado.']);
     exit();
 }
 
@@ -41,18 +43,12 @@ $logcodigo = $_SESSION['codigo'] ?? '';
 
 // Validar selección de modelos y placas
 if (empty($_POST['idsplacas'])) {
-    echo '<script language="javascript">
-    alert("No hay ningún activo seleccionado");
-    window.location.href = "navegar.php?ruta=formulario_cambiar_origen_presupuestario_a_los_activos_n.php";
-    </script>';
+    echo json_encode(['success' => false, 'error' => 'No hay ningún activo seleccionado.']);
     exit();
 }
 
 if (empty($_POST['nuevoFondo'])) {
-    echo '<script language="javascript">
-    alert("No se seleccionó un nuevo fondo presupuestario");
-    window.location.href = "navegar.php?ruta=formulario_cambiar_origen_presupuestario_a_los_activos_n.php";
-    </script>';
+    echo json_encode(['success' => false, 'error' => 'No se seleccionó un nuevo fondo presupuestario.']);
     exit();
 }
 
@@ -63,19 +59,19 @@ $query = "UPDATE t_placa SET id_fondos = ? WHERE id_placa = ?";
 $stmt = $link->prepare($query);
 
 if (!$stmt) {
-    die("Error preparando la consulta: " . $link->error);
+    echo json_encode(['success' => false, 'error' => 'Error preparando la consulta: ' . $link->error]);
+    exit();
 }
 
+$errores = [];
 foreach ($_POST['idsplacas'] as $idplaca) {
     // Validar que los valores no estén vacíos
     if (!empty($id_fondos_nuevo) && !empty($idplaca)) {
         $stmt->bind_param('ii', $id_fondos_nuevo, $idplaca);
-        
+
         // Ejecutar la consulta
         if (!$stmt->execute()) {
-            echo '<script language="javascript">
-            alert("Error al actualizar el activo con id de placa ' . $idplaca . '");
-            </script>';
+            $errores[] = 'Error al actualizar el activo con id de placa ' . $idplaca;
         }
     }
 }
@@ -84,15 +80,11 @@ foreach ($_POST['idsplacas'] as $idplaca) {
 $stmt->close();
 $link->close();
 
-// Redireccionar con mensaje de éxito preservando la navegación
-$subsistema_id = intval($_POST['subsistema_id'] ?? 0);
-$modulo_id = intval($_POST['modulo_id'] ?? 0);
-$ruta_volver = "navegar.php?ruta=formulario_cambiar_origen_presupuestario_a_los_activos_n.php";
-if ($subsistema_id > 0 && $modulo_id > 0) {
-    $ruta_volver .= "&subsistema_id=$subsistema_id&modulo_id=$modulo_id";
+if (!empty($errores)) {
+    echo json_encode(['success' => false, 'error' => implode(' | ', $errores)]);
+    exit();
 }
-echo '<script language="javascript">
-alert("Cambios realizados");
-window.location.href = "' . $ruta_volver . '";
-</script>';
+
+echo json_encode(['success' => true]);
+exit();
 ?>

@@ -125,7 +125,9 @@ function usuarioTieneRuta(string $ruta): bool
         'formulario_menu_principal.php',
         'formulario_modulos.php',
         'formulario_sub_modulos.php',
-        'navegar.php'
+        'navegar.php',
+        'acerca_de_n.php',
+        'ayuda_n.php'
     ];
 
     // Si la ruta pertenece a formularios públicos internos, se permite el acceso sin validar permisos específicos

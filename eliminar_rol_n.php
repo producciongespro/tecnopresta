@@ -113,6 +113,13 @@ if ($codigo != $logcodigo) {
     exit;
 }
 
+$cedula_actual = $usuario_azure['cedula'] ?? null;
+if ($cedula_actual !== null && $cedula === $cedula_actual) {
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'No puede eliminar sus propios permisos'];
+    header("Location: navegar.php?ruta=formulario_crear_roles_n.php");
+    exit;
+}
+
 if (!$esRoot && $id_rol == 1) {
     $_SESSION['flash'] = ['type' => 'error', 'message' => 'No puede eliminar un usuario root'];
     header("Location: navegar.php?ruta=formulario_crear_roles_n.php");

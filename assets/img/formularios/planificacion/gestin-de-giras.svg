@@ -1,0 +1,144 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Paleta Institucional MEP -->
+
+  <linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#164687"></stop>
+    <stop offset="100%" stop-color="#021A53"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2D67B1"></stop>
+    <stop offset="100%" stop-color="#164687"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#B89243"></stop>
+  </linearGradient>
+
+  <linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D7DBDF"></stop>
+    <stop offset="100%" stop-color="#BFC5CB"></stop>
+  </linearGradient>
+
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- Marco Principal -->
+
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"></rect>
+</g>
+
+<!-- Cabecera -->
+
+<g filter="url(#shadow)">
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"></rect>
+  <circle cx="256" cy="67" r="7" fill="white"></circle>
+</g>
+
+<!-- Panel Principal -->
+
+<g filter="url(#shadow)">
+
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#mepBlue)"></rect>
+
+  <!-- Ruta / Gira -->
+
+  <path d="M174 208
+           C190 176 220 164 252 174
+           C282 184 300 172 330 148" stroke="white" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 8"></path>
+
+  <!-- Punto origen -->
+
+  <circle cx="174" cy="208" r="10" fill="url(#mepGold)"></circle>
+
+  <!-- Centro educativo -->
+
+  <path d="M318 140
+           L294 156
+           V198
+           H342
+           V156
+           Z" fill="white"></path>
+
+  <rect x="312" y="174" width="12" height="24" rx="2" fill="url(#mepBlueSoft)"></rect>
+
+  <!-- Vehículo -->
+
+  <rect x="218" y="186" width="46" height="20" rx="4" fill="white"></rect>
+
+  <rect x="228" y="176" width="22" height="14" rx="3" fill="white"></rect>
+
+  <circle cx="228" cy="210" r="5" fill="url(#mepGold)"></circle>
+  <circle cx="254" cy="210" r="5" fill="url(#mepGold)"></circle>
+
+</g>
+
+<!-- Costos Estimados -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <circle cx="120" cy="360" r="24" fill="white"></circle>
+
+  <text x="111" y="367" font-family="Arial" font-size="18" font-weight="bold" fill="#164687">₡</text>
+
+</g>
+
+<!-- Planificación -->
+
+<g filter="url(#shadow)">
+
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"></rect>
+
+  <rect x="230" y="332" width="52" height="10" rx="5" fill="white"></rect>
+
+  <rect x="230" y="354" width="38" height="10" rx="5" fill="white"></rect>
+
+  <rect x="230" y="376" width="46" height="10" rx="5" fill="white"></rect>
+
+  <circle cx="282" cy="408" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M278 408L281 411L286 404" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Estado de Giras -->
+
+<g filter="url(#shadow)">
+
+  <circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"></circle>
+
+  <!-- Calendario -->
+
+  <rect x="372" y="334" width="40" height="42" rx="6" fill="white"></rect>
+
+  <rect x="372" y="334" width="40" height="10" rx="5" fill="url(#mepGold)"></rect>
+
+  <!-- Check de aprobación -->
+
+  <circle cx="414" cy="382" r="10" fill="url(#mepGold)"></circle>
+
+  <path d="M410 382L413 385L418 378" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- Base Institucional -->
+
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"></rect>
+</g>
+
+<!-- Franja Corporativa -->
+
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.28"></rect>
+
+</svg>

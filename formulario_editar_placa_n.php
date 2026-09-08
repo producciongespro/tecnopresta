@@ -76,7 +76,7 @@ $id_fondos_filtro = isset($_POST['id_fondos']) ? intval($_POST['id_fondos']) : (
     
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
-    <link rel="stylesheet" href="css/formulario_menu_principal.css" />
+    <link rel="stylesheet" href="css/formulario_menu_principal.css?v=7"/>
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -115,6 +115,22 @@ $id_fondos_filtro = isset($_POST['id_fondos']) ? intval($_POST['id_fondos']) : (
         .table-responsive {
             max-height: 500px;
             overflow-y: auto;
+        }
+        .table-responsive .table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table-responsive .table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(135deg, var(--mep-primary), var(--mep-secondary));
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .table-responsive .table thead th {
+            background: transparent;
+            color: #fff;
+            border: none;
         }
         .user-info {
             background-color: #f8f9fa;

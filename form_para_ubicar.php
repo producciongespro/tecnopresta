@@ -93,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="" selected disabled>Selecciona un lugar</option>
                         <?php
                         $sql = "SELECT id_lugar, lugar FROM t_lugar 
+                                WHERE activo = 1
                                 ORDER BY id_lugar";
 
                                 $regGD = mysqli_query($link, $sql) or die(mysqli_error($link));

@@ -60,14 +60,16 @@ $logcodigo = $_SESSION['codigo'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliminar activos</title>
     <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
     <link rel="stylesheet" href="css/formulario_menu_principal.css?v=9" />
     
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> -->
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
             .table-marcado {
@@ -124,6 +126,7 @@ $logcodigo = $_SESSION['codigo'];
 </head>
 <body class="layout-page">
     <?php include 'partials/header.php'; ?>
+    <main class="contenido-principal">
     <div class="container mt-5">
     
         <div class="hero-box mb-4 fade-enter">
@@ -254,6 +257,7 @@ $logcodigo = $_SESSION['codigo'];
             </div>
 
     </div>
+    </main>
 
     <!-- Botón flotante Volver al Dashboard -->
     <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="btn-disponibilidad" data-tooltip="Regresar">
@@ -262,7 +266,8 @@ $logcodigo = $_SESSION['codigo'];
     
     <?php include 'partials/footer.php'; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
     <script>
     function mostrarModal(id) {
         var modal = new bootstrap.Modal(document.getElementById(id));

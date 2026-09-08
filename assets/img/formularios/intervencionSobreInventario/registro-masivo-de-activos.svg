@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <filter id="registromasivo-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#021A53" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo blanco -->
+  <rect width="512" height="512" fill="#FFFFFF"/>
+
+  <!-- Franja vertical dorada lateral -->
+  <rect x="0" y="0" width="12" height="512" fill="#CFAC65" opacity="0.5"/>
+
+  <!-- DASHBOARD PRINCIPAL (capa trasera, se dibuja primero) -->
+  <rect x="65" y="100" width="382" height="315" rx="16" fill="#FFFFFF" stroke="#021A53" stroke-width="3.5" filter="url(#registromasivo-shadow)"/>
+
+  <!-- HEADER SUPERIOR / CÁMARA WEB (capa frontal, se dibuja después para quedar encima) -->
+  <rect x="165" y="82" width="182" height="36" rx="10" fill="#021A53" filter="url(#registromasivo-shadow)"/>
+  <circle cx="256" cy="100" r="9" fill="#FFFFFF"/>
+
+  <!-- PANEL CENTRAL AZUL -->
+  <rect x="90" y="125" width="332" height="185" rx="10" fill="#164687"/>
+
+  <!-- REGISTRO MASIVO DESDE CSV -->
+  
+  <!-- 1. Archivo CSV / Hoja de Cálculo (Izquierda) -->
+  <rect x="125" y="150" width="80" height="110" rx="4" fill="#FFFFFF"/>
+  <!-- Encabezado del archivo -->
+  <rect x="125" y="150" width="80" height="14" rx="4" fill="#021A53"/>
+  <rect x="125" y="157" width="80" height="7" fill="#021A53"/> <!-- Tapa el rx inferior del header -->
+  <!-- Icono de tabla/hoja de cálculo en el header -->
+  <rect x="132" y="154" width="8" height="6" rx="1" fill="#CFAC65"/>
+  
+  <!-- Filas de datos (simulando columnas de CSV) -->
+  <rect x="133" y="172" width="64" height="4" rx="1" fill="#D7DBDF"/>
+  <rect x="133" y="184" width="45" height="4" rx="1" fill="#D7DBDF"/>
+  <rect x="133" y="196" width="64" height="4" rx="1" fill="#D7DBDF"/>
+  <rect x="133" y="208" width="50" height="4" rx="1" fill="#D7DBDF"/>
+  <rect x="133" y="220" width="64" height="4" rx="1" fill="#D7DBDF"/>
+  <rect x="133" y="232" width="40" height="4" rx="1" fill="#D7DBDF"/>
+  
+  <!-- Líneas verticales sutiles para reforzar el concepto de columnas -->
+  <line x1="165" y1="172" x2="165" y2="236" stroke="#B3BAC1" stroke-width="1" opacity="0.5"/>
+
+  <!-- 2. Flecha de Carga / Importación (Centro) -->
+  <line x1="220" y1="205" x2="260" y2="205" stroke="#CFAC65" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 252 199 L 262 205 L 252 211" stroke="#CFAC65" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Puntos de movimiento en la flecha -->
+  <circle cx="230" cy="205" r="2" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="240" cy="205" r="2" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- 3. Pila de Activos (Derecha) -->
+  <!-- Caja trasera -->
+  <rect x="280" y="165" width="70" height="32" rx="3" fill="#2D67B1" opacity="0.4"/>
+  <rect x="280" y="165" width="70" height="6" rx="2" fill="#021A53" opacity="0.2"/>
+  
+  <!-- Caja media -->
+  <rect x="285" y="185" width="70" height="32" rx="3" fill="#2D67B1" opacity="0.7"/>
+  <rect x="285" y="185" width="70" height="6" rx="2" fill="#021A53" opacity="0.2"/>
+  
+  <!-- Caja frontal (destacada) -->
+  <rect x="290" y="205" width="70" height="36" rx="3" fill="#FFFFFF"/>
+  <rect x="290" y="205" width="70" height="6" rx="2" fill="#164687" opacity="0.3"/>
+  <!-- Etiqueta de activo en la caja frontal -->
+  <rect x="300" y="218" width="14" height="14" rx="2" fill="#CFAC65"/>
+  <path d="M 304 225 L 307 228 L 311 222" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="320" y="220" width="25" height="3" rx="1" fill="#D7DBDF"/>
+  <rect x="320" y="228" width="18" height="3" rx="1" fill="#D7DBDF"/>
+
+  <!-- TRES MÓDULOS INFERIORES SIMPLIFICADOS -->
+  <!-- Módulo izquierdo: Creación (+) -->
+  <circle cx="135" cy="365" r="28" fill="#2D67B1"/>
+  <path d="M 135 353 L 135 377 M 123 365 L 147 365" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Módulo central: Validación (documento con check) -->
+  <rect x="198" y="342" width="44" height="46" rx="6" fill="#2D67B1"/>
+  <rect x="208" y="352" width="24" height="3" rx="1" fill="#FFFFFF" opacity="0.7"/>
+  <rect x="208" y="360" width="18" height="3" rx="1" fill="#FFFFFF" opacity="0.7"/>
+  <path d="M 228 372 L 233 377 L 240 368" stroke="#CFAC65" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Módulo derecho: Consulta (lupa) -->
+  <circle cx="377" cy="365" r="28" fill="#2D67B1"/>
+  <circle cx="371" cy="359" r="9" stroke="#FFFFFF" stroke-width="2.5" fill="none"/>
+  <line x1="378" y1="366" x2="385" y2="373" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- BASE INFERIOR -->
+  <rect x="65" y="420" width="382" height="16" rx="6" fill="#164687"/>
+</svg>

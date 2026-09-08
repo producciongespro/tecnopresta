@@ -76,7 +76,6 @@ if (mysqli_num_rows($resultado) > 0) {
                 <th class="th-color">Color</th>
                 <th class="th-placa">Placa</th>
                 <th class="th-serial">Serial</th>
-                <th class="th-estado">Estado</th>
             </tr>
         </thead>
         <tbody class="BusquedaRapida">';
@@ -90,7 +89,6 @@ if (mysqli_num_rows($resultado) > 0) {
             <td class="td-color">' . htmlspecialchars($activos['color']) . '</td>
             <td class="td-placa">' . htmlspecialchars($activos['placa']) . '</td>
             <td class="td-serial">' . htmlspecialchars($activos['serial']) . '</td>
-            <td class="td-estado"></td>
         </tr>';
     }
 

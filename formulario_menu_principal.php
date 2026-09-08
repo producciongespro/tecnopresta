@@ -145,6 +145,49 @@
                                 </a>   
                             </div> 
                         </template>
+
+                        <!-- CARD ESTÁTICA: ACERCA DE / MANUAL DE USUARIO (información institucional al final de la grilla) -->
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4" role="listitem">
+                            <div class="card card-premium h-100 d-flex flex-column p-4 fade-enter"
+                                 style="border-top: 3px solid rgba(207, 172, 101, 0.55);">
+
+                                <a href="navegar.php?ruta=acerca_de_n.php&seccion=acerca"
+                                    class="text-decoration-none d-block flex-grow-1"
+                                    aria-label="Ir a Acerca de..."
+                                >
+                                    <div class="img-container">
+                                        <img
+                                            src="assets/img/acercaDe.svg"
+                                            class="img-fluid"
+                                            loading="lazy"
+                                            alt="Imagen de Acerca de"
+                                        />
+                                    </div>
+                                    <h5 class="card-title fw-semibold mb-2"
+                                        style="font-size: 1rem; color: #0f1f3d;"
+                                    >Acerca de...</h5>
+                                    <p class="card-text text-muted small" style="line-height: 1.6;">
+                                        Información General del Sistema TecnoPresta y su Manual de Usuario.
+                                    </p>
+                                </a>
+
+                                <div class="border-top pt-3 mt-3">
+                                    <small class="text-muted d-block mb-2 fw-semibold">
+                                        Información
+                                    </small>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a href="navegar.php?ruta=acerca_de_n.php&seccion=acerca"
+                                            class="badge badge-modulo text-decoration-none"
+                                            title="Ver información del sistema"
+                                        >Acerca de...</a>
+                                        <a href="navegar.php?ruta=acerca_de_n.php&seccion=manual"
+                                            class="badge badge-modulo text-decoration-none"
+                                            title="Ver el manual de usuario"
+                                        >Manual de usuario</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div> 
             </div>

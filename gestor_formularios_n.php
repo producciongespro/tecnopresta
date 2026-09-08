@@ -176,7 +176,6 @@ if ($sid) {
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="editFormularioId" value="0">
-                        <input type="hidden" id="formModulo" value="">
 
                         <!-- Banner de modulo -->
                         <div id="moduloBanner" class="modulo-banner mb-4" style="display:none;">
@@ -213,6 +212,22 @@ if ($sid) {
                         <div class="gestor-form-section">
                             <div class="gestor-section-title">
                                 <i class="bi bi-folder2-open"></i>Ubicación
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="formSubsistema" class="gestor-label">Subsistema <span class="text-danger">*</span></label>
+                                    <select class="gestor-input form-select" id="formSubsistema" onchange="onFormSubsistemaChange()">
+                                        <option value="">Seleccione un subsistema...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="formModulo" class="gestor-label">Módulo <span class="text-danger">*</span></label>
+                                    <select class="gestor-input form-select" id="formModulo" onchange="onFormModuloChange()">
+                                        <option value="">Seleccione un módulo...</option>
+                                    </select>
+                                    <div class="form-text" id="movimientoAviso" style="display:none;"></div>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -358,6 +373,9 @@ if ($sid) {
     let accionesData = [];
     let accionesPorFormulario = {};
 
+    // Modulo actual en edicion (para detectar movimientos)
+    let moduloOriginal = 0;
+
     // Colores para cada tipo de accion
     const COLORES_ACCION = {
         1:  '#0d6efd',   // ver - azul
@@ -468,6 +486,7 @@ if ($sid) {
 
             llenarSelectSubsistemas();
             llenarSelectModulos();
+            llenarSelectSubsistemaModal();
             llenarAccionesCheckbox();
             renderizarFormularios();
 
@@ -504,6 +523,89 @@ if ($sid) {
             op.textContent = m.nombre;
             select.appendChild(op);
         });
+    }
+
+    // ============================================================
+    // SELECTORES DE UBICACIÓN (modal) - Subsistema / Módulo
+    // ============================================================
+
+    function llenarSelectSubsistemaModal() {
+        const select = document.getElementById('formSubsistema');
+        select.innerHTML = '<option value="">Seleccione un subsistema...</option>';
+        subsistemasData.forEach(function(s) {
+            const op = document.createElement('option');
+            op.value = s.id;
+            op.textContent = s.nombre;
+            select.appendChild(op);
+        });
+    }
+
+    function llenarSelectModuloModal(subsistemaId) {
+        const select = document.getElementById('formModulo');
+        select.innerHTML = '<option value="">Seleccione un módulo...</option>';
+
+        if (!subsistemaId) return;
+
+        const modulosFiltrados = modulosData.filter(function(m) {
+            return parseInt(m.subsistema_id) === parseInt(subsistemaId);
+        });
+        modulosFiltrados.forEach(function(m) {
+            const op = document.createElement('option');
+            op.value = m.id;
+            op.textContent = m.nombre;
+            select.appendChild(op);
+        });
+    }
+
+    function onFormSubsistemaChange() {
+        const subsistemaId = document.getElementById('formSubsistema').value;
+        llenarSelectModuloModal(subsistemaId);
+        actualizarIndicadoresUbicacion();
+    }
+
+    function onFormModuloChange() {
+        actualizarIndicadoresUbicacion();
+    }
+
+    // Actualiza banner, hint del icono y aviso de movimiento segun los selects
+    function actualizarIndicadoresUbicacion() {
+        const subsistemaId = parseInt(document.getElementById('formSubsistema').value) || 0;
+        const moduloId = parseInt(document.getElementById('formModulo').value) || 0;
+
+        const subsistemaSel = subsistemasData.find(function(s) { return parseInt(s.id) === subsistemaId; });
+        const moduloSel = modulosData.find(function(m) { return parseInt(m.id) === moduloId; });
+
+        // Banner
+        const moduloDisplayText = document.getElementById('moduloDisplayText');
+        const moduloBanner = document.getElementById('moduloBanner');
+        if (moduloSel) {
+            let txt = moduloSel.nombre;
+            if (subsistemaSel) txt = subsistemaSel.nombre + ' / ' + moduloSel.nombre;
+            moduloDisplayText.textContent = txt;
+            moduloBanner.style.display = 'flex';
+        } else {
+            moduloDisplayText.textContent = 'Modulo #' + moduloId;
+            moduloBanner.style.display = moduloId ? 'flex' : 'none';
+        }
+
+        // Hint del icono
+        const hintRuta = document.getElementById('imagenRutaHint');
+        if (moduloSel) {
+            const carpeta = nombreModuloACarpetaJS(moduloSel.nombre);
+            hintRuta.innerHTML = 'Se guardara en <code>assets/img/formularios/' + escapeHtml(carpeta) + '/</code>';
+        } else {
+            hintRuta.innerHTML = 'Se guardara en <code>assets/img/formularios/</code>';
+        }
+
+        // Aviso de movimiento (solo edicion)
+        const aviso = document.getElementById('movimientoAviso');
+        const idEdit = parseInt(document.getElementById('editFormularioId').value) || 0;
+        if (idEdit > 0 && moduloId > 0 && moduloId !== moduloOriginal) {
+            aviso.textContent = 'Se moverá a: ' + (subsistemaSel ? subsistemaSel.nombre + ' / ' + (moduloSel ? moduloSel.nombre : '?') : '?');
+            aviso.style.display = 'block';
+        } else {
+            aviso.style.display = 'none';
+        }
     }
 
     function llenarAccionesCheckbox() {
@@ -670,6 +772,10 @@ if ($sid) {
         document.getElementById('formImagen').value = '';
         document.getElementById('imagenActual').style.display = 'none';
 
+        // Reset selects de ubicacion
+        document.getElementById('formSubsistema').value = '';
+        llenarSelectModuloModal('');
+
         const moduloBanner = document.getElementById('moduloBanner');
         const moduloDisplayText = document.getElementById('moduloDisplayText');
 
@@ -678,15 +784,21 @@ if ($sid) {
             if (f) {
                 document.getElementById('formNombre').value = f.nombre || '';
                 document.getElementById('formDescripcion').value = f.descripcion || '';
-                document.getElementById('formModulo').value = f.modulo_id || '';
                 document.getElementById('formRuta').value = f.ruta || '';
                 document.getElementById('formOrden').value = f.orden || 0;
                 document.getElementById('formColor').value = f.color || '#003876';
 
-                // Mostrar banner con modulo
-                const mod = modulosData.find(function(m) { return parseInt(m.id) === parseInt(f.modulo_id); });
-                moduloDisplayText.textContent = mod ? mod.nombre : 'Modulo #' + f.modulo_id;
-                moduloBanner.style.display = 'flex';
+                // Guardar modulo original para detectar movimiento
+                moduloOriginal = parseInt(f.modulo_id) || 0;
+
+                // Preseleccionar subsistema y modulo actuales
+                const mod = modulosData.find(function(m) { return parseInt(m.id) === moduloOriginal; });
+                if (mod) {
+                    document.getElementById('formSubsistema').value = mod.subsistema_id;
+                    llenarSelectModuloModal(mod.subsistema_id);
+                    document.getElementById('formModulo').value = moduloOriginal;
+                }
+                actualizarIndicadoresUbicacion();
 
                 // Mostrar imagen actual si existe
                 if (f.imagen) {
@@ -709,29 +821,20 @@ if ($sid) {
             document.getElementById('formOrden').value = '0';
             document.getElementById('formColor').value = '#003876';
 
-            // Tomar modulo seleccionado en el filtro
+            // Tomar subsistema y modulo seleccionados en el filtro
+            const filtroSubsistema = document.getElementById('filtroSubsistema');
             const filtroModulo = document.getElementById('filtroModulo');
+            const selectedSubsistema = filtroSubsistema.value;
             const selectedId = filtroModulo.value;
-            if (selectedId) {
-                const mod = modulosData.find(function(m) { return parseInt(m.id) === parseInt(selectedId); });
-                document.getElementById('formModulo').value = selectedId;
-                moduloDisplayText.textContent = mod ? mod.nombre : 'Modulo #' + selectedId;
-                moduloBanner.style.display = 'flex';
-            } else {
-                document.getElementById('formModulo').value = '';
-                moduloBanner.style.display = 'none';
+            if (selectedSubsistema) {
+                document.getElementById('formSubsistema').value = selectedSubsistema;
+                llenarSelectModuloModal(selectedSubsistema);
+                if (selectedId) {
+                    document.getElementById('formModulo').value = selectedId;
+                }
             }
-        }
-
-        // Actualizar hint de ruta del icono segun el modulo seleccionado
-        const hintRuta = document.getElementById('imagenRutaHint');
-        const moduloId = parseInt(document.getElementById('formModulo').value) || 0;
-        const moduloSel = modulosData.find(function(m) { return parseInt(m.id) === moduloId; });
-        if (moduloSel) {
-            const carpeta = nombreModuloACarpetaJS(moduloSel.nombre);
-            hintRuta.innerHTML = 'Se guardara en <code>assets/img/formularios/' + escapeHtml(carpeta) + '/</code>';
-        } else {
-            hintRuta.innerHTML = 'Se guardara en <code>assets/img/formularios/</code>';
+            moduloOriginal = 0;
+            actualizarIndicadoresUbicacion();
         }
 
         mostrarModal('modalFormulario');
@@ -741,6 +844,7 @@ if ($sid) {
         const id = parseInt(document.getElementById('editFormularioId').value) || 0;
         const nombre = document.getElementById('formNombre').value.trim();
         const descripcion = document.getElementById('formDescripcion').value.trim();
+        const subsistema_id = parseInt(document.getElementById('formSubsistema').value) || 0;
         const modulo_id = parseInt(document.getElementById('formModulo').value) || 0;
         const ruta = document.getElementById('formRuta').value.trim();
         const orden = parseInt(document.getElementById('formOrden').value) || 0;
@@ -753,10 +857,12 @@ if ($sid) {
         });
 
         if (!nombre) { mostrarError('El nombre del formulario es obligatorio'); return; }
-        if (!modulo_id) { mostrarError('Debe seleccionar un modulo en el filtro'); return; }
+        if (!subsistema_id) { mostrarError('Debe seleccionar un subsistema'); return; }
+        if (!modulo_id) { mostrarError('Debe seleccionar un modulo'); return; }
 
         const formData = new FormData();
         formData.append('action', id ? 'editar' : 'crear');
+        formData.append('subsistema_id', subsistema_id);
         formData.append('modulo_id', modulo_id);
         const mod = modulosData.find(function(m) { return parseInt(m.id) === modulo_id; });
         formData.append('modulo_nombre', mod ? mod.nombre : '');
@@ -773,22 +879,37 @@ if ($sid) {
             formData.append('imagen', fileInput.files[0]);
         }
 
-        try {
-            const resp = await fetch('actualizar_gestor_formularios_n.php', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await resp.json();
+        const ejecutarGuardado = async function() {
+            try {
+                const resp = await fetch('actualizar_gestor_formularios_n.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await resp.json();
 
-            if (data.success) {
-                ocultarModal('modalFormulario');
-                mostrarExito(data.message);
-                cargarDatos();
-            } else {
-                mostrarError(data.message);
+                if (data.success) {
+                    ocultarModal('modalFormulario');
+                    mostrarExito(data.message);
+                    cargarDatos();
+                } else {
+                    mostrarError(data.message);
+                }
+            } catch (e) {
+                mostrarError('Error de conexion: ' + e.message);
             }
-        } catch (e) {
-            mostrarError('Error de conexion: ' + e.message);
+        };
+
+        // Si es edicion y se movio de modulo, pedir confirmacion (los permisos se mantienen)
+        if (id > 0 && modulo_id !== moduloOriginal) {
+            const modDestino = modulosData.find(function(m) { return parseInt(m.id) === modulo_id; });
+            const subDestino = subsistemasData.find(function(s) { return parseInt(s.id) === subsistema_id; });
+            const nombreDestino = (subDestino ? subDestino.nombre : '?') + ' / ' + (modDestino ? modDestino.nombre : '?');
+            mostrarConfirmacion(
+                'El formulario "' + nombre + '" se moverá a: ' + nombreDestino + '. Los permisos y funcionalidad se mantienen. ¿Continuar?',
+                ejecutarGuardado
+            );
+        } else {
+            ejecutarGuardado();
         }
     }
 

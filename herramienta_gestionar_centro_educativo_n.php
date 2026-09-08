@@ -226,14 +226,34 @@ if ($accion === 'insertar' || $accion === 'editar') {
     } else {
         // Código saber normalizado (formato válido, "Cerrado" o "NR")
         $cod_saber = $cod_saber_ok;
-        // Validar código único
-        $check = $link->prepare("SELECT id_ins FROM t_instituciones WHERE codigo = ? AND id_ins != ?");
-        $check->bind_param("si", $codigo, $id_ins);
-        $check->execute();
-        $check->store_result();
 
-        if ($check->num_rows > 0) {
-            $mensaje = "El código '$codigo' ya está registrado en otra institución.";
+        // ==== VALIDACIONES DE UNICIDAD (implementadas sin cambios en la BD) ====
+        // 1) Pueden existir 2 o más centros con el mismo código (4 dígitos),
+        //    siempre que su código saber sea distinto.
+        // 2) El código saber es único a nivel global (no pueden existir 2 o más
+        //    instituciones con el mismo código saber). Excepción: los valores
+        //    "NR" y "Cerrado" SÍ pueden repetirse.
+        // 3) Pueden existir 2 o más instituciones con el mismo nombre, siempre
+        //    que su código saber sea distinto (se cumple de forma implícita
+        //    gracias a la regla 2).
+        // 4) Esta lógica aplica tanto al crear como al editar (el bloque se
+        //    comparte para las acciones 'insertar' y 'editar').
+        $duplicado = false;
+        $institucion_duplicada = '';
+        if ($cod_saber !== 'NR' && $cod_saber !== 'Cerrado') {
+            $check = $link->prepare("SELECT institucion FROM t_instituciones WHERE cod_saber = ? AND id_ins != ? LIMIT 1");
+            $check->bind_param("si", $cod_saber, $id_ins);
+            $check->execute();
+            $resultadoCheck = $check->get_result();
+            if ($filaCheck = $resultadoCheck->fetch_assoc()) {
+                $duplicado = true;
+                $institucion_duplicada = $filaCheck['institucion'];
+            }
+            $check->close();
+        }
+
+        if ($duplicado) {
+            $mensaje = "El código saber '$cod_saber' ya está registrado en la institución '" . htmlspecialchars($institucion_duplicada, ENT_QUOTES) . "'.";
             $tipo = 'error';
         } else {
             if ($accion === 'insertar') {
@@ -256,7 +276,6 @@ if ($accion === 'insertar' || $accion === 'editar') {
             }
             $stmt->close();
         }
-        $check->close();
     }
 
     // Si hubo error, conservar los valores enviados para que el usuario los corrija

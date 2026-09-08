@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
 $lugares_html = '<option value="">Seleccione el Lugar...</option>';
 $lugares_html .= '<option value="0"' . ((isset($_POST['id_lugar']) && intval($_POST['id_lugar']) === 0) ? ' selected' : '') . '>Sin ubicación asignada</option>';
 $lugares_js = [0 => 'Sin ubicación asignada'];
-$query_lugares = $link->query("SELECT id_lugar, lugar FROM t_lugar ORDER BY id_lugar");
+$query_lugares = $link->query("SELECT id_lugar, lugar FROM t_lugar WHERE activo = 1 AND id_lugar <> 15 ORDER BY id_lugar");
 if ($query_lugares) {
     while ($fila_lugar = $query_lugares->fetch_assoc()) {
         $lid_lugar = intval($fila_lugar['id_lugar']);
@@ -189,15 +189,24 @@ if ($query_lugares) {
         .table-responsive {
             max-height: 500px;
             overflow-y: auto;
+            border-radius: 10px;
         }
-        .header-fixed {
+        #form-edicion .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: visible;
+            margin-bottom: 0;
+        }
+        #form-edicion .header-fixed {
             position: sticky;
             top: 0;
-            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
             z-index: 100;
+            background: linear-gradient(135deg, var(--mep-blue), var(--mep-blue2));
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header-fixed th {
+        #form-edicion .header-fixed th {
+            background: transparent;
+            --bs-table-bg: transparent;
             color: #fff;
             font-size: 0.8rem;
             font-weight: 600;
@@ -331,11 +340,6 @@ if ($query_lugares) {
         }
 
         /* ==== Tabla de edición ==== */
-        #form-edicion .table {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
         #form-edicion tbody tr:hover {
             background: #f8faff;
         }

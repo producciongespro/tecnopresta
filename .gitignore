@@ -38,3 +38,6 @@ subidos/
 sql/bd.php
 sql/conexion.php
 sql/conexionAzure.php
+
+# Configuración de la API (credenciales)
+api/db_config.php

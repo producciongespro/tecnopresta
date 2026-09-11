@@ -122,7 +122,7 @@
                             </div>
                             <div class="dropdown-divider"></div>
                             <!-- Perfil -->
-                            <a class="dropdown-item user-item" href="portal_perfil.php">
+                            <a class="dropdown-item user-item" href="portal_perfil_n.php">
                                 <!-- <i class="bi bi-person-circle"></i> -->
                                 <i class="bi bi-person-circle me-2"></i>
                                 <span>Mi Perfil</span>

@@ -39,7 +39,7 @@ mysqli_stmt_close($stmt_ins);
 $res_fondos = mysqli_query($link, "SELECT id_fondos, fondos FROM t_fondos ORDER BY fondos ASC");
 $res_clases = mysqli_query($link, "SELECT id_ag, clase FROM t_activo_general ORDER BY clase ASC");
 $res_estados = mysqli_query($link, "SELECT id_estado, estado FROM t_estado ORDER BY estado ASC");
-$res_lugares = mysqli_query($link, "SELECT id_lugar, lugar FROM t_lugar WHERE activo = 1 AND id_lugar <> 15 ORDER BY lugar ASC");
+$res_lugares = mysqli_query($link, "SELECT id_lugar, lugar FROM t_lugar WHERE activo = 1 AND id_lugar <> 7 ORDER BY lugar ASC");
 
 // Catálogo de ámbitos de la institución
 $res_ambitos = false;

@@ -78,48 +78,76 @@ if (isset($_POST['fondos'])) {
     $consulta = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($consulta) > 0) {
-        echo '<table class="table table-hover">
-            <thead>
+        // Fondos presupuestarios disponibles para el desplegable
+        $listado_fondos = [];
+        $q_fondos = $link->query("SELECT id_fondos, fondos FROM t_fondos ORDER BY fondos");
+        if ($q_fondos) {
+            while ($fila_f = $q_fondos->fetch_assoc()) {
+                $listado_fondos[] = $fila_f;
+            }
+        }
+
+        $total_registros = mysqli_num_rows($consulta);
+
+        echo '<div class="contador-container">
+                <div class="contador-registros">
+                    <i class="bi bi-database me-2"></i>
+                    Registros encontrados: <span>' . $total_registros . '</span>' .
+                    ($total_registros == 1 ? ' registro' : ' registros') .
+                '</div>
+              </div>';
+
+        echo '<div class="table-responsive edicion-tabla-scroll" style="max-height: 700px;">
+            <table class="table table-striped table-hover mb-0">
+            <thead class="header-fixed">
                 <tr>
-                    <th>Seleccionar</th>
-                    <th>Placa</th>
-                    <th>Serial</th>
-                    <th>ID Activo Actual</th>
-                    <th>Nuevo ID Activo</th>
-                    <th>ID Fondo Actual</th>
-                    <th>Nuevo ID Fondo</th>
+                    <th style="width: 40px; white-space: nowrap;">Sel.</th>
+                    <th style="width: 18%;">Placa</th>
+                    <th style="width: 14%;">Serial</th>
+                    <th style="width: 130px;">ID Activo<br>Actual</th>
+                    <th style="width: 130px;">Nuevo ID<br>Activo</th>
+                    <th style="width: 130px;">ID Fondo<br>Actual</th>
+                    <th style="width: 130px;">Nuevo ID<br>Fondo</th>
+                    <th style="width: 16%;">Fondo Presupuestario</th>
                 </tr>
             </thead>
             <tbody class="BusquedaRapida">';
 
         while ($activo = mysqli_fetch_array($consulta)) {
+            $id_placa          = $activo['id_placa'];
+            $id_fondos_actual  = $activo['id_fondos'];
+
+            $opciones_fondos = '<option value="">— Seleccione…</option>';
+            foreach ($listado_fondos as $fila_f) {
+                $sel = (intval($fila_f['id_fondos']) === intval($id_fondos_actual)) ? ' selected' : '';
+                $opciones_fondos .= '<option value="' . intval($fila_f['id_fondos']) . '"' . $sel . '>' . htmlspecialchars($fila_f['fondos']) . '</option>';
+            }
+
             echo '<tr>
-                <td><input type="checkbox" name="idsplacas[]" value="' . $activo['id_placa'] . '"/></td>
-                <td>' . $activo['placa'] . '</td>
-                <td>' . $activo['serial'] . '</td>
+                <td><input type="checkbox" class="form-check-input check-editar" name="idsplacas[]" value="' . $id_placa . '"/></td>
+                <td>' . htmlspecialchars($activo['placa']) . '</td>
+                <td>' . htmlspecialchars($activo['serial']) . '</td>
                 <td>' . $activo['id_activo'] . '</td>
                 <td>
-                    <input type="number" class="form-control" 
-                           name="nuevo_id_activo[' . $activo['id_placa'] . ']" 
-                           value="' . $activo['id_activo'] . '">
+                    <input type="number" class="form-control form-control-sm campo-edicion" 
+                           name="nuevo_id_activo[' . $id_placa . ']" 
+                           value="' . $activo['id_activo'] . '" disabled>
                 </td>
-                <td>' . $activo['id_fondos'] . '</td>
+                <td>' . $id_fondos_actual . '</td>
                 <td>
-                    <input type="number" class="form-control" 
-                           name="nuevo_id_fondos[' . $activo['id_placa'] . ']" 
-                           value="' . $activo['id_fondos'] . '">
+                    <input type="number" class="form-control form-control-sm campo-edicion nuevo-id-fondo" 
+                           name="nuevo_id_fondos[' . $id_placa . ']" 
+                           value="' . $id_fondos_actual . '" disabled>
+                </td>
+                <td>
+                    <select class="form-select form-select-sm campo-edicion fondo-presupuestario" data-id="' . $id_placa . '" disabled>
+                        ' . $opciones_fondos . '
+                    </select>
                 </td>
             </tr>';
         }
 
-        echo '</tbody></table>';
-        
-        // Botón para enviar el formulario
-        echo '<div class="mt-3">
-                <button type="submit" class="btn btn-primary" name="btnEditar">
-                    <i class="bi bi-pencil-square"></i> Actualizar Seleccionados
-                </button>
-              </div>';
+        echo '</tbody></table></div>';
     } else {
         echo '<p>No se encontraron activos con los filtros seleccionados.</p>';
     }

@@ -12,7 +12,6 @@ if (!$tienellave) {
     exit();
 }
 */
-
 require_once("conexion.php");
 $link = $mysqli;
 if (mysqli_connect_errno()) {
@@ -101,12 +100,32 @@ $logcodigo = $_SESSION['codigo'];
                 border-radius: 8px;
                 margin-bottom: 20px;
             }
+            .btn-disponibilidad:disabled {
+                opacity: 0.4;
+                pointer-events: none;
+            }
     </style>
 </head>
 <body class="layout-page">
 
     <?php include 'partials/header.php'; ?>
     <main class="container mt-5 contenido-principal">
+        <div class="hero-box mb-4 fade-enter">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="hero-icon">
+                            <i class="bi bi-pencil-square" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold mb-1">Actualización de Tipo de Activo y Fondo Presupuestario</h2>
+                            <p class="mb-0 opacity-75">Actualice el ID del activo (tipo) y el fondo presupuestario de su institución</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- <h2>Usuario: <?php //echo $lognombre." ".$logcodigo;?></h2><br>
         <h4>Formulario para seleccionar activos a editar de los centros educativos.</h4> -->
         
@@ -149,17 +168,19 @@ $logcodigo = $_SESSION['codigo'];
             <input type="hidden" name="subsistema_id" value="<?= intval($_GET['subsistema_id'] ?? 0) ?>">
             <input type="hidden" name="modulo_id" value="<?= intval($_GET['modulo_id'] ?? 0) ?>">
             <div id="mostraractivos">
-                <!-- Aquí se cargará dinámicamente la tabla y el botón submit -->
+                <!-- Aquí se cargará dinámicamente la tabla -->
             </div>
+
+            <!-- Botón flotante Actualizar Seleccionados (arriba del botón Regresar) -->
+            <button type="submit" class="btn-disponibilidad" id="btn-flotante-actualizar"
+                    name="btnEditar" value="1" disabled
+                    style="bottom: 170px;" data-tooltip="Actualizar Seleccionados (0)">
+                <i class="bi bi-pencil-square"></i>
+            </button>
         </form>
 
         
-        <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">
-            <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293z"/>
-            </svg>
-        </div>
-    </main>
+        </main>
 
 
     <!-- <footer class="bg-dark text-white pt-4 pb-4">
@@ -180,6 +201,8 @@ $logcodigo = $_SESSION['codigo'];
     </footer> -->
 
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="js/jquery-3.7.1.min.js"></script>
     
     <script>
         function cargarActivos() {
@@ -198,6 +221,12 @@ $logcodigo = $_SESSION['codigo'];
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById('mostraractivos').innerHTML = xhr.responseText;
+                    // Reset del botón flotante al cargar nuevos resultados
+                    var btnFlotante = document.getElementById('btn-flotante-actualizar');
+                    if (btnFlotante) {
+                        btnFlotante.disabled = true;
+                        btnFlotante.setAttribute('data-tooltip', 'Actualizar Seleccionados (0)');
+                    }
                 }
             };
             
@@ -223,6 +252,47 @@ $logcodigo = $_SESSION['codigo'];
                     event.preventDefault(); // Evita que el formulario se envíe si el usuario cancela
                 }
             }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Actualiza estado del botón flotante y su contador (patrón herramienta_editar_masiva_n.php)
+            function actualizarEstadoBoton() {
+                var cantidad = $('.check-editar:checked').length;
+                var btn = $('#btn-flotante-actualizar');
+                btn.prop('disabled', cantidad === 0);
+                btn.attr('data-tooltip', 'Actualizar Seleccionados (' + cantidad + ')');
+            }
+
+            // Habilitar/deshabilitar campos de edición según el check "Seleccionar"
+            // (delegación: la tabla se carga vía AJAX)
+            $(document).on('change', '.check-editar', function() {
+                var fila = $(this).closest('tr');
+                var habilitar = this.checked;
+                fila.find('.campo-edicion').prop('disabled', !habilitar);
+                actualizarEstadoBoton();
+            });
+
+            // Sincronización bidireccional por fila: Nuevo ID Fondo <-> Fondo Presupuestario
+            // Desplegable -> Numérico
+            $(document).on('change', '.fondo-presupuestario', function() {
+                var fila = $(this).closest('tr');
+                var idPlaca = $(this).data('id');
+                fila.find('input[name="nuevo_id_fondos[' + idPlaca + ']"]').val($(this).val());
+            });
+
+            // Numérico -> Desplegable
+            $(document).on('change', '.nuevo-id-fondo', function() {
+                var fila = $(this).closest('tr');
+                var select = fila.find('.fondo-presupuestario');
+                var valor = $(this).val();
+                if (valor !== '' && select.find('option[value="' + valor + '"]').length > 0) {
+                    select.val(valor);
+                } else {
+                    select.val('');
+                }
+            });
         });
     </script>
 

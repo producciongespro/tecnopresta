@@ -66,9 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * ──────────────────────────────────────────────────────────── */
         $query = "SELECT p.*,
                          p.codigo            AS codigo_centro,
+                         Tg.clase            AS clase,
                          GROUP_CONCAT(DISTINCT CONCAT(i.institucion, '::: ', COALESCE(i.cod_saber, '')) ORDER BY i.id_ins SEPARATOR ' ||| ') AS satelites_concat
                   FROM   t_placa p
                   LEFT JOIN t_instituciones i ON p.codigo = i.codigo
+                  LEFT JOIN t_activo Ta ON p.id_activo = Ta.id_activo
+                  LEFT JOIN t_activo_general Tg ON Ta.id_ag = Tg.id_ag
                   WHERE ";
 
         $conditions = [];
@@ -108,9 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * ──────────────────────────────────────────────────────────── */
         $query_elim = "SELECT b.*,
                               b.codigo            AS codigo_centro,
+                              Tg.clase            AS clase,
                               GROUP_CONCAT(DISTINCT CONCAT(i.institucion, '::: ', COALESCE(i.cod_saber, '')) ORDER BY i.id_ins SEPARATOR ' ||| ') AS satelites_concat
                        FROM   bitacora_eliminados b
                        LEFT JOIN t_instituciones i ON b.codigo = i.codigo
+                       LEFT JOIN t_activo Ta ON b.id_activo = Ta.id_activo
+                       LEFT JOIN t_activo_general Tg ON Ta.id_ag = Tg.id_ag
                        WHERE ";
 
         $conditions_elim = [];
@@ -323,6 +329,10 @@ function institucionInfo(array $row): array {
                             <div class="prestamo-form-body">
                                 <div class="row mb-3">
                                     <div class="col-md-3">
+                                        <div class="form-label mb-1">Activo</div>
+                                        <span class="text-primary fw-bold"><?= !empty($activo['clase']) ? htmlspecialchars($activo['clase']) : '—' ?></span>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-label mb-1">Placa</div>
                                         <span class="text-primary fw-bold"><?= htmlspecialchars($activo['placa']) ?></span>
                                     </div>
@@ -330,7 +340,7 @@ function institucionInfo(array $row): array {
                                         <div class="form-label mb-1">Serial</div>
                                         <span class="text-primary fw-bold"><?= htmlspecialchars($activo['serial']) ?></span>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-label mb-1">ID Interno</div>
                                         <code><?= htmlspecialchars($activo['id_placa']) ?></code>
                                     </div>
@@ -373,6 +383,10 @@ function institucionInfo(array $row): array {
                             <div class="prestamo-form-body">
                                 <div class="row mb-3">
                                     <div class="col-md-3">
+                                        <div class="form-label mb-1">Clase</div>
+                                        <span class="text-danger fw-bold"><?= !empty($eliminado['clase']) ? htmlspecialchars($eliminado['clase']) : '—' ?></span>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-label mb-1">Placa</div>
                                         <span class="text-danger fw-bold"><?= htmlspecialchars($eliminado['placa']) ?></span>
                                     </div>
@@ -380,7 +394,7 @@ function institucionInfo(array $row): array {
                                         <div class="form-label mb-1">Serial</div>
                                         <span class="text-danger fw-bold"><?= htmlspecialchars($eliminado['serial']) ?></span>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-label mb-1">ID Original</div>
                                         <code><?= htmlspecialchars($eliminado['id_placa'] ?? 'N/A') ?></code>
                                     </div>

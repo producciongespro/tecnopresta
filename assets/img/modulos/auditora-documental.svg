@@ -1,0 +1,240 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+<linearGradient id="mepBlue" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#164687"/>
+<stop offset="100%" stop-color="#021A53"/>
+</linearGradient>
+
+<linearGradient id="mepBlueSoft" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#2D67B1"/>
+<stop offset="100%" stop-color="#164687"/>
+</linearGradient>
+
+<linearGradient id="mepGold" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#D7B36A"/>
+<stop offset="100%" stop-color="#B78B39"/>
+</linearGradient>
+
+<linearGradient id="mepGray" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#E8EDF3"/>
+<stop offset="100%" stop-color="#C8D1DC"/>
+</linearGradient>
+
+<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+<feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"/>
+</filter>
+
+</defs>
+
+<!-- Marco -->
+<g filter="url(#shadow)">
+<rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"/>
+</g>
+
+<!-- Encabezado -->
+<g filter="url(#shadow)">
+<rect x="198" y="46" width="116" height="42" rx="14" fill="url(#mepBlue)"/>
+<circle cx="256" cy="67" r="7" fill="white"/>
+</g>
+
+<!-- Franja -->
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#mepGold)" opacity="0.28"/>
+
+<!-- Panel Principal - Auditoría Documental -->
+
+<g filter="url(#shadow)">
+
+<rect x="148" y="122" width="216" height="122"
+rx="16"
+fill="url(#mepBlue)"/>
+
+<!-- Documento/Acta siendo auditado -->
+
+<rect x="174" y="146"
+width="58"
+height="74"
+rx="8"
+fill="white"/>
+
+<rect x="186" y="160"
+width="34"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<rect x="186" y="170"
+width="28"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<rect x="186" y="180"
+width="32"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<rect x="186" y="190"
+width="24"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<!-- Sello de auditoría -->
+
+<circle cx="218" cy="208"
+r="10"
+fill="url(#mepGold)"/>
+
+<path d="M213 208L216 211L223 204"
+stroke="white"
+stroke-width="2.5"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+<!-- Lupa de revisión -->
+
+<circle cx="248" cy="170"
+r="12"
+fill="white"
+opacity="0.3"/>
+
+<circle cx="248" cy="170"
+r="10"
+fill="none"
+stroke="white"
+stroke-width="3"/>
+
+<path d="M256 178L262 184"
+stroke="white"
+stroke-width="3"
+stroke-linecap="round"/>
+
+<!-- Flecha hacia documento certificado -->
+
+<path d="M262 180H276"
+stroke="white"
+stroke-width="4"
+stroke-linecap="round"/>
+
+<path d="M272 175L278 180L272 185"
+stroke="white"
+stroke-width="4"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+<!-- Documento certificado -->
+
+<rect x="284" y="146"
+width="58"
+height="74"
+rx="8"
+fill="white"/>
+
+<rect x="296" y="160"
+width="34"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<rect x="296" y="170"
+width="28"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<rect x="296" y="180"
+width="32"
+height="4"
+rx="2"
+fill="#164687"/>
+
+<!-- Código de certificación -->
+
+<rect x="296"
+y="194"
+width="28"
+height="10"
+rx="3"
+fill="url(#mepGold)"/>
+
+<!-- Badge de aprobado -->
+
+<circle cx="330" cy="154"
+r="9"
+fill="url(#mepGold)"/>
+
+<path d="M326 154L329 157L335 151"
+stroke="white"
+stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+</g>
+
+<!-- Círculo Inferior Izquierdo: Checklist de Revisión -->
+<g filter="url(#shadow)">
+<circle cx="120" cy="360" r="52" fill="url(#mepBlueSoft)"/>
+
+<rect x="100" y="336" width="40" height="50" rx="4" fill="white"/>
+<rect x="110" y="330" width="20" height="8" rx="2" fill="url(#mepGold)"/>
+
+<path d="M106 348 L109 351 L114 345" stroke="#164687" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="118" y="347" width="16" height="3" rx="1.5" fill="#164687"/>
+
+<path d="M106 360 L109 363 L114 357" stroke="#164687" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="118" y="359" width="16" height="3" rx="1.5" fill="#164687"/>
+
+<path d="M106 372 L109 375 L114 369" stroke="#164687" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="118" y="371" width="16" height="3" rx="1.5" fill="#164687"/>
+
+<!-- Badge de validación -->
+<circle cx="142" cy="380" r="12" fill="url(#mepGold)"/>
+<path d="M137 380 L140 383 L147 375" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Panel Inferior Central: Archivo de Documentos -->
+<g filter="url(#shadow)">
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#mepGray)"/>
+
+<!-- Folder 1 -->
+<path d="M226 340 L240 340 L244 346 L274 346 L274 370 L226 370 Z" fill="white"/>
+<rect x="234" y="352" width="24" height="3" rx="1.5" fill="#164687"/>
+
+<!-- Folder 2 -->
+<path d="M234 356 L248 356 L252 362 L282 362 L282 386 L234 386 Z" fill="white" stroke="#C8D1DC" stroke-width="2"/>
+<rect x="242" y="368" width="24" height="3" rx="1.5" fill="#164687"/>
+
+<!-- Folder 3 -->
+<path d="M242 372 L256 372 L260 378 L290 378 L290 402 L242 402 Z" fill="white" stroke="#C8D1DC" stroke-width="2"/>
+<rect x="250" y="384" width="24" height="3" rx="1.5" fill="#164687"/>
+
+<!-- Sello de Auditoría en carpetas -->
+<circle cx="278" cy="396" r="10" fill="url(#mepGold)"/>
+<path d="M274 396 L277 399 L283 392" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Círculo Inferior Derecho: Revisión Nacional -->
+<g filter="url(#shadow)">
+<circle cx="392" cy="360" r="52" fill="url(#mepBlueSoft)"/>
+
+<!-- Mapa estilizado Costa Rica -->
+<path d="M374 360 L381 352 L389 354 L397 347 L405 352 L412 347 L414 356 L408 364 L401 366 L395 374 L386 373 L380 368 Z" fill="white"/>
+
+<!-- Pin de Auditoría Nacional -->
+<path d="M392 336 C398 336 403 341 403 347 C403 356 392 367 392 367 C392 367 381 356 381 347 C381 341 386 336 392 336 Z" fill="url(#mepGold)"/>
+<circle cx="392" cy="347" r="3" fill="white"/>
+
+<!-- Check de validación nacional -->
+<circle cx="414" cy="376" r="10" fill="url(#mepBlue)"/>
+<path d="M410 376 L413 379 L419 372" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Base -->
+<g filter="url(#shadow)">
+<rect x="168" y="448" width="176" height="28" rx="12" fill="url(#mepBlue)"/>
+</g>
+
+</svg>

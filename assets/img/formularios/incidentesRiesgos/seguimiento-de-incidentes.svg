@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#021A53" flood-opacity="0.15"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fondo blanco -->
+  <rect width="512" height="512" fill="#FFFFFF"/>
+
+  <!-- Franja vertical dorada lateral -->
+  <rect x="0" y="0" width="12" height="512" fill="#CFAC65" opacity="0.5"/>
+
+  <!-- DASHBOARD PRINCIPAL (capa trasera) -->
+  <rect x="65" y="100" width="382" height="315" rx="16" fill="#FFFFFF" stroke="#021A53" stroke-width="3.5" filter="url(#shadow)"/>
+
+  <!-- HEADER SUPERIOR / CÁMARA WEB (capa frontal) -->
+  <rect x="165" y="82" width="182" height="36" rx="10" fill="#021A53" filter="url(#shadow)"/>
+  <circle cx="256" cy="100" r="9" fill="#FFFFFF"/>
+
+  <!-- PANEL CENTRAL AZUL -->
+  <rect x="90" y="125" width="332" height="185" rx="10" fill="#164687"/>
+
+  <!-- SEGUIMIENTO DE INCIDENCIAS: Línea de tiempo con nodos -->
+  
+  <!-- Línea conectora base (ruta del seguimiento) -->
+  <line x1="130" y1="200" x2="382" y2="200" stroke="#2D67B1" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Segmento recorrido (ya completado) -->
+  <line x1="130" y1="200" x2="256" y2="200" stroke="#CFAC65" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- NODO 1: Completado -->
+  <circle cx="130" cy="200" r="14" fill="#2D67B1"/>
+  <circle cx="130" cy="200" r="9" fill="#FFFFFF"/>
+  <path d="M 126 200 L 129 203 L 134 197" stroke="#021A53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- NODO 2: Completado -->
+  <circle cx="203" cy="200" r="14" fill="#2D67B1"/>
+  <circle cx="203" cy="200" r="9" fill="#FFFFFF"/>
+  <path d="M 199 200 L 202 203 L 207 197" stroke="#021A53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- NODO 3: ACTUAL / En seguimiento (destacado dorado) -->
+  <circle cx="256" cy="200" r="20" fill="#CFAC65" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="256" cy="200" r="16" fill="#CFAC65"/>
+  <circle cx="256" cy="200" r="10" fill="#FFFFFF"/>
+  <!-- Triángulo de alerta (incidencia) -->
+  <path d="M 256 194 L 261 204 L 251 204 Z" fill="#021A53"/>
+  <line x1="256" y1="197" x2="256" y2="200" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="256" cy="202" r="1" fill="#FFFFFF"/>
+
+  <!-- NODO 4: Pendiente -->
+  <circle cx="319" cy="200" r="14" fill="#2D67B1" opacity="0.4"/>
+  <circle cx="319" cy="200" r="9" fill="#FFFFFF" opacity="0.5"/>
+
+  <!-- NODO 5: Pendiente -->
+  <circle cx="382" cy="200" r="14" fill="#2D67B1" opacity="0.4"/>
+  <circle cx="382" cy="200" r="9" fill="#FFFFFF" opacity="0.5"/>
+
+  <!-- Indicadores de estado debajo de cada nodo -->
+  <!-- Bajo nodo 1 -->
+  <rect x="122" y="230" width="16" height="4" rx="1" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="124" y="238" width="12" height="3" rx="1" fill="#FFFFFF" opacity="0.4"/>
+  
+  <!-- Bajo nodo 2 -->
+  <rect x="195" y="230" width="16" height="4" rx="1" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="197" y="238" width="12" height="3" rx="1" fill="#FFFFFF" opacity="0.4"/>
+  
+  <!-- Bajo nodo 3 (destacado) -->
+  <rect x="246" y="230" width="20" height="4" rx="1" fill="#CFAC65"/>
+  <rect x="248" y="238" width="16" height="3" rx="1" fill="#CFAC65" opacity="0.7"/>
+  
+  <!-- Bajo nodo 4 -->
+  <rect x="311" y="230" width="16" height="4" rx="1" fill="#FFFFFF" opacity="0.4"/>
+  <rect x="313" y="238" width="12" height="3" rx="1" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Bajo nodo 5 -->
+  <rect x="374" y="230" width="16" height="4" rx="1" fill="#FFFFFF" opacity="0.4"/>
+  <rect x="376" y="238" width="12" height="3" rx="1" fill="#FFFFFF" opacity="0.3"/>
+
+  <!-- Badge lateral con contador de incidencias -->
+  <rect x="340" y="145" width="60" height="26" rx="6" fill="#FFFFFF" filter="url(#shadow)"/>
+  <circle cx="355" cy="158" r="7" fill="#CFAC65"/>
+  <path d="M 352 158 L 354 160 L 358 155" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="367" y="154" width="25" height="3" rx="1" fill="#021A53"/>
+  <rect x="367" y="160" width="18" height="3" rx="1" fill="#B3BAC1"/>
+
+  <!-- TRES MÓDULOS INFERIORES SIMPLIFICADOS -->
+  <!-- Módulo izquierdo: Creación (+) -->
+  <circle cx="135" cy="365" r="28" fill="#2D67B1"/>
+  <path d="M 135 353 L 135 377 M 123 365 L 147 365" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Módulo central: Validación (documento con check) -->
+  <rect x="198" y="342" width="44" height="46" rx="6" fill="#2D67B1"/>
+  <rect x="208" y="352" width="24" height="3" rx="1" fill="#FFFFFF" opacity="0.7"/>
+  <rect x="208" y="360" width="18" height="3" rx="1" fill="#FFFFFF" opacity="0.7"/>
+  <path d="M 228 372 L 233 377 L 240 368" stroke="#CFAC65" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Módulo derecho: Consulta (lupa) -->
+  <circle cx="377" cy="365" r="28" fill="#2D67B1"/>
+  <circle cx="371" cy="359" r="9" stroke="#FFFFFF" stroke-width="2.5" fill="none"/>
+  <line x1="378" y1="366" x2="385" y2="373" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- BASE INFERIOR -->
+  <rect x="65" y="420" width="382" height="16" rx="6" fill="#164687"/>
+</svg>

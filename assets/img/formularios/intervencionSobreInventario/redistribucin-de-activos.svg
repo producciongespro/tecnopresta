@@ -1,89 +1,76 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#192952"/>
-      <stop offset="100%" stop-color="#0035A0"/>
-    </linearGradient>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none"> 
+<defs> 
+<linearGradient id="blue" x1="120" y1="80" x2="390" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#2D67B1"/><stop offset="1" stop-color="#021A53"/></linearGradient> 
+<linearGradient id="gold" x1="320" y1="150" x2="410" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#D8B36A"/><stop offset="1" stop-color="#B78B39"/></linearGradient> 
+<linearGradient id="gray" x1="210" y1="310" x2="300" y2="430" gradientUnits="userSpaceOnUse"><stop stop-color="#EEF2F6"/><stop offset="1" stop-color="#C8D2DE"/></linearGradient> 
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".16"/></filter> 
+</defs> 
 
-    <linearGradient id="goldAccent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#CFAC65"/>
-      <stop offset="100%" stop-color="#F2DAB1"/>
-    </linearGradient>
+<!-- Marco --> 
+<g filter="url(#shadow)"> 
+<rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"/> 
+<rect x="198" y="46" width="116" height="42" rx="14" fill="url(#blue)"/> 
+<circle cx="256" cy="67" r="7" fill="white"/> 
+</g> 
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#gold)" opacity=".30"/> 
 
-    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.12"/>
-    </filter>
-  </defs>
+<!-- Redistribución de activos / Traslado entre dependencias --> 
+<g filter="url(#shadow)"> 
+<rect x="148" y="122" width="216" height="122" rx="16" fill="url(#blue)"/> 
 
-  <!-- Fondo transparente -->
+<!-- Dependencia Origen --> 
+<path d="M150 210 L150 150 L180 135 L210 150 L210 210 Z" fill="white"/> 
+<path d="M145 210 H215" stroke="#021A53" stroke-width="4" stroke-linecap="round"/> 
+<rect x="174" y="180" width="12" height="30" rx="2" fill="url(#gold)" stroke="#021A53" stroke-width="3"/> 
+<rect x="158" y="160" width="10" height="12" rx="2" fill="#2D67B1"/> 
+<rect x="192" y="160" width="10" height="12" rx="2" fill="#2D67B1"/> 
 
-  <!-- CLIPBOARD / REGISTRO DE DISTRIBUCIÓN -->
-  <g filter="url(#shadow)">
-    <rect x="150" y="120" width="200" height="260" rx="26" fill="url(#blueMain)"/>
-    <rect x="170" y="140" width="160" height="220" rx="18" fill="white"/>
-  </g>
+<!-- Flecha de traslado --> 
+<path d="M215 180 H295" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/> 
+<path d="M285 170 L299 180 L285 190" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/> 
 
-  <!-- CLIP -->
-  <rect x="210" y="90" width="100" height="60" rx="16" fill="url(#blueMain)"/>
-  <circle cx="260" cy="110" r="8" fill="white"/>
+<!-- Activo en movimiento --> 
+<rect x="240" y="165" width="30" height="30" rx="6" fill="white" stroke="#021A53" stroke-width="3"/> 
+<path d="M248 175 H262 M248 185 H262" stroke="#164687" stroke-width="3" stroke-linecap="round"/> 
 
-  <!-- DATOS DEL REGISTRO -->
-  <rect x="190" y="180" width="110" height="10" rx="5" fill="#CFAC65"/>
-  <rect x="190" y="205" width="82" height="10" rx="5" fill="#E5E7EB"/>
+<!-- Dependencia Destino --> 
+<path d="M300 210 L300 150 L330 135 L360 150 L360 210 Z" fill="white"/> 
+<path d="M295 210 H365" stroke="#021A53" stroke-width="4" stroke-linecap="round"/> 
+<rect x="324" y="180" width="12" height="30" rx="2" fill="url(#gold)" stroke="#021A53" stroke-width="3"/> 
+<rect x="308" y="160" width="10" height="12" rx="2" fill="#2D67B1"/> 
+<rect x="342" y="160" width="10" height="12" rx="2" fill="#2D67B1"/> 
+</g> 
 
-  <!-- DOS CENTROS EDUCATIVOS -->
-  <g filter="url(#shadow)">
-    <!-- Centro origen -->
-    <rect x="188" y="238" width="54" height="52" rx="10" fill="url(#blueMain)"/>
-    <path d="M215 246L195 257H235L215 246Z" fill="white"/>
-    <rect x="199" y="260" width="7" height="18" rx="2" fill="white"/>
-    <rect x="212" y="260" width="7" height="18" rx="2" fill="white"/>
-    <rect x="225" y="260" width="7" height="18" rx="2" fill="white"/>
-    <rect x="195" y="280" width="40" height="4" rx="2" fill="white"/>
+<!-- Solicitud de traslado --> 
+<g filter="url(#shadow)"> 
+<circle cx="120" cy="360" r="52" fill="url(#blue)"/> 
+<rect x="100" y="340" width="40" height="50" rx="6" fill="white"/> 
+<rect x="114" y="334" width="12" height="12" rx="3" fill="url(#gold)"/> 
+<path d="M110 355 H130 M110 365 H130 M110 375 H125" stroke="#164687" stroke-width="3" stroke-linecap="round"/> 
+</g> 
 
-    <!-- Centro destino -->
-    <rect x="278" y="238" width="54" height="52" rx="10" fill="url(#goldAccent)"/>
-    <path d="M305 246L285 257H325L305 246Z" fill="#192952"/>
-    <rect x="289" y="260" width="7" height="18" rx="2" fill="#192952"/>
-    <rect x="302" y="260" width="7" height="18" rx="2" fill="#192952"/>
-    <rect x="315" y="260" width="7" height="18" rx="2" fill="#192952"/>
-    <rect x="285" y="280" width="40" height="4" rx="2" fill="#192952"/>
-  </g>
+<!-- Activos en tránsito --> 
+<g filter="url(#shadow)"> 
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#gray)"/> 
+<rect x="229" y="335" width="54" height="15" rx="4" fill="white"/> 
+<rect x="229" y="356" width="54" height="15" rx="4" fill="white"/> 
+<rect x="229" y="377" width="54" height="15" rx="4" fill="white"/> 
+<path d="M237 405 H275" stroke="#164687" stroke-width="4" stroke-linecap="round"/> 
+<path d="M256 398 V417 M248 409 L256 417 L264 409" stroke="url(#gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/> 
+</g> 
 
-  <!-- FLECHA DE TRANSFERENCIA ENTRE CENTROS -->
-  <g>
-    <path d="M247 264H273" stroke="#192952" stroke-width="7" stroke-linecap="round"/>
-    <path d="M265 253L278 264L265 275" fill="#192952"/>
-  </g>
+<!-- Recepción conforme --> 
+<g filter="url(#shadow)"> 
+<circle cx="392" cy="360" r="52" fill="url(#blue)"/> 
+<rect x="372" y="340" width="40" height="45" rx="6" fill="white"/> 
+<circle cx="392" cy="360" r="14" fill="url(#gold)"/> 
+<path d="M386 360 L390 364 L399 355" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/> 
+<path d="M380 375 H404" stroke="#164687" stroke-width="3" stroke-linecap="round"/> 
+<path d="M380 382 H398" stroke="#164687" stroke-width="3" stroke-linecap="round"/> 
+</g> 
 
-  <!-- PORTÁTIL / ACTIVO TECNOLÓGICO EN MOVIMIENTO -->
-  <g filter="url(#shadow)">
-    <rect x="218" y="304" width="76" height="45" rx="8" fill="url(#goldAccent)"/>
-    <rect x="222" y="308" width="68" height="34" rx="6" fill="white"/>
-
-    <!-- Código de barras -->
-    <g transform="translate(241,316)" fill="#192952">
-      <rect x="0" y="0" width="2" height="16"/>
-      <rect x="4" y="0" width="1" height="16"/>
-      <rect x="7" y="0" width="3" height="16"/>
-      <rect x="12" y="0" width="1" height="16"/>
-      <rect x="15" y="0" width="2" height="16"/>
-      <rect x="19" y="0" width="1" height="16"/>
-      <rect x="22" y="0" width="3" height="16"/>
-      <rect x="27" y="0" width="1" height="16"/>
-      <rect x="30" y="0" width="2" height="16"/>
-    </g>
-
-    <rect x="210" y="349" width="92" height="12" rx="6" fill="#64748B"/>
-  </g>
-
-  <!-- FLECHAS DE DISTRIBUCIÓN HACIA LOS CENTROS -->
-  <g stroke="url(#blueMain)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M225 306C215 300 213 294 215 290"/>
-    <path d="M287 306C297 300 299 294 297 290"/>
-  </g>
-
-  <!-- Puntas de flecha -->
-  <path d="M207 296L215 286L220 299" fill="#192952"/>
-  <path d="M305 296L297 286L292 299" fill="#192952"/>
+<!-- Base --> 
+<g filter="url(#shadow)"> 
+<rect x="168" y="448" width="176" height="28" rx="12" fill="url(#blue)"/> 
+</g> 
 </svg>

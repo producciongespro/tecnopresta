@@ -1,77 +1,109 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none"> 
+<defs> 
+<linearGradient id="blue" x1="120" y1="80" x2="390" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#2D67B1"/><stop offset="1" stop-color="#021A53"/></linearGradient> 
+<linearGradient id="gold" x1="320" y1="150" x2="410" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#D8B36A"/><stop offset="1" stop-color="#B78B39"/></linearGradient> 
+<linearGradient id="gray" x1="210" y1="310" x2="300" y2="430" gradientUnits="userSpaceOnUse"><stop stop-color="#EEF2F6"/><stop offset="1" stop-color="#C8D2DE"/></linearGradient> 
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".16"/></filter> 
+</defs> 
 
-<defs>
-  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#192952"></stop>
-    <stop offset="100%" stop-color="#0035A0"></stop>
-  </linearGradient>
+<!-- Marco --> 
+<g filter="url(#shadow)"> 
+<rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"/> 
+<rect x="198" y="46" width="116" height="42" rx="14" fill="url(#blue)"/> 
+<circle cx="256" cy="67" r="7" fill="white"/> 
+</g> 
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#gold)" opacity=".30"/> 
 
-  <linearGradient id="goldAccent" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#CFAC65"></stop>
-    <stop offset="100%" stop-color="#F2DAB1"></stop>
-  </linearGradient>
+<!-- Actualización de Placas y Series (Equipo Tecnológico) --> 
+<g filter="url(#shadow)"> 
+<rect x="148" y="122" width="216" height="122" rx="16" fill="url(#blue)"/> 
 
-  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.12"></feDropShadow>
-  </filter>
-</defs>
+<!-- Equipo Tecnológico (Laptop) --> 
+<rect x="160" y="138" width="64" height="44" rx="4" fill="white"/> 
+<rect x="156" y="182" width="72" height="8" rx="3" fill="#EEF2F6"/> 
+<path d="M170 152 H214 M170 166 H206" stroke="#164687" stroke-width="4" stroke-linecap="round"/> 
 
-<!-- CLIPBOARD -->
-<g filter="url(#shadow)">
-  <rect x="150" y="120" width="200" height="260" rx="26" fill="url(#blueMain)"></rect>
-  <rect x="170" y="140" width="160" height="220" rx="18" fill="white"></rect>
-</g>
+<!-- Flecha de Transición --> 
+<path d="M232 160 H268" stroke="white" stroke-width="5" stroke-linecap="round"/> 
+<path d="M258 150 L272 160 L258 170" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/> 
 
-<!-- CLIP -->
-<rect x="210" y="90" width="100" height="60" rx="16" fill="url(#blueMain)"></rect>
-<circle cx="260" cy="110" r="8" fill="white"></circle>
+<!-- Etiqueta de Placa/Serie (Código de barras) --> 
+<rect x="280" y="138" width="68" height="48" rx="5" fill="white"/> 
+<path d="M288 146 V178 M296 146 V178 M304 146 V178 M312 146 V178 M320 146 V178 M328 146 V178 M336 146 V178" stroke="#164687" stroke-width="4" stroke-linecap="round"/> 
+<path d="M288 186 H340" stroke="#D8B36A" stroke-width="3" stroke-linecap="round"/> 
 
-<!-- TEXTO -->
-<rect x="190" y="180" width="110" height="10" rx="5" fill="#CFAC65"></rect>
-<rect x="190" y="205" width="80" height="10" rx="5" fill="#E5E7EB"></rect>
+<!-- Lápiz de Edición --> 
+<path d="M330 170 L348 152 L354 158 L336 176 Z" fill="url(#gold)"/> 
+<path d="M348 152 L354 158" stroke="#021A53" stroke-width="2" stroke-linejoin="round"/> 
 
-<!-- TAG (PLACA / SERIE) -->
-<g filter="url(#shadow)">
-  <rect x="230" y="235" width="90" height="50" rx="10" fill="url(#goldAccent)"></rect>
-  
-  <!-- orificio etiqueta -->
-  <circle cx="240" cy="260" r="4" fill="white"></circle>
+<!-- Franja inferior: Contexto educativo + actualización de placas --> 
+<rect x="160" y="200" width="192" height="34" rx="8" fill="white" opacity=".15"/> 
 
-  <!-- líneas tipo serie -->
-  <rect x="255" y="248" width="45" height="6" rx="3" fill="white"></rect>
-  <rect x="255" y="260" width="35" height="6" rx="3" fill="white"></rect>
-  <rect x="255" y="272" width="25" height="6" rx="3" fill="white"></rect>
-</g>
+<!-- Birrete educativo (centro educativo) --> 
+<path d="M172 218 L188 210 L204 218 L188 226 Z" fill="white"/> 
+<path d="M188 226 V232" stroke="white" stroke-width="2" stroke-linecap="round"/> 
+<circle cx="204" cy="222" r="2" fill="url(#gold)"/> 
 
-<!-- ICONO ACTUALIZACIÓN -->
-<g>
-  <path d="M205 260C205 240 225 225 245 225" stroke="url(#blueMain)" stroke-width="8" stroke-linecap="round"></path>
-  <path d="M240 215L255 225L240 235" fill="url(#blueMain)"></path>
+<!-- Etiqueta de placa con código QR --> 
+<rect x="218" y="208" width="26" height="22" rx="3" fill="white"/> 
+<rect x="222" y="212" width="6" height="6" fill="#164687"/> 
+<rect x="230" y="212" width="4" height="4" fill="#164687"/> 
+<rect x="236" y="212" width="4" height="6" fill="#164687"/> 
+<rect x="222" y="220" width="4" height="6" fill="#164687"/> 
+<rect x="228" y="222" width="6" height="4" fill="#164687"/> 
+<rect x="236" y="222" width="4" height="4" fill="#164687"/> 
 
-  <path d="M300 275C300 295 280 310 260 310" stroke="url(#blueMain)" stroke-width="8" stroke-linecap="round"></path>
-  <path d="M265 320L250 310L265 300" fill="url(#blueMain)"></path>
-</g>
+<!-- Flecha de actualización --> 
+<path d="M252 219 H264" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/> 
+<path d="M260 214 L268 219 L260 224" stroke="url(#gold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/> 
 
-<!-- FLECHA -->
-<path d="M230 340H285" stroke="url(#blueMain)" stroke-width="8" stroke-linecap="round"></path>
-<path d="M270 328L285 340L270 352" fill="url(#blueMain)"></path>
+<!-- Escáner / Lector de placas --> 
+<rect x="274" y="208" width="28" height="22" rx="4" fill="white"/> 
+<rect x="278" y="212" width="20" height="10" rx="2" fill="#164687"/> 
+<path d="M280 226 H300" stroke="url(#gold)" stroke-width="2" stroke-linecap="round"/> 
 
-<!-- PORTÁTIL -->
-<g transform="translate(300,340)" filter="url(#shadow)">
-  
-  <!-- marco dorado -->
-  <rect x="0" y="0" width="70" height="42" rx="8" fill="url(#goldAccent)"></rect>
-  
-  <!-- pantalla -->
-  <rect x="4" y="4" width="62" height="32" rx="6" fill="white"></rect>
+<!-- Check de verificación --> 
+<circle cx="322" cy="219" r="11" fill="url(#gold)"/> 
+<path d="M317 219 L321 223 L328 215" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</g> 
 
-  <!-- serie interna -->
-  <rect x="18" y="12" width="34" height="6" rx="3" fill="#192952"></rect>
-  <rect x="18" y="22" width="26" height="6" rx="3" fill="#192952"></rect>
+<!-- Búsqueda por Código/Fondo Presupuestario --> 
+<g filter="url(#shadow)"> 
+<circle cx="120" cy="360" r="52" fill="url(#blue)"/> 
+<!-- Documento presupuestario --> 
+<rect x="98" y="342" width="28" height="36" rx="3" fill="white"/> 
+<path d="M104 352 H120 M104 360 H120 M104 368 H116" stroke="#164687" stroke-width="2.5" stroke-linecap="round"/> 
+<!-- Lupa de búsqueda --> 
+<circle cx="128" cy="374" r="9" fill="none" stroke="url(#gold)" stroke-width="3"/> 
+<path d="M134 380 L140 386" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/> 
+</g> 
 
-  <!-- base -->
-  <rect x="-8" y="42" width="86" height="12" rx="6" fill="#64748B"></rect>
+<!-- Edición de Datos del Activo --> 
+<g filter="url(#shadow)"> 
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#gray)"/> 
+<!-- Pantalla con datos --> 
+<rect x="228" y="332" width="56" height="36" rx="4" fill="white"/> 
+<path d="M236 344 H276 M236 356 H268" stroke="#164687" stroke-width="3" stroke-linecap="round"/> 
+<!-- Base del equipo --> 
+<rect x="224" y="372" width="64" height="8" rx="2" fill="#C8D2DE"/> 
+<!-- Icono de edición superpuesto --> 
+<path d="M272 362 L284 350 L288 354 L276 366 Z" fill="url(#gold)"/> 
+</g> 
 
-</g>
+<!-- Actualización Exitosa --> 
+<g filter="url(#shadow)"> 
+<circle cx="392" cy="360" r="52" fill="url(#blue)"/> 
+<!-- Monitor institucional --> 
+<rect x="374" y="342" width="36" height="26" rx="3" fill="white"/> 
+<rect x="388" y="368" width="8" height="6" fill="#EEF2F6"/> 
+<rect x="380" y="374" width="24" height="4" rx="2" fill="#EEF2F6"/> 
+<!-- Badge de verificación --> 
+<circle cx="404" cy="348" r="10" fill="url(#gold)"/> 
+<path d="M400 348 L403 351 L409 344" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</g> 
 
+<!-- Base --> 
+<g filter="url(#shadow)"> 
+<rect x="168" y="448" width="176" height="28" rx="12" fill="url(#blue)"/> 
+</g> 
 </svg>

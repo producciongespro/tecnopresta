@@ -51,6 +51,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 //Devuelve la información en formato Json
 header('Content-Type: application/json'); 
+header('Cache-Control: no-store'); //Evita que proxys/CDNs sirvan el menú (rutas de imágenes) desde caché 
 
 try {
     
@@ -610,14 +611,40 @@ function crearMenu(array $permisos): array {
         }
     }
 
-    /** *** 6. REINDEXAR ARREGLOS *** */
+    /** *** 6. REINDEXAR + VERSIONAR IMÁGENES (cache-busting) *** */
+    //Anexa ?v=filemtime a cada imagen existente para que, al cambiar el icono,
+    //la URL cambie y ninguna caché (CDN/proxy/navegador) sirva bytes viejos.
+    $dirRaiz = __DIR__ . '/../';
     foreach ($menu as &$subsistema) { //Reindexa los subsistemas
-         //Reindexa los módulos dentro de cada subsistema
+        if (!empty($subsistema['imagen']) && strpos($subsistema['imagen'], '?') === false) {
+            $ruta = $dirRaiz . ltrim($subsistema['imagen'], '/');
+            if (file_exists($ruta)) {
+                $subsistema['imagen'] .= '?v=' . filemtime($ruta);
+            }
+        }
+        //Reindexa los módulos dentro de cada subsistema
         foreach ($subsistema['modulos'] as &$modulo) {
+            if (!empty($modulo['imagen']) && strpos($modulo['imagen'], '?') === false) {
+                $ruta = $dirRaiz . ltrim($modulo['imagen'], '/');
+                if (file_exists($ruta)) {
+                    $modulo['imagen'] .= '?v=' . filemtime($ruta);
+                }
+            }
+            foreach ($modulo['formularios'] as &$formulario) {
+                if (!empty($formulario['imagen']) && strpos($formulario['imagen'], '?') === false) {
+                    $ruta = $dirRaiz . ltrim($formulario['imagen'], '/');
+                    if (file_exists($ruta)) {
+                        $formulario['imagen'] .= '?v=' . filemtime($ruta);
+                    }
+                }
+            }
+            unset($formulario);
             $modulo['formularios'] = array_values($modulo['formularios']); //Reindexa los formularios dentro de cada módulo
         }
+        unset($modulo);
         $subsistema['modulos'] = array_values($subsistema['modulos']); //Reindexa los módulos dentro de cada subsistema
     }
+    unset($subsistema);
 
     return array_values($menu);
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+<defs>
+  <linearGradient id="blue" x1="120" y1="80" x2="390" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#2D67B1"/><stop offset="1" stop-color="#021A53"/></linearGradient>
+  <linearGradient id="gold" x1="320" y1="150" x2="410" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#D8B36A"/><stop offset="1" stop-color="#B78B39"/></linearGradient>
+  <linearGradient id="gray" x1="210" y1="310" x2="300" y2="430" gradientUnits="userSpaceOnUse"><stop stop-color="#EEF2F6"/><stop offset="1" stop-color="#C8D2DE"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".16"/></filter>
+</defs>
+
+<!-- Marco principal -->
+<g filter="url(#shadow)">
+  <rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"/>
+  <rect x="198" y="46" width="116" height="42" rx="14" fill="url(#blue)"/>
+  <circle cx="256" cy="67" r="7" fill="white"/>
+</g>
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#gold)" opacity=".30"/>
+
+<!-- Actualización de tipo y fondo presupuestario -->
+<g filter="url(#shadow)">
+  <rect x="148" y="122" width="216" height="122" rx="16" fill="url(#blue)"/>
+
+  <!-- Selector de Tipo de Fondo -->
+  <rect x="164" y="139" width="82" height="76" rx="10" fill="white"/>
+  <rect x="174" y="149" width="62" height="17" rx="5" fill="#E7ECF2"/>
+  <path d="M183 157H218" stroke="#164687" stroke-width="4" stroke-linecap="round"/>
+  <path d="M217 174L222 179L227 174" stroke="#D8B36A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="174" y="185" width="62" height="10" rx="4" fill="#C8D2DE"/>
+  <rect x="174" y="201" width="46" height="8" rx="4" fill="#EEF2F6"/>
+
+  <!-- Código presupuestario / búsqueda -->
+  <rect x="257" y="139" width="91" height="76" rx="10" fill="white"/>
+  <rect x="267" y="149" width="71" height="18" rx="5" fill="#E7ECF2"/>
+  <path d="M275 158H316" stroke="#164687" stroke-width="4" stroke-linecap="round"/>
+  <rect x="267" y="177" width="71" height="23" rx="5" fill="#F4F6F8" stroke="#C8D2DE" stroke-width="2"/>
+  <path d="M275 188H313" stroke="#B9C5D2" stroke-width="4" stroke-linecap="round"/>
+  <!-- Lupa -->
+  <circle cx="326" cy="190" r="8" stroke="#2D67B1" stroke-width="3"/>
+  <path d="M332 196L338 202" stroke="#2D67B1" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Flecha de consulta / actualización -->
+  <path d="M211 222H300" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <path d="M292 214L301 222L292 230" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Registro encontrado / fondo editable -->
+  <rect x="306" y="205" width="42" height="27" rx="6" fill="url(#gold)"/>
+  <path d="M315 214H338" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M315 222H331" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</g>
+
+<!-- Tipo de fondo / clasificación presupuestaria -->
+<g filter="url(#shadow)">
+  <circle cx="120" cy="360" r="52" fill="url(#blue)"/>
+  <!-- Documento / clasificación -->
+  <path d="M99 331H130L141 342V388H99V331Z" fill="white"/>
+  <path d="M130 331V342H141" fill="#E7ECF2"/>
+  <rect x="106" y="349" width="27" height="5" rx="2.5" fill="#2D67B1"/>
+  <path d="M106 362H134M106 373H134M106 384H125" stroke="#B9C5D2" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="139" cy="328" r="10" fill="url(#gold)"/>
+  <path d="M135 328L138 331L143 325" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Edición del fondo presupuestario -->
+<g filter="url(#shadow)">
+  <rect x="214" y="312" width="84" height="122" rx="16" fill="url(#gray)"/>
+  <!-- Fondo / registro -->
+  <rect x="229" y="329" width="54" height="15" rx="4" fill="white"/>
+  <rect x="229" y="350" width="54" height="15" rx="4" fill="white"/>
+  <rect x="229" y="371" width="54" height="15" rx="4" fill="white"/>
+  <path d="M237 399H275" stroke="#164687" stroke-width="5" stroke-linecap="round"/>
+  <!-- Lápiz de edición -->
+  <g transform="translate(253 386) rotate(-45)">
+    <rect x="0" y="0" width="9" height="29" rx="2.5" fill="url(#blue)"/>
+    <path d="M0 29L4.5 36L9 29Z" fill="#B78B39"/>
+    <rect x="0" y="6" width="9" height="6" fill="#D8B36A"/>
+  </g>
+</g>
+
+<!-- Activo localizado / registro consultado -->
+<g filter="url(#shadow)">
+  <circle cx="392" cy="360" r="52" fill="url(#blue)"/>
+  <!-- Activo tecnológico -->
+  <rect x="364" y="340" width="54" height="34" rx="5" fill="white"/>
+  <rect x="371" y="346" width="40" height="21" rx="3" fill="#EEF2F6"/>
+  <path d="M356 380H426" stroke="white" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="419" cy="331" r="11" fill="url(#gold)"/>
+  <path d="M414 331L418 335L425 327" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Base -->
+<g filter="url(#shadow)">
+  <rect x="168" y="448" width="176" height="28" rx="12" fill="url(#blue)"/>
+</g>
+</svg>

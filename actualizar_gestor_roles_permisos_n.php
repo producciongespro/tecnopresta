@@ -16,7 +16,8 @@
  * }
  *
  * Logica por cambio:
- *   activo=true:  INSERT IGNORE INTO permisos + INSERT IGNORE INTO roles_permisos
+ *   activo=true:  valida cadena activa (formulario/modulo/subsistema/accion)
+ *                 INSERT IGNORE INTO permisos + INSERT IGNORE INTO roles_permisos
  *   activo=false: DELETE FROM roles_permisos + DELETE FROM permisos (si huerfano)
  *
  * Seguridad:
@@ -29,9 +30,12 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-require_once __DIR__ . '/usuarioAzure.php';
-require_once __DIR__ . '/auth.php';
-require_once __DIR__ . '/sql/bd.php';
+// require_once __DIR__ . '/usuarioAzure.php';
+// require_once __DIR__ . '/auth.php';
+// require_once __DIR__ . '/sql/bd.php';
+require_once __DIR__ . '/../usuarioAzure.php';
+require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/bd.php';
 
 $usuario_azure = obtenerUsuarioSesion();
 if (!$usuario_azure) {
@@ -68,6 +72,7 @@ try {
 
     $procesados = 0;
     $errores = 0;
+    $detalleErrores = [];
 
     // Prepared statements reutilizables
     $sqlBuscarPermiso = "SELECT id FROM permisos WHERE formulario_id = ? AND accion_id = ?";
@@ -81,6 +86,20 @@ try {
 
     $sqlDeleteRP = "DELETE FROM roles_permisos WHERE rol_id = ? AND permiso_id = ?";
     $stmtDeleteRP = $conexionBD->prepare($sqlDeleteRP);
+
+    // Valida que el formulario, su modulo y su subsistema esten activos
+    // (y que la accion exista y no este eliminada) antes de asignar
+    $sqlValidarCadena = "SELECT f.id
+        FROM formularios f
+        INNER JOIN modulos m     ON m.id = f.modulo_id
+        INNER JOIN subsistemas s ON s.id = m.subsistema_id
+        INNER JOIN acciones    a ON a.id = ?
+        WHERE f.id = ?
+          AND f.eliminado = 0
+          AND m.eliminado = 0
+          AND s.eliminado = 0
+          AND a.eliminado = 0";
+    $stmtValidarCadena = $conexionBD->prepare($sqlValidarCadena);
 
     $sqlCheckPermisoUsado = "SELECT COUNT(*) AS total FROM roles_permisos WHERE permiso_id = ?";
     $stmtCheckUsado = $conexionBD->prepare($sqlCheckPermisoUsado);
@@ -100,6 +119,14 @@ try {
 
         if ($activo) {
             // ASIGNAR permiso
+            // 0. Verificar que el formulario (y su modulo/subsistema/accion) no este eliminado
+            $stmtValidarCadena->execute([$accion_id, $formulario_id]);
+            if (!$stmtValidarCadena->fetchColumn()) {
+                $errores++;
+                $detalleErrores[] = 'formulario ' . $formulario_id . ' / accion ' . $accion_id . ': formulario, modulo, subsistema o accion desactivado o inexistente, no se asigno';
+                continue;
+            }
+
             // 1. Asegurar que existe el registro en permisos
             $stmtInsertPermiso->execute([$formulario_id, $accion_id]);
 
@@ -141,12 +168,18 @@ try {
 
     $conexionBD->commit();
 
+    $mensaje = 'Cambios aplicados correctamente (' . $procesados . ' procesados, ' . $errores . ' errores)';
+    if (!empty($detalleErrores)) {
+        $mensaje .= ' - ' . implode(' | ', $detalleErrores);
+    }
+
     echo json_encode([
         'success' => true,
-        'message' => 'Cambios aplicados correctamente (' . $procesados . ' procesados, ' . $errores . ' errores)',
+        'message' => $mensaje,
         'data' => [
             'procesados' => $procesados,
-            'errores' => $errores
+            'errores' => $errores,
+            'detalle_errores' => $detalleErrores
         ]
     ]);
 

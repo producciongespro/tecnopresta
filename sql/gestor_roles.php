@@ -7,6 +7,13 @@
  * formularios, acciones, permisos y roles_permisos para el
  * formulario gestor_roles_permisos_n.php (arbol de permisos).
  *
+ * Soft delete:
+ * - Excluye subsistemas, modulos, formularios y acciones con
+ *   eliminado = 1, igual que el menu en sql/formulario_principal.php
+ * - Los permisos se restringen a formularios no eliminados para que
+ *   el contador de permisos asignados no incluya formularios caidos
+ * - No modifica datos: solo SELECT
+ *
  * Seguridad:
  * - Valida sesion Azure
  * - Solo accesible por usuario Root
@@ -42,32 +49,37 @@ try {
     $stmtRol->execute();
     $roles = $stmtRol->fetchAll(PDO::FETCH_ASSOC);
 
-    // Subsistemas (todos para el arbol)
-    $sqlSub = "SELECT id, nombre, descripcion FROM subsistemas ORDER BY orden ASC, nombre ASC";
+    // Subsistemas (solo los no eliminados, para el arbol de permisos)
+    $sqlSub = "SELECT id, nombre, descripcion FROM subsistemas WHERE eliminado = 0 ORDER BY orden ASC, nombre ASC";
     $stmtSub = $conexionBD->prepare($sqlSub);
     $stmtSub->execute();
     $subsistemas = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
 
-    // Modulos (todos para el arbol)
-    $sqlMod = "SELECT id, nombre, subsistema_id, descripcion FROM modulos ORDER BY subsistema_id ASC, orden ASC, nombre ASC";
+    // Modulos (solo los no eliminados, para el arbol de permisos)
+    $sqlMod = "SELECT id, nombre, subsistema_id, descripcion FROM modulos WHERE eliminado = 0 ORDER BY subsistema_id ASC, orden ASC, nombre ASC";
     $stmtMod = $conexionBD->prepare($sqlMod);
     $stmtMod->execute();
     $modulos = $stmtMod->fetchAll(PDO::FETCH_ASSOC);
 
-    // Formularios (todos para el arbol)
-    $sqlForm = "SELECT id, modulo_id, nombre, descripcion FROM formularios ORDER BY modulo_id ASC, orden ASC";
+    // Formularios (solo los no eliminados, para el arbol de permisos)
+    $sqlForm = "SELECT id, modulo_id, nombre, descripcion FROM formularios WHERE eliminado = 0 ORDER BY modulo_id ASC, orden ASC";
     $stmtForm = $conexionBD->prepare($sqlForm);
     $stmtForm->execute();
     $formularios = $stmtForm->fetchAll(PDO::FETCH_ASSOC);
 
-    // Acciones
-    $sqlAcc = "SELECT id, nombre, descripcion FROM acciones ORDER BY id ASC";
+    // Acciones (solo las no eliminadas)
+    $sqlAcc = "SELECT id, nombre, descripcion FROM acciones WHERE eliminado = 0 ORDER BY id ASC";
     $stmtAcc = $conexionBD->prepare($sqlAcc);
     $stmtAcc->execute();
     $acciones = $stmtAcc->fetchAll(PDO::FETCH_ASSOC);
 
-    // Permisos (todas las combinaciones formulario x accion)
-    $sqlPerm = "SELECT id, formulario_id, accion_id FROM permisos ORDER BY formulario_id ASC, accion_id ASC";
+    // Permisos (combinaciones formulario x accion de formularios no eliminados)
+    // El JOIN con formularios.eliminado = 0 omite los permisos de formularios
+    // desactivados para que el contador de permisos del rol no los incluya
+    $sqlPerm = "SELECT p.id, p.formulario_id, p.accion_id
+                FROM permisos p
+                INNER JOIN formularios f ON f.id = p.formulario_id AND f.eliminado = 0
+                ORDER BY p.formulario_id ASC, p.accion_id ASC";
     $stmtPerm = $conexionBD->prepare($sqlPerm);
     $stmtPerm->execute();
     $permisos = $stmtPerm->fetchAll(PDO::FETCH_ASSOC);

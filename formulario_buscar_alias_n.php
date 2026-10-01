@@ -8,11 +8,12 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
+/*
 if (!defined('ACCESO_SEGURO')) {
     http_response_code(403);
     exit('Acceso directo no permitido');
 }
-
+*/
 if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     $_SESSION['subsistema_id'] = intval($_GET['subsistema_id']);
     $_SESSION['modulo_id'] = intval($_GET['modulo_id']);

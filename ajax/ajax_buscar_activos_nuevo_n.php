@@ -11,10 +11,9 @@
  *   1. t_activo.modelo_id IS NOT NULL → existe en t_modelos
  *   2. t_activo.id_ag IS NOT NULL → existe en t_activo_general
  *   3. t_activo.id_marca IS NOT NULL → existe en t_marca
- *   4. t_modelos esta asociado a un fondo (t_modelo_fondos)
  *
  * Cadena relacional:
- *   t_activo.modelo_id → t_modelos.id_modelo → t_modelo_fondos.id_modelo
+ *   t_activo.modelo_id → t_modelos.id_modelo
  *   t_activo.id_ag → t_activo_general.id_ag
  *   t_activo.id_marca → t_marca.id_marca
  *
@@ -76,12 +75,12 @@ $conditions = [
 $params = [];
 $types  = '';
 
-// Filtro opcional: fondo presupuestario
-if ($id_fondos > 0) {
-    $conditions[] = 'mf.id_fondos = ?';
-    $params[]     = $id_fondos;
-    $types       .= 'i';
-}
+    // Filtro opcional: fondo presupuestario
+    if ($id_fondos > 0) {
+        $conditions[] = 'EXISTS (SELECT 1 FROM t_placa p WHERE p.id_activo = a.id_activo AND p.id_fondos = ?)';
+        $params[]     = $id_fondos;
+        $types       .= 'i';
+    }
 
 // Filtro opcional: texto de busqueda (busca en modelo, tipo y marca)
 if ($busqueda !== '') {
@@ -108,7 +107,6 @@ $query = "SELECT
           INNER JOIN t_activo_general ag ON a.id_ag = ag.id_ag
           INNER JOIN t_marca m ON a.id_marca = m.id_marca
           INNER JOIN t_modelos tm ON a.modelo_id = tm.id_modelo
-          INNER JOIN t_modelo_fondos mf ON tm.id_modelo = mf.id_modelo
           WHERE $whereClause
           GROUP BY ag.id_ag, ag.clase, ag.imagen, m.id_marca, m.marca, tm.id_modelo, tm.modelo
           ORDER BY ag.clase ASC, m.marca ASC, tm.modelo ASC";

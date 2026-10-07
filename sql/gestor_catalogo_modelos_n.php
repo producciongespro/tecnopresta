@@ -3,9 +3,8 @@
  * ============================================================
  * ENDPOINT: Gestor Catalogo de Modelos - Datos
  * ============================================================
- * Proposito: Retorna JSON con lista de modelos del catalogo
- * (t_modelos), fuentes presupuestarias (t_fondos) y la relacion
- * 0..N modelo-fondos (t_modelo_fondos).
+ * Proposito: Retorna tipos, marcas, modelos y combinaciones
+ * creadas en t_activo (agrupadas por id_ag,id_marca,modelo_id).
  *
  * Seguridad:
  * - Valida sesion Azure
@@ -28,64 +27,65 @@ if (!$usuario_azure) {
     echo json_encode(['success' => false, 'message' => 'Sesion invalida']);
     exit;
 }
-/*
+
 // Solo Root puede acceder a este endpoint
 if (!esUsuarioRoot()) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Acceso no autorizado']);
     exit;
 }
-*/
+
 try {
     $conexionBD = BD::crearInstancia();
 
-    // Consultar modelos del catalogo (activos e inactivos, para gestion)
-    $sqlModelos = "
-        SELECT
-            tm.id_modelo,
-            tm.modelo,
-            tm.mdl_elm,
-            tm.created_by,
-            tm.created_at,
-            tm.updated_at,
-            (SELECT COUNT(*) FROM t_activo a WHERE a.modelo_id = tm.id_modelo) AS activos_asociados
-        FROM t_modelos tm
-        ORDER BY tm.modelo ASC
-    ";
+    // 1. Tipos de activo (t_activo_general)
+    $sqlTipos = "SELECT id_ag, clase FROM t_activo_general ORDER BY clase ASC";
+    $stmtTipos = $conexionBD->prepare($sqlTipos);
+    $stmtTipos->execute();
+    $tipos = $stmtTipos->fetchAll(PDO::FETCH_ASSOC);
+
+    // 2. Marcas (t_marca)
+    $sqlMarcas = "SELECT id_marca, marca FROM t_marca ORDER BY marca ASC";
+    $stmtMarcas = $conexionBD->prepare($sqlMarcas);
+    $stmtMarcas->execute();
+    $marcas = $stmtMarcas->fetchAll(PDO::FETCH_ASSOC);
+
+    // 3. Modelos (t_modelos)
+    $sqlModelos = "SELECT id_modelo, modelo, mdl_elm FROM t_modelos ORDER BY modelo ASC";
     $stmtMod = $conexionBD->prepare($sqlModelos);
     $stmtMod->execute();
     $modelos = $stmtMod->fetchAll(PDO::FETCH_ASSOC);
 
-    // Consultar fuentes presupuestarias disponibles
-    $sqlFondos = "
-        SELECT id_fondos, fondos
-        FROM t_fondos
-        ORDER BY fondos ASC
+    // 4. Combinaciones creadas en t_activo (agrupadas por id_ag,id_marca,modelo_id)
+    $sqlCombos = "
+        SELECT 
+            a.id_ag,
+            ag.clase,
+            a.id_marca,
+            m.marca,
+            a.modelo_id,
+            COALESCE(tm.modelo, '') AS modelo_nombre,
+            COUNT(DISTINCT a.id_activo) AS filas_t_activo,
+            COUNT(DISTINCT p.id_placa) AS unidades_fisicas
+        FROM t_activo a
+        LEFT JOIN t_activo_general ag ON ag.id_ag = a.id_ag
+        LEFT JOIN t_marca m ON m.id_marca = a.id_marca
+        INNER JOIN t_modelos tm ON tm.id_modelo = a.modelo_id
+        LEFT JOIN t_placa p ON p.id_activo = a.id_activo
+        WHERE (a.modelo_id IS NOT NULL AND a.modelo_id <> 0)
+        GROUP BY a.id_ag, ag.clase, a.id_marca, m.marca, a.modelo_id, tm.modelo
+        ORDER BY ag.clase ASC, m.marca ASC, tm.modelo ASC
     ";
-    $stmtFondos = $conexionBD->prepare($sqlFondos);
-    $stmtFondos->execute();
-    $fondos = $stmtFondos->fetchAll(PDO::FETCH_ASSOC);
-
-    // Consultar la relacion modelo-fondos
-    $sqlRelacion = "
-        SELECT id_modelo, id_fondos
-        FROM t_modelo_fondos
-    ";
-    $stmtRel = $conexionBD->prepare($sqlRelacion);
-    $stmtRel->execute();
-    $relaciones = $stmtRel->fetchAll(PDO::FETCH_ASSOC);
-
-    // Agrupar fondos por modelo para facilitar el renderizado
-    $fondosPorModelo = [];
-    foreach ($relaciones as $rel) {
-        $fondosPorModelo[(int)$rel['id_modelo']][] = (int)$rel['id_fondos'];
-    }
+    $stmtCombos = $conexionBD->prepare($sqlCombos);
+    $stmtCombos->execute();
+    $combos = $stmtCombos->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
         'success' => true,
+        'tipos' => $tipos,
+        'marcas' => $marcas,
         'modelos' => $modelos,
-        'fondos' => $fondos,
-        'fondos_por_modelo' => $fondosPorModelo
+        'combos' => $combos
     ], JSON_UNESCAPED_UNICODE);
 
 } catch (Exception $e) {

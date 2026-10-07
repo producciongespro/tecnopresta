@@ -61,7 +61,7 @@ if (!defined('ACCESO_SEGURO')) {
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
     <link rel="stylesheet" href="css/formulario_menu_principal.css?v=4" />
 
-    <link href="css/bootstrap-icons/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     
     <script src="js/jquery-3.7.1.min.js"></script>

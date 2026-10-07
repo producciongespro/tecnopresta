@@ -67,7 +67,7 @@ if (isset($_SESSION['flash'])) {
     <!-- Bootstrap 5 CSS -->
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="css/bootstrap-icons/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->

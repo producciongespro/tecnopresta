@@ -187,7 +187,7 @@ $redirigir_js = htmlspecialchars($redirigir_a, ENT_QUOTES, 'UTF-8');
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/nueva-identidad.css">
     <link rel="stylesheet" href="css/formulario_menu_principal.css?v=3" />
-    <link href="css/bootstrap-icons/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body class="layout-page">
   <?php include 'partials/header.php'; ?>

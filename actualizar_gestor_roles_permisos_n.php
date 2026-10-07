@@ -30,12 +30,12 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-// require_once __DIR__ . '/usuarioAzure.php';
-// require_once __DIR__ . '/auth.php';
-// require_once __DIR__ . '/sql/bd.php';
-require_once __DIR__ . '/../usuarioAzure.php';
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/bd.php';
+require_once __DIR__ . '/usuarioAzure.php';
+require_once __DIR__ . '/auth.php';
+ require_once __DIR__ . '/sql/bd.php';
+//require_once __DIR__ . '/../usuarioAzure.php';
+//require_once __DIR__ . '/../auth.php';
+//require_once __DIR__ . '/bd.php';
 
 $usuario_azure = obtenerUsuarioSesion();
 if (!$usuario_azure) {

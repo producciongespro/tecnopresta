@@ -119,28 +119,10 @@ if ($resModelo->num_rows === 0) {
 }
 $stmtModelo->close();
 
-// ══════════════════════════════════════════════════════════════
-// PASO 3: Verificar que el modelo este asociado a un fondo (t_modelo_fondos)
-// ══════════════════════════════════════════════════════════════
-$stmtFondo = $link->prepare(
-    "SELECT id_modelo FROM t_modelo_fondos WHERE id_modelo = ? LIMIT 1"
-);
-if (!$stmtFondo) {
-    echo json_encode(['success' => false, 'message' => 'Error preparando consulta: ' . $link->error]);
-    exit();
-}
-$stmtFondo->bind_param("i", $modelo_id);
-$stmtFondo->execute();
-$resFondo = $stmtFondo->get_result();
-if ($resFondo->num_rows === 0) {
-    $stmtFondo->close();
-    echo json_encode(['success' => false, 'message' => 'El modelo no tiene fondos presupuestarios asociados']);
-    exit();
-}
-$stmtFondo->close();
+
 
 // ══════════════════════════════════════════════════════════════
-// PASO 4: Verificar que el id_activo exista en t_activo y pertenezca al modelo
+// PASO 3: Verificar que el id_activo exista en t_activo y pertenezca al modelo
 // ══════════════════════════════════════════════════════════════
 $stmtActivo = $link->prepare(
     "SELECT a.id_activo
@@ -167,7 +149,7 @@ if ($resActivo->num_rows === 0) {
 $stmtActivo->close();
 
 // ══════════════════════════════════════════════════════════════
-// PASO 5: Verificar placa duplicada
+// PASO 4: Verificar placa duplicada
 // ══════════════════════════════════════════════════════════════
 $stmtCheck = $link->prepare("SELECT id_placa, codigo FROM t_placa WHERE placa = ?");
 if (!$stmtCheck) {
@@ -198,7 +180,7 @@ if ($resCheck->num_rows > 0) {
 $stmtCheck->close();
 
 // ══════════════════════════════════════════════════════════════
-// PASO 5b: Verificar serial duplicado
+// PASO 4b: Verificar serial duplicado
 // ══════════════════════════════════════════════════════════════
 $stmtCheckS = $link->prepare("SELECT id_placa, codigo FROM t_placa WHERE serial = ?");
 if (!$stmtCheckS) {
@@ -229,7 +211,7 @@ if ($resCheckS->num_rows > 0) {
 $stmtCheckS->close();
 
 // ══════════════════════════════════════════════════════════════
-// PASO 6: Insertar placa CON campo color (hex)
+// PASO 5: Insertar placa CON campo color (hex)
 // ══════════════════════════════════════════════════════════════
 $query = "INSERT INTO t_placa (
     placa, serial, id_activo, codigo, id_estado,

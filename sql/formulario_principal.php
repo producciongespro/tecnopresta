@@ -80,6 +80,12 @@ try {
     //Obtiene le nombre completo del usuario
     $funcionario_nombre = trim((string)($usuario_azure['nombre'] ?? ''));
 
+    //Obtiene los apellidos del usuario desde la sesion (Apellido1 y Apellido2)
+    $funcionario_apellidos = trim((string)($usuario_azure['apellidos'] ?? ''));
+
+    //Nombre completo = nombres + apellidos (se guarda completo en la tabla usuarios)
+    $funcionario_nombre_completo = trim($funcionario_nombre . ' ' . $funcionario_apellidos);
+
     // El correo del funcionario obtenido del Azure, o un valor por defecto si no está disponible
     $funcionario_correo = trim((string)($usuario_azure['correo'] ?? ''));
 
@@ -147,7 +153,7 @@ try {
         
         $consulta->execute([
             $funcionario_cedula, 
-            $funcionario_nombre, 
+            $funcionario_nombre_completo, 
             $funcionario_correo,
             $funcionario_azure_id,
             $sexo
@@ -160,13 +166,23 @@ try {
         $usuario_id = (int)$usuario['id'];
     }
 
-    // === 8.1 CORREGIR NOMBRE SI SE GUARDÓ UN CORREO ====
-    if ($usuario && str_contains($usuario['nombre'] ?? '', '@')) {
-        $nombre_real = trim((string)($usuario_azure['nombre'] ?? ''));
-        if ($nombre_real !== '') {
+    // === 8.1 ACTUALIZAR NOMBRE COMPLETO (nombres + apellidos) ====
+    if ($usuario) {
+        $nombre_en_bd = (string)($usuario['nombre'] ?? '');
+        $nombre_objetivo = '';
+
+        if ($funcionario_apellidos !== '') {
+            //Con apellidos de la sesion se guarda/actualiza el nombre completo
+            $nombre_objetivo = $funcionario_nombre_completo;
+        } elseif ($funcionario_nombre !== '' && str_contains($nombre_en_bd, '@')) {
+            //Fallback: sin apellidos en la sesion, solo se corrige si el nombre guardado es un correo
+            $nombre_objetivo = $funcionario_nombre;
+        }
+
+        if ($nombre_objetivo !== '' && $nombre_en_bd !== $nombre_objetivo) {
             $sqlCorregir = "UPDATE usuarios SET nombre = ? WHERE id = ?";
             $stmtCorregir = $conexionBD->prepare($sqlCorregir);
-            $stmtCorregir->execute([$nombre_real, $usuario_id]);
+            $stmtCorregir->execute([$nombre_objetivo, $usuario_id]);
         }
     }
 

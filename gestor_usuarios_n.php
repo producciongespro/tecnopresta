@@ -327,7 +327,7 @@ if ($sid) {
         <div class="card mb-4">
             <div class="card-body">
                 <div class="row g-3 align-items-center">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="input-group">
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-search text-muted"></i>
@@ -337,7 +337,13 @@ if ($sid) {
                                    oninput="filtrarUsuarios()">
                         </div>
                     </div>
-                    <div class="col-md-4 text-end">
+                    <div class="col-md-3">
+                        <select class="form-select" id="filtroRol"
+                                aria-label="Filtrar por rol" onchange="filtrarUsuarios()">
+                            <option value="">Todos los roles</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-end">
                         <button class="btn btn-mep-primary" onclick="abrirModalAsignar()">
                             <i class="bi bi-plus-lg me-1"></i> Asignar Rol
                         </button>
@@ -424,7 +430,8 @@ if ($sid) {
                             <label class="form-label">Buscar usuario por cedula</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" id="inputCedula"
-                                       placeholder="Ingrese la cedula..." maxlength="30">
+                                       placeholder="Ingrese la cedula..." maxlength="30"
+                                       onkeydown="if (event.key === 'Enter') { event.preventDefault(); buscarUsuarioPorCedula(); }">
                                 <button class="btn btn-mep-primary" type="button" onclick="buscarUsuarioPorCedula()">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -711,7 +718,9 @@ if ($sid) {
                 root_count: data.root_count || 0
             };
 
+            llenarFiltroRoles();
             renderizarTabla(datos.usuarios);
+            filtrarUsuarios();
             actualizarEstadisticas();
 
         } catch (e) {
@@ -744,7 +753,9 @@ if ($sid) {
                 return '<span class="' + clase + '">' + escapeHtml(r) + '</span>';
             }).join('');
 
-            html += '<tr data-usuario-id="' + u.id + '" data-busqueda="' +
+            html += '<tr data-usuario-id="' + u.id + '"' +
+                    ' data-roles="' + escapeHtml((u.roles || '').toLowerCase()) + '"' +
+                    ' data-busqueda="' +
                     escapeHtml((u.nombre + ' ' + u.cedula + ' ' + u.correo).toLowerCase()) + '">';
             html += '<td>';
             html += '<div class="usuario-info-row">';
@@ -776,14 +787,44 @@ if ($sid) {
     // FILTRADO
     // ============================================================
 
+    // Llena el selector de roles y conserva la seleccion activa
+    // (cargarDatos se vuelve a ejecutar tras asignar/editar/eliminar).
+    function llenarFiltroRoles() {
+        const select = document.getElementById('filtroRol');
+        const seleccionado = select.value;
+
+        let html = '<option value="">Todos los roles</option>';
+        datos.roles.forEach(function(r) {
+            html += '<option value="' + escapeHtml(String(r.rol).toLowerCase()) + '">' +
+                    escapeHtml(r.rol) + '</option>';
+        });
+        select.innerHTML = html;
+
+        if (seleccionado) {
+            select.value = seleccionado;
+            if (select.value !== seleccionado) select.value = '';
+        }
+    }
+
     function filtrarUsuarios() {
         const termino = document.getElementById('buscarUsuario').value.toLowerCase().trim();
+        const rolFiltro = document.getElementById('filtroRol').value; // nombre en minusculas
         const filas = document.querySelectorAll('#tablaUsuarios tr[data-usuario-id]');
         let visibles = 0;
 
         filas.forEach(function(fila) {
-            const busqueda = fila.getAttribute('data-busqueda');
-            if (!termino || busqueda.indexOf(termino) !== -1) {
+            const busqueda = fila.getAttribute('data-busqueda') || '';
+            const coincideTexto = !termino || busqueda.indexOf(termino) !== -1;
+
+            let coincideRol = true;
+            if (rolFiltro) {
+                const rolesFila = (fila.getAttribute('data-roles') || '').split(',');
+                coincideRol = rolesFila.some(function(r) {
+                    return r.trim() === rolFiltro;
+                });
+            }
+
+            if (coincideTexto && coincideRol) {
                 fila.style.display = '';
                 visibles++;
             } else {
@@ -791,14 +832,28 @@ if ($sid) {
             }
         });
 
-        if (visibles === 0 && termino) {
+        const hayFiltroActivo = termino || rolFiltro;
+        if (visibles === 0 && hayFiltroActivo && filas.length > 0) {
             const tbody = document.getElementById('tablaUsuarios');
             if (!document.getElementById('filaSinResultados')) {
+                const selectRol = document.getElementById('filtroRol');
+                const nombreRol = rolFiltro && selectRol.selectedOptions.length
+                    ? selectRol.selectedOptions[0].textContent : '';
+                let mensaje = '';
+                if (termino && nombreRol) {
+                    mensaje = 'No se encontraron usuarios con el rol "' + nombreRol +
+                              '" que coincidan con "' + termino + '"';
+                } else if (nombreRol) {
+                    mensaje = 'No se encontraron usuarios con el rol "' + nombreRol + '"';
+                } else {
+                    mensaje = 'No se encontraron usuarios que coincidan con "' + termino + '"';
+                }
+
                 const tr = document.createElement('tr');
                 tr.id = 'filaSinResultados';
                 tr.innerHTML = '<td colspan="5" class="sin-resultados">' +
                     '<i class="bi bi-search" style="font-size:2rem;"></i>' +
-                    '<p class="mt-2">No se encontraron usuarios que coincidan con "' + escapeHtml(termino) + '"</p>' +
+                    '<p class="mt-2">' + escapeHtml(mensaje) + '</p>' +
                     '</td>';
                 tbody.appendChild(tr);
             }
@@ -1027,11 +1082,18 @@ if ($sid) {
             }
 
             const u = data.usuario;
-            document.getElementById('avatarUsuarioBuscado').textContent = getIniciales(u.nombre);
-            document.getElementById('nombreUsuarioBuscado').textContent = u.nombre;
+            const nombreVisible = u.nombre_completo || u.nombre;
+            document.getElementById('avatarUsuarioBuscado').textContent = getIniciales(nombreVisible);
+            document.getElementById('nombreUsuarioBuscado').textContent = nombreVisible;
             document.getElementById('correoUsuarioBuscado').textContent = u.correo;
             document.getElementById('usuarioIdBuscado').value = u.id;
             document.getElementById('resultadoBusqueda').style.display = '';
+
+            // Cargar codigo presupuestario asociado al usuario encontrado
+            const inputCodigo = document.getElementById('inputCodigoPresu');
+            if (inputCodigo && document.getElementById('seccionCodigoPresu').style.display !== 'none') {
+                inputCodigo.value = u.codigo_presu || '';
+            }
 
         } catch (e) {
             mostrarError('Error al buscar usuario: ' + e.message);
@@ -1182,8 +1244,12 @@ if ($sid) {
                 html += '<div class="fw-bold" style="font-size:0.9rem;">' + escapeHtml(r.rol) + '</div>';
                 html += '<small class="text-muted">' + escapeHtml(subNombre) + '</small>';
                 html += '</div></div>';
+                html += '<div class="d-flex align-items-center gap-2">';
                 html += '<button class="accion-btn editar" title="Editar rol" onclick="ocultarModal(\'modalDetalleRoles\'); abrirModalEditar(' + r.usuario_rol_id + ');">';
                 html += '<i class="bi bi-pencil-square"></i></button>';
+                html += '<button class="accion-btn eliminar" title="Eliminar rol" onclick="eliminarRolDirecto(' + r.usuario_rol_id + ')">';
+                html += '<i class="bi bi-trash3"></i></button>';
+                html += '</div>';
                 html += '</div>';
             });
             container.innerHTML = html;
@@ -1195,6 +1261,54 @@ if ($sid) {
     // ============================================================
     // ELIMINAR ROL
     // ============================================================
+
+    // Ejecuta el borrado (soft) del rol indicado y refresca la tabla.
+    async function ejecutarEliminarRol(usuarioRolId) {
+        try {
+            const resp = await fetch('actualizar_gestor_usuarios_n.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    accion: 'eliminar',
+                    usuario_rol_id: parseInt(usuarioRolId)
+                })
+            });
+            const data = await resp.json();
+
+            if (data.success) {
+                mostrarExito(data.message);
+                await cargarDatos();
+            } else {
+                mostrarError(data.message);
+            }
+        } catch (e) {
+            mostrarError('Error de conexion: ' + e.message);
+        }
+    }
+
+    // Boton eliminar dentro del modal "Roles Asignados" (usuarios con varios roles).
+    function eliminarRolDirecto(usuarioRolId) {
+        const detalle = datos.detalle_roles.find(function(d) {
+            return parseInt(d.usuario_rol_id) === parseInt(usuarioRolId);
+        });
+        if (!detalle) {
+            mostrarError('No se encontro el registro del rol');
+            return;
+        }
+
+        const usuario = datos.usuarios.find(function(u) {
+            return parseInt(u.id) === parseInt(detalle.usuario_id);
+        });
+        const nombreUsuario = usuario ? usuario.nombre : '';
+
+        mostrarConfirmacion(
+            '¿Desea eliminar el rol "' + detalle.rol + '" de ' + nombreUsuario + '?',
+            async function() {
+                ocultarModal('modalDetalleRoles');
+                await ejecutarEliminarRol(usuarioRolId);
+            }
+        );
+    }
 
     function eliminarRolUsuario(usuarioId) {
         const usuario = datos.usuarios.find(function(u) {
@@ -1217,27 +1331,8 @@ if ($sid) {
             const r = rolesUsuario[0];
             mostrarConfirmacion(
                 '¿Desea eliminar el rol "' + r.rol + '" de ' + usuario.nombre + '?',
-                async function() {
-                    try {
-                        const resp = await fetch('actualizar_gestor_usuarios_n.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                accion: 'eliminar',
-                                usuario_rol_id: parseInt(r.usuario_rol_id)
-                            })
-                        });
-                        const data = await resp.json();
-
-                        if (data.success) {
-                            mostrarExito(data.message);
-                            await cargarDatos();
-                        } else {
-                            mostrarError(data.message);
-                        }
-                    } catch (e) {
-                        mostrarError('Error de conexion: ' + e.message);
-                    }
+                function() {
+                    ejecutarEliminarRol(r.usuario_rol_id);
                 }
             );
         } else {

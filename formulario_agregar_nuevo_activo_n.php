@@ -359,8 +359,9 @@ while ($row = $res->fetch_assoc()) {
           <div class="card-body">
 
             <div class="row g-3 mb-3">
-              <!-- Fondo presupuestario (OPCIONAL) -->
-              <div class="col-md-4">
+              <!-- Fondo presupuestario (OPCIONAL) - TEMPORALMENTE OCULTO: no se usa por ahora.
+                   Clase "d-none" oculta el filtro; no eliminar por si se reactiva mas adelante. -->
+              <div class="col-md-4 d-none">
                 <label class="form-label">Fondo Presupuestario <small class="text-muted">(opcional)</small></label>
                 <select id="fondo_select" class="form-select" style="width:100%;">
                   <option value="">Todos los fondos</option>
@@ -370,8 +371,8 @@ while ($row = $res->fetch_assoc()) {
                 </select>
               </div>
 
-              <!-- Cuadro de busqueda unico -->
-              <div class="col-md-6">
+              <!-- Cuadro de busqueda unico (ocupa todo el ancho mientras el fondo este oculto) -->
+              <div class="col-md-10">
                 <label class="form-label">Buscar tipo, marca o modelo</label>
                 <div class="input-group">
                   <span class="input-group-text" style="background:var(--mep-blue);color:#fff;border-color:var(--mep-blue);border-radius:8px 0 0 8px;">

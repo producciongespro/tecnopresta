@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="tecnopresta, mep, innovaciones educativas, Programa Nacional de Tecnolog&iacute;as M&oacute;viles" />
+    <meta name="description" content="Tecnopresta" />
+    <script
+      type="text/javascript"
+      src="//cdn.jsdelivr.net/npm/bluebird@3.7.2/js/browser/bluebird.min.js"
+    ></script>
+<!--    
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+    OneSignal.init({
+      appId: "be920f28-6be8-4d01-957a-25c3f09cd806",
+    });
+  });
+</script> -->
+    
+    
+    <!-- Microsoft Clarity, Herramienta de Comportamiento de Usuario // Franklin
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "c2jqfjqibd");
+    </script> -->
+    
+    
+    <!-- Validacion en Google Search Console// Franklin  -->
+    <meta name="google-site-verification" content="lBNqrBXfd6TNu6Ser1eAwVssVs07ClgjK0D58zmySrw" />
+
+<!--
+    <script
+      type="text/javascript"
+      src="https://alcdn.msauth.net/browser/2.0.0-beta.4/js/msal-browser.js"
+      integrity="sha384-7sxY2tN3GMVE5jXH2RL9AdbO6s46vUh9lUid4yNCHJMUzDoj+0N4ve6rLOmR88yN"
+      crossorigin="anonymous"
+    ></script>
+-->
+
+<!-- Usar la versión NORMAL para desarrollo necesitamos debugging detallado para lo del Teams-->
+<script
+  type="text/javascript"
+  src="https://alcdn.msauth.net/browser/2.21.0/js/msal-browser.js"
+></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Sistema Préstamo e Inventario // TecnoPresta</title>
+    <link rel="shortcut icon" href="ico/favicon.png">
+    
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/css/uikit.min.css" />
+    
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit-icons.min.js"></script>
+    
+    <!-- Convertir push -->
+    <script src="utils.js"></script>
+  </head>
+  <body>
+   
+    <nav class="navbar 
+                navbar-expand-sm 
+                navbar-expand-md 
+                navbar-expand-lg 
+                bg-light navbar-light
+                justify-content-between">        
+        <span class="navbar-brand mb-0 h1">
+            <img src="images/logodelgobierno.png" width="45" height="30" alt="" loading="lazy">
+            Solicitudes de Préstamo de Activos [TecnoPresta]
+        </span> 
+         <!--  <div class="container-fluid">
+            <a class="navbar-brand" href="solicitud_admin.html">Solicitar cuenta administrador</a>
+          </div> -->
+ 
+        <span class="navbar-brand mb-0 h1">
+          <!-- <a class="navbar-brand" href="solicitud_admin.html"></a> -->
+         
+          
+          <button class="demo uk-button uk-button-default" type="button" id="subscribe"><FONT COLOR="black">Suscribirse a Notificaciones</FONT></button>       
+        </span>          
+    </nav>
+
+              <nav class="nav nav-pills flex-column 
+                          nav-justified">
+                <a class="item nav-item nav-link" 
+                    href="javascript:void(0);" onclick="iniciarLoginNormal()">
+                    <br> <br>         
+                      <div>
+                        <img src="images/Logotipo.png" width="1400" class="my-4">                          
+                      </div>
+                </a>
+                  <!-- <a class="item nav-item nav-link" 
+                            href="javascript:void(0);" onclick="signIn()">
+                            <br> <br>         
+                          <div>
+                          <img src="images/Logotipo.png" width="1400" class="my-4">                          
+                        </div>
+                  </a> -->
+                  
+         <!--         <a class="item nav-item nav-link btn btn-dark
+                            py-3 py-sm-4 py-md-4 py-lg-4 py-xl-3 col-md-4 mx-auto" 
+                            href="javascript:void(0);" style="font-weight: bold;
+                            font-family: 'Lucida Console', Monaco, monospace;
+                            border-radius: 5px;
+                            border-style:groove;
+                            border-bottom: 0.5vw solid #000000; font-size: 1.4rem;"                            
+                            id="btnIngresar"
+                            onclick="signIn()"
+                            >Ingresar
+                  </a> -->
+
+              </nav>
+          
+  
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<!-- <center><button type="button" class="btn btn-dark" id="btnIngresar" onclick="signIn()">Ingresar</button></center> -->
+<div class="d-flex justify-content-between align-items-center px-3 mt-3">
+
+  <!-- BOTÓN PRINCIPAL (centrado visualmente) -->
+  <div class="mx-auto">
+    <button 
+      type="button" 
+      class="btn btn-dark" 
+      id="btnIngresar" 
+      onclick="iniciarLoginNormal()">
+      Ingresar
+    </button>
+  </div>
+
+  <!-- BOTÓN OCULTO (lado derecho) -->
+  <button 
+    id="btnAccesoOculto"
+    onclick="accesoControlado()"
+    style="
+      background: transparent;
+      border: none;
+      color: #cfcfcf;   /* gris suave */
+      opacity: 0.3;
+      font-size: 14px;
+    ">
+    •
+  </button>
+
+</div>
+
+
+  <div class="container-sm container-md container-lg">
+    <div class="row justify-content-center"> 
+      <div id="contenedorError" class="form-group row"></div>       
+    </div>
+  </div>
+ 
+  <!--<div class="col-md-6">        
+    <df-messenger
+    intent="WELCOME"
+    chat-title="TecnoPresta"
+    agent-id="319ef6bf-87ec-418a-ba23-4c5e0c9000f6"
+    language-code="es"
+  ></df-messenger>    --> 
+
+      <!-- Modal -->
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" 
+           data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabelTipo" 
+           aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabelTipo">Seleccione el código presupuestario</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>  
+            </div>
+            <div class="modal-body">
+                           
+              <!-- Plantilla que se carga en .js -->
+                
+                  <div class="container-fluid">
+                    
+                      <ul class="list-unstyled" id="listTipo">                     
+                        
+                        <li id="fila">
+
+                          <div class="list-group-flush">
+                              <!-- <a href="formulario_menu_principal.php" class="list-group-item list-group-item-action"> -->
+                              <a href="formulario_menu_principal.html" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                  <div class="col-sm-2">
+                                    <h5 class="mb-1">5300</h5>
+                                  </div>
+                                  <div class="col-sm-10">
+                                     <h5 class="mb-1">Liceo Nombre del Liceo</h5>
+                                  </div>                                  
+                                </div>
+                              </a>
+                          </div>
+
+                      </li>  
+
+                  </ul>
+  
+                </div>                 
+                              
+              </div>
+  
+          </div>
+        </div>
+
+      </div>  
+    
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->        
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="css/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="./authUnido.js?version=1"></script> -->
+    <!-- <script type="text/javascript" src="./authConfig.js?version=1"></script>-->
+    <!-- <script type="text/javascript" src="./graphConfig.js"></script> -->   
+    <!-- <script type="text/javascript" src="js/formulario_login.js?version=13"></script> -->
+    <!-- ESTE ES PARA LA NUEVA VERSIÓN -->
+    <!-- <script type="text/javascript" src="js/formulario_login_e.js?version=13"></script> -->
+    <!-- CODIGO ERICK -->
+    <script>
+      /* ============================================
+      * CARGADOR DINÁMICO DE LOGIN
+      * ============================================
+      * Carga el JS SOLO cuando se necesita
+      */
+      window.tipoLoginActivo = null; ////carga en la variable el tipo de login, inicializa en null
+      function cargarScriptLogin(ruta, callback) {
+
+          // ============================================
+          // Si YA existe el script cargado
+          // ============================================
+          const scriptExistente = document.querySelector(
+              `script[src="${ruta}"]`
+          );
+
+          if (scriptExistente) {
+
+              console.log("⚠️ Script ya cargado:", ruta);
+
+              // Ejecuta callback directamente
+              if (callback) callback();
+
+              return;
+          }
+          
+          if (document.getElementById("loginScript")) { //Si ya hay un script de login cargado, lo elimina para evitar conflictos
+              document.getElementById("loginScript").remove(); // Elimina el script existente
+          }
+
+          // ============================================
+          // Crear nuevo script
+          // ============================================
+          let script = document.createElement("script");
+          script.src = ruta;
+          script.id = "loginScript";
+
+          script.onload = async function () {
+              console.log("✅ Script cargado:", ruta);
+
+              // 🔥 FORZAR INICIALIZACIÓN MANUAL -  // Inicializar MSAL SOLO si existe
+              if (typeof initializeMSAL === "function" && !window.msalInicializado) { // Verifica si MSAL ya fue inicializado
+                  await initializeMSAL();
+                  window.msalInicializado = true; // Marca MSAL como inicializado
+              }
+
+              // 🔥 Ejecutar callback después de inicializar
+              if (callback) callback();
+          };
+
+          document.body.appendChild(script);
+      }
+
+      /**
+       * ============================================
+       * BOTÓN PRINCIPAL (PRODUCCIÓN)
+       * ============================================
+       */
+      function iniciarLoginNormal() {
+        
+        window.tipoLoginActivo = "normal"; //carga en la variable el tipo de login
+
+        cargarScriptLogin("js/formulario_login.js?version=18", function () {
+
+          if (typeof signIn === "function") {
+            signIn();
+          } else {
+            console.error("❌ signIn no está definido");
+          }
+
+        });
+      }
+
+    /**
+     * ============================================
+     * BOTÓN OCULTO (NUEVA VERSIÓN)
+     * ============================================
+    */
+    function accesoControlado() {
+
+      window.tipoLoginActivo = "especial"; //carga en la variable el tipo de login
+
+      const codigo = prompt("Ingrese código de acceso:");
+      if (codigo === null) return;
+
+      if (codigo !== "321456") {
+        alert("Acceso no autorizado");
+        return;
+      }
+
+      console.log("✅ Acceso autorizado");
+
+      cargarScriptLogin("js/formulario_login_e.js?version=13", function () {
+
+        if (typeof signInEspecial === "function") {
+          signInEspecial();
+        } else {
+          console.error("❌ signInEspecial no está definido");
+        }
+
+      });
+    }
+    </script>
+
+    
+
+    <!-- <script type="text/javascript" src="./tokenManager.js?version=1"></script> -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+       window.addEventListener('load', () => {
+         navigator.serviceWorker.register('./service-worker.js')
+             .then((reg) => {
+               console.log('Registrando el Service worker.', reg);
+             }, function(err) {
+           // registration failed :(
+           console.log('Error al registrar el ServiceWorker: ', err);
+         });
+       });
+     }
+   </script>
+    
+<script>
+document.getElementById('subscribe').addEventListener('click', function() {
+    navigator.serviceWorker.ready.then(function(registration) {
+        // Verificar si ya existe una suscripción
+        registration.pushManager.getSubscription().then(function(subscription) {
+            // Si hay una suscripción activa, cancelarla
+            if (subscription) {
+                subscription.unsubscribe().then(function() {
+                    console.log('Desuscrito con éxito');
+                }).catch(function(error) {
+                    console.error('Error al desuscribirse:', error);
+                });
+            }
+
+            // Suscribir nuevamente con la nueva clave
+            registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array('BJG5s-2sldzC64tugMXk6xorDxrIcmCMT2J7Wyoq3dFtFshEJ3UvdtUYJ8vGRHl9pepQBZDiaVnH5KDWhlpHvuY')
+            }).then(function(subscription) {
+                console.log('Usuario suscrito:', subscription);
+                // Enviar la suscripción al servidor
+                fetch('subscribe.php', {
+                    method: 'POST',
+                    body: JSON.stringify(subscription),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }).catch(function(error) {
+                console.error('Error al suscribir al usuario:', error);
+            });
+        });
+    });
+});
+
+</script>
+
+  </body>
+</html>

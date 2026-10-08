@@ -342,7 +342,7 @@ while ($row = $res->fetch_assoc()) {
                 <h6 class="alert-heading mb-2">Pasos para registrar tu activo</h6>
                 <ol class="mb-0">
                   <li class="mb-1">Escriba un texto de busqueda (tipo, marca o modelo) y haga clic en <strong>Buscar</strong>.</li>
-                  <li class="mb-1">Opcionalmente, seleccione un <strong>fondo presupuestario</strong> para filtrar.</li>
+                  <!-- <li class="mb-1">Opcionalmente, seleccione un <strong>fondo presupuestario</strong> para filtrar.</li> -->
                   <li class="mb-1">De los resultados, haga clic en <strong>Seleccionar</strong> sobre el modelo deseado.</li>
                   <li>Seleccione el color, ingrese placa, serial y confirme el registro.</li>
                 </ol>

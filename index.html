@@ -2986,7 +2986,7 @@
 
     </main>
 
-    <!-- BOTÓN OCULTO (lado derecho) - TAL CUAL EN INDEX_SEMIMODIFICADO (CON CONTRASEÑA 654123) -->
+    <!-- BOTÓN OCULTO (lado derecho) - VALIDACIÓN SERVER-SIDE VÍA verificar_codigo_acceso.php -->
     <div style="position: fixed; bottom: 12px; right: 14px; z-index: 50;">
       <button 
         id="btnAccesoOculto"
@@ -3123,16 +3123,29 @@
 
     /**
      * ============================================
-     * BOTÓN OCULTO (CON CONTRASEÑA)
+     * BOTÓN OCULTO (VALIDACIÓN SERVER-SIDE)
      * Ahora carga la VERSIÓN ANTERIOR (normal)
      * ============================================
     */
-    function accesoControlado() {
+    async function accesoControlado() {
 
       const codigo = prompt("Ingrese código de acceso:");
       if (codigo === null) return;
 
-      if (codigo !== "654123") {
+      let autorizado = false;
+      try {
+        const resp = await fetch("verificar_codigo_acceso.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "codigo=" + encodeURIComponent(codigo)
+        });
+        const data = await resp.json();
+        autorizado = data && data.ok === true;
+      } catch (error) {
+        console.error("❌ Error al validar el código de acceso:", error);
+      }
+
+      if (!autorizado) {
         alert("Acceso no autorizado");
         return;
       }

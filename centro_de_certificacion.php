@@ -19,10 +19,10 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
-if (!defined('ACCESO_SEGURO')) {
-    http_response_code(403);
-    exit('Acceso directo no permitido');
-}
+ if (!defined('ACCESO_SEGURO')) {
+     http_response_code(403);
+     exit('Acceso directo no permitido');
+ }
 
 require_once("conexion.php");
 $link = $mysqli;
@@ -288,7 +288,7 @@ $fecha = date("d-m-Y", $time);
 
     <div class="card shadow-sm mt-4">
         <div class="card-body">
-            <form action="navegar.php?ruta=crear_certificacion_para_firmar.php" method="POST">
+            <form action="crear_certificacion_para_firmar.php" method="POST">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">

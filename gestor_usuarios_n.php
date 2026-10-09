@@ -352,7 +352,7 @@ if ($sid) {
                 <div class="stats-bar mt-3" id="statsBar">
                     <div class="stat-item">
                         <i class="bi bi-people"></i>
-                        <span><span class="stat-num" id="statTotal">0</span> usuarios</span>
+                        <span id="statTotalLabel"><span class="stat-num" id="statTotal">0</span> usuarios</span>
                     </div>
                     <div class="stat-item">
                         <i class="bi bi-shield-fill"></i>
@@ -721,7 +721,6 @@ if ($sid) {
             llenarFiltroRoles();
             renderizarTabla(datos.usuarios);
             filtrarUsuarios();
-            actualizarEstadisticas();
 
         } catch (e) {
             mostrarError('Error al cargar datos: ' + e.message);
@@ -778,11 +777,6 @@ if ($sid) {
         tbody.innerHTML = html;
     }
 
-    function actualizarEstadisticas() {
-        document.getElementById('statTotal').textContent = datos.usuarios.length;
-        document.getElementById('statRoles').textContent = datos.detalle_roles.length;
-    }
-
     // ============================================================
     // FILTRADO
     // ============================================================
@@ -833,6 +827,37 @@ if ($sid) {
         });
 
         const hayFiltroActivo = termino || rolFiltro;
+
+        // Etiqueta adaptable: total de usuarios sin filtro de rol, o
+        // "Usuarios del Rol xxx" con la cantidad de usuarios de ese rol.
+        const labelTotal = document.getElementById('statTotalLabel');
+        if (rolFiltro) {
+            const selectRol = document.getElementById('filtroRol');
+            const nombreRol = selectRol.selectedOptions.length ? selectRol.selectedOptions[0].textContent : '';
+            let totalRol = 0;
+            filas.forEach(function(fila) {
+                const rolesFila = (fila.getAttribute('data-roles') || '').split(',');
+                if (rolesFila.some(function(r) { return r.trim() === rolFiltro; })) totalRol++;
+            });
+            labelTotal.innerHTML = '<span class="stat-num" id="statTotal">' + totalRol + '</span> Usuarios del Rol ' + escapeHtml(nombreRol);
+        } else {
+            labelTotal.innerHTML = '<span class="stat-num" id="statTotal">' + datos.usuarios.length + '</span> usuarios';
+        }
+
+        // Roles asignados: total sin filtro, o asignaciones del rol filtrado
+        const statRoles = document.getElementById('statRoles');
+        if (statRoles) {
+            if (rolFiltro) {
+                let asignacionesRol = 0;
+                datos.detalle_roles.forEach(function(d) {
+                    if ((d.rol || '').toLowerCase() === rolFiltro) asignacionesRol++;
+                });
+                statRoles.textContent = asignacionesRol;
+            } else {
+                statRoles.textContent = datos.detalle_roles.length;
+            }
+        }
+
         if (visibles === 0 && hayFiltroActivo && filas.length > 0) {
             const tbody = document.getElementById('tablaUsuarios');
             if (!document.getElementById('filaSinResultados')) {

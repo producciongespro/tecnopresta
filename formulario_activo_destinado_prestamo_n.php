@@ -80,6 +80,7 @@ $activado = 1;
     <?php include 'partials/header.php'; ?>
 
     <!-- Hero Header MEP -->
+    <div class="container">
     <div class="hero-box mb-4 mt-2 fade-enter">
       <div class="row align-items-center">
         <div class="col-md-8">
@@ -102,6 +103,7 @@ $activado = 1;
           </a>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- Buscador -->

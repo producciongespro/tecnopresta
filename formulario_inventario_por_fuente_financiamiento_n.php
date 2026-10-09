@@ -67,6 +67,7 @@ if (!defined('ACCESO_SEGURO')) {
     <main class="contenido-principal">
 
     <!-- Hero Header MEP -->
+    <div class="container">
     <div class="hero-box mb-4 mt-2 fade-enter">
       <div class="row align-items-center">
         <div class="col-md-8">
@@ -80,15 +81,16 @@ if (!defined('ACCESO_SEGURO')) {
             </div>
           </div>
         </div>
-        <div class="col-md-4 mt-3 mt-md-0 text-md-end">
+        <!-- <div class="col-md-4 mt-3 mt-md-0 text-md-end">
           <a href="ayuda.html#aan" class="text-white text-decoration-none opacity-75 small me-3">
             <i class="bi bi-question-circle"></i> Ayuda
           </a>
           <a href="contactenos.php?rep=Error en formulario prestamo html" class="text-white text-decoration-none opacity-75 small">
             <i class="bi bi-envelope"></i> Reportar
           </a>
-        </div>
+        </div> -->
       </div>
+    </div>
     </div>
 
     <!-- Mensajes dinámicos -->

@@ -85,11 +85,11 @@ if (!defined('ACCESO_SEGURO')) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-3 mt-md-0 text-md-end">
+                    <!-- <div class="col-md-4 mt-3 mt-md-0 text-md-end">
                         <a href="mailto:soporte@mep.go.cr" class="text-white text-decoration-none opacity-75 small">
                             <i class="bi bi-envelope"></i> Reportar
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="mb-3">

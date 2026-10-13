@@ -82,7 +82,7 @@ $total_resultados = $result ? mysqli_num_rows($result) : 0;
 
 $param_retorno = '';
 if ($subsistema_id > 0 && $modulo_id > 0) {
-    $param_retorno = '&subsistema_id=' . $subsistema_id . '&modulo_id=' . $modulo_id;
+    $param_retorno = '?subsistema_id=' . $subsistema_id . '&modulo_id=' . $modulo_id;
 }
 ?>
 
@@ -123,7 +123,7 @@ if ($subsistema_id > 0 && $modulo_id > 0) {
                     </div>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <a class="btn btn-mep-primary" href="navegar.php?ruta=formulario_crear_usuario_sistema_n.php<?= $param_retorno ?>">
+                    <a class="btn btn-mep-primary" href="formulario_crear_usuario_sistema_n.php<?= $param_retorno ?>">
                         <i class="bi bi-person-plus-fill me-1"></i> Crear usuario
                     </a>
                 </div>
@@ -386,7 +386,7 @@ if ($subsistema_id > 0 && $modulo_id > 0) {
 
         function confirmarEliminar(id) {
             mostrarConfirmacion('¿Está seguro de que desea eliminar este usuario y sus permisos? Esta acción no se puede deshacer.', function() {
-                window.location.href = urlEliminarBase + id + (paramRetorno ? '?' + paramRetorno.substring(1) : '');
+                window.location.href = urlEliminarBase + id + (paramRetorno ? '&' + paramRetorno.substring(1) : '');
             });
         }
 

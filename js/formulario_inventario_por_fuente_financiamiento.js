@@ -191,7 +191,7 @@ function guardar() {
                 mensajeModalParrafo.innerText="";
 
                 tituloMensaje.innerText = 'Ok!';
-                contenedorError.innerText ='Se registró la informarcaión correctamente!';      
+                contenedorError.innerText ='Se registró la información correctamente!';      
                 
                 mostrarModal('modalMensajeGuardar');
 

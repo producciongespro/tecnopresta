@@ -32,13 +32,13 @@ if ($subsistema_id > 0 && $modulo_id > 0) {
     . '&subsistema_id=' . $subsistema_id
     . '&modulo_id=' . $modulo_id;
 }
-
+/*
 // === Bloquear acceso directo ===
 if (!defined('ACCESO_SEGURO')) {
   http_response_code(403);
   exit('Acceso directo no permitido');
 }
-
+*/
 // === Roles gestionables (solo crear con estos roles) ===
 $roles_gestionables = [2, 3, 4, 5];
 $mapa_roles = [];

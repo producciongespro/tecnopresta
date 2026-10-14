@@ -4,9 +4,9 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require "/home/tecnopresta/PHPMailer/src/SMTP.php";
-require "/home/tecnopresta/PHPMailer/src/PHPMailer.php";
-require "/home/tecnopresta/PHPMailer/src/Exception.php";
+require __DIR__ . "/../PHPMailer/SMTP.php";
+require __DIR__ . "/../PHPMailer/PHPMailer.php";
+require __DIR__ . "/../PHPMailer/Exception.php";
 
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -122,8 +122,7 @@ class Email_Prestamo
         $phpmailer->SMTPAuth = true;
         $phpmailer->setFrom($phpmailer->Username,$from_name);
         $phpmailer->AddAddress($address_to); // recipients email
-        $phpmailer->AddEmbeddedImage('../img/correo/envio2.png', 'resultadoSolicitud', 'attachment', 'base64', 'image/png');
-        $phpmailer->AddEmbeddedImage('../img/correo/Emailtemplates-11.png', 'piePagina', 'attachment', 'base64', 'image/png');
+        $phpmailer->AddEmbeddedImage('../img/correo/encabezado-tecnopresta.png', 'encabezado', 'attachment', 'base64', 'image/png');
         $phpmailer->Subject = $the_subject;
 
         $phpmailer->Body .= "<head>
@@ -156,8 +155,7 @@ class Email_Prestamo
                             }
                         </style>
                         </head>";
-        //$phpmailer->Body .= "<img src=\"http://tecnopresta.mep.go.cr/img/correo/resultadoSolicitud.png\" alt=\"\" width=\"100%\" height=\"500px\" />";
-        $phpmailer->Body .= "<img src=\"cid:resultadoSolicitud\" width=\"100%\" height=\"400px\" />";        
+        $phpmailer->Body .= "<img src=\"cid:encabezado\" width=\"100%\" alt=\"TecnoPresta - Ministerio de Educaci&oacute;n P&uacute;blica\" />";
         $phpmailer->Body .= "<h3> Estimado Funcionario (a) </h3>";
         $phpmailer->Body .="<p> <b> El Sistema de Inventario e Incidencias de Pr&eacute;stamos de Equipo  [Tecnopresta] </b> le informa:</p>";
 
@@ -209,8 +207,6 @@ class Email_Prestamo
         //     <td> ".$seccionDescripcion."</td>
         // </tr>
         
-        //$phpmailer->Body .= "<img src=\"http://tecnopresta.mep.go.cr/img/correo/Emailtemplates-07.png\" alt=\"\" width=\"90%\" height=\"125px\" />";
-        $phpmailer->Body .= "<img src=\"cid:piePagina\" width=\"100%\" height=\"150px\" />";
         $phpmailer->IsHTML(true);  // Activar si se envia etiquetas html
         $phpmailer->Send();
         

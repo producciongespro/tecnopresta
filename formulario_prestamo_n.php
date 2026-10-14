@@ -46,7 +46,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
 
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="css/formulario_menu_principal.css?version=4" />
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css"/>
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2"/>
 
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
@@ -96,7 +96,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
                 <input class="form-control" id="fechaRetiro"/>
             </div>
             <div class="col-md-3">
-              <input class="form-control" id="horaRetiro"/>
+              <input type="time" class="form-control" id="horaRetiro"/>
             </div>
           </div>
 
@@ -106,7 +106,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
                 <input class="form-control" id="fechaDevolución"/>
             </div>
             <div class="col-md-3">
-              <input class="form-control" id="horaDevolucion"/>
+              <input type="time" class="form-control" id="horaDevolucion"/>
             </div>
           </div>
 
@@ -291,7 +291,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     <script src="gijgo/gijgo.min.js" type="text/javascript"></script>
     <script src="gijgo/messages.es-es.js" type="text/javascript"></script>
 
-    <script src="js/formulario_prestamo_n.js?version=3"></script>
+    <script src="js/formulario_prestamo_n.js?v=1.1"></script>
 
   </main>
   <?php include 'partials/footer.php'; ?>

@@ -25,7 +25,7 @@ class SelectActivoPrestado
             foreach($arrayArticulos as $id_placa)
             {			
 
-                $consultaSQL = "SELECT clase, modelo, marca, color, 
+                $consultaSQL = "SELECT clase, modelo, marca, t_color.color AS color, 
                                         numero_activo, t_placa.id_placa, 
                                         prestamo_detalle_fechaRetiro,
                                         prestamo_detalle_fechaDevolucion,

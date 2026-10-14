@@ -57,7 +57,7 @@ if (!defined('ACCESO_SEGURO')) {
 
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="css/formulario_menu_principal.css?version=4" />
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css"/>
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2"/>
 
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
@@ -68,16 +68,18 @@ if (!defined('ACCESO_SEGURO')) {
   </head>
   <body class="layout-page">
     
-    <?php include 'partials/header.php'; ?>
+    <div class="d-none d-md-block">
+      <?php include 'partials/header.php'; ?>
+    </div>
     <main class="flex-grow-1">
 
     <div class="container">
       <br>
       <div class="solicitud-titulo-seccion">
         <h3><i class="bi bi-inbox"></i>Solicitudes Pendientes de Revisión</h3>
-        <a href="navegar.php?ruta=contactenos_n.php&rep=Error en formulario vista solicitud html" class="reporte-link">
+        <!-- <a href="navegar.php?ruta=contactenos_n.php&rep=Error en formulario vista solicitud html" class="reporte-link">
           <i class="bi bi-exclamation-triangle"></i>Reportar Incidencia / Error
-        </a>
+        </a> -->
       </div>
       <hr class="my-3">
     </div>
@@ -105,9 +107,11 @@ if (!defined('ACCESO_SEGURO')) {
     <!-- jQuery first, then Bootstrap JS -->    
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_VistaSolicitud_n.js?version=14"></script>
+    <script src="js/formulario_VistaSolicitud_n.js?v=1.1"></script>
 
   </main>
-  <?php include 'partials/footer.php'; ?>
+  <div class="d-none d-md-block">
+    <?php include 'partials/footer.php'; ?>
+  </div>
   </body>
 </html>

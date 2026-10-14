@@ -16,21 +16,9 @@ $(document).ready(function() {
     uiLibrary: 'bootstrap5'
   });
 
-  $('#horaRetiro').timepicker({
-    locale: 'es-es',
-    format: 'HH:MM',
-    uiLibrary: 'bootstrap5'
-  });
-
   $('#fechaDevolución').datepicker({
     locale: 'es-es',
     format: 'dd mm yyyy',
-    uiLibrary: 'bootstrap5'
-  });
-
-  $('#horaDevolucion').timepicker({
-    locale: 'es-es',
-    format: 'HH:MM',
     uiLibrary: 'bootstrap5'
   });
 
@@ -223,7 +211,7 @@ function rechazar() {
     formData.append('arrayArticulosNombre', jsonNombre);
     formData.append('prestamo_nombre_solicitante', solicitud_nombre_funcionario);
         
-    fetch('sql/updateSolicitudRechazadaGestor.php', {
+    fetch('sql_n/updateSolicitudRechazadaGestor.php', {
       method: 'POST', 
       body: formData,     
     }).then(function(response) {
@@ -874,7 +862,7 @@ function guardar() {
     formData.append('boleta', booBoleta);
     formData.append('destino', txtBoleta);
     
-    fetch('sql/insertPrestamoGestor.php', {
+    fetch('sql_n/insertPrestamoGestor.php', {
       method: 'POST', 
       body: formData,     
     }).then(function(response) {
@@ -1034,7 +1022,7 @@ function cargaDatosBd(id) {
 
   $('#item').remove();
  
-  fetch('sql/selectSolicitudDetalleAliasGestor.php?' 
+  fetch('sql_n/selectSolicitudDetalleAliasGestor.php?' 
           + new URLSearchParams({solicitud_Id: solicitud_Id, codigo: codigoPresupuestario}))
     .then(function(response) {
 
@@ -1073,7 +1061,7 @@ function cargaDatosBd(id) {
                                   '</div>';        
   }).then();
 
-  fetch('sql/selectSolicitudDetalleActivoGestor.php?' 
+  fetch('sql_n/selectSolicitudDetalleActivoGestor.php?' 
     + new URLSearchParams({solicitud_Id: solicitud_Id, codigo: codigoPresupuestario}))
   .then(function(response) {
 
@@ -1118,7 +1106,7 @@ function cargaDatosBd(id) {
 
 function cargaDatosRechazoSolicitud() {
 
-  fetch('sql/selectRechazoSolicitudGestor.php?').then(function(response) {
+  fetch('sql_n/selectRechazoSolicitudGestor.php?').then(function(response) {
 
     if(response.ok) {
 
@@ -1162,7 +1150,7 @@ function cargaDatosRechazoSolicitud() {
 
 function cargaDatosBdSolicitudEncabezado() {
 
-  fetch('sql/selectSolicitudEncabezadoGestor.php?' 
+  fetch('sql_n/selectSolicitudEncabezadoGestor.php?' 
           + new URLSearchParams({solicitud_Id: solicitud_Id}))
     .then(function(response) {
 
@@ -1352,7 +1340,7 @@ function cargaDatosPantallaEncabezado(rs) {
     // cboSeccion.value= rs[0].seccion_Id;     
     //$("#cboSeccion").selectpicker("refresh");
     
-    // fetch('sql/selectSolicitudDetalleCSGestor.php?' 
+    // fetch('sql_n/selectSolicitudDetalleCSGestor.php?' 
     //       + new URLSearchParams({solicitud_Id: solicitud_Id}))
     // .then(function(response) {
 
@@ -1435,7 +1423,7 @@ function salir() {
 function cargaComboSeccion() 
 {
   
-  fetch('sql/selectSeccion_Gestor.php')
+  fetch('sql_n/selectSeccion_Gestor.php')
   .then(function(response) 
   {
           
@@ -1471,7 +1459,7 @@ function cargaComboSeccion()
 function cargaComboSoftware() 
 {
   
-  fetch('sql/select_Caracteristica_softwareGestor.php')
+  fetch('sql_n/select_Caracteristica_softwareGestor.php')
   .then(function(response) 
   {
           

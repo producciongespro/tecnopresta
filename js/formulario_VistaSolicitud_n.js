@@ -27,7 +27,7 @@ function mostrarLoading(mostrar) {
 
 function cargaDatosBd() {
 
-  fetch('sql/selectSolicitudGestor.php?'
+  fetch('sql_n/selectSolicitudGestor.php?'
     + new URLSearchParams({codigo: codigoPresupuestario}))
     .then(function(response) {
     if(response.ok) {
@@ -184,7 +184,7 @@ function cargaDatosPantalla(rs) {
     fila.appendChild(colCard);
 
     /* ── Cargar alias (artículos sin placa) ── */
-    fetch('sql/selectSolicitudDetalleGestor.php?'
+    fetch('sql_n/selectSolicitudDetalleGestor.php?'
       + new URLSearchParams({solicitud_Id: obj.solicitud_Id}))
       .then(function(response) {
         if(response.ok) {
@@ -216,7 +216,7 @@ function cargaDatosPantalla(rs) {
                 infoDiv.appendChild(nombreP);
 
                 itemDiv.appendChild(imgWrapper);
-                itemDiv.appendChild(cantidadBadge);
+                //itemDiv.appendChild(cantidadBadge);
                 itemDiv.appendChild(infoDiv);
                 itemsGrid.appendChild(itemDiv);
               });
@@ -226,7 +226,7 @@ function cargaDatosPantalla(rs) {
       }).catch(function() {}).then();
 
     /* ── Cargar activos (con placa) ── */
-    fetch('sql/selectSolicitudDetalleActivosGestor.php?'
+    fetch('sql_n/selectSolicitudDetalleActivosGestor.php?'
       + new URLSearchParams({solicitud_Id: obj.solicitud_Id}))
       .then(function(response) {
         if(response.ok) {

@@ -5,37 +5,38 @@ require_once 'conexion.php';
 class sql {
 
 	function conActivo($nombreActivo, $codigo){
-		
+
 		// el array es para que el JSON funcione con tíldes
 		$pdo = new \PDO(DB_Str, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-		
+
 		if (empty($nombreActivo)) {
 
-			$consultaSQL = "SELECT t_placa.id_activo, clase, marca, modelo, imagen, 
+			$consultaSQL = "SELECT t_placa.id_activo, clase, marca, modelo, imagen,
 							t_placa.id_placa, placa, numero_activo
 							FROM t_placa
 							INNER JOIN t_activo ON t_placa.id_activo = t_activo.id_activo
 							INNER JOIN t_marca ON t_activo.id_marca = t_marca.id_marca
-							INNER JOIN t_activo_general ON t_activo.id_ag = t_activo_general.id_ag 
-							WHERE codigo = '$codigo' and prestar = 1 AND (alias_id is null OR alias_id = 0) 
+							INNER JOIN t_activo_general ON t_activo.id_ag = t_activo_general.id_ag
+							WHERE codigo = '$codigo' and prestar = 1 AND (alias_id is null OR alias_id = 0)
 							ORDER BY clase, placa, numero_activo ASC";
 
 		} else {
 
-			$consultaSQL = "SELECT t_placa.id_activo, clase, marca, modelo, imagen, 
+			$consultaSQL = "SELECT t_placa.id_activo, clase, marca, modelo, imagen,
 							t_placa.id_placa, placa, numero_activo
 							FROM t_placa
 							INNER JOIN t_activo ON t_placa.id_activo = t_activo.id_activo
 							INNER JOIN t_marca ON t_activo.id_marca = t_marca.id_marca
-							INNER JOIN t_activo_general ON t_activo.id_ag = t_activo_general.id_ag 
+							INNER JOIN t_activo_general ON t_activo.id_ag = t_activo_general.id_ag
 							WHERE codigo = '$codigo' and prestar = 1 AND (alias_id is null OR alias_id = 0)
 							AND (clase LIKE '%$nombreActivo%' OR marca LIKE '%$nombreActivo%' OR modelo LIKE '%$nombreActivo%')
-							ORDER BY clase, placa, numero_activo ASC";			
+							ORDER BY clase, placa, numero_activo ASC";
 		}
 
-		if ($pdo != null) {								
+		if ($pdo != null) {
 
-			$sql = $pdo->query($consultaSQL);
+			$sql = $pdo->prepare($consultaSQL);
+			$sql->execute();
 
 			$rs = [];
 
@@ -165,24 +166,34 @@ class sql {
 
 		// el array es para que el JSON funcione con tíldes
 		$pdo = new \PDO(DB_Str, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-		
+
 		if (empty($aliasActivo)) {
 
-			$consultaSQL = "SELECT t_alias.alias_id, alias, alias_imagen							 
-							FROM t_alias						
-							WHERE codigo = $codigo ORDER BY alias";
+			$consultaSQL = "SELECT t_alias.alias_id, alias, alias_imagen
+							FROM t_alias
+							WHERE codigo = $codigo
+							AND EXISTS (
+								SELECT 1 FROM t_placa
+								WHERE t_placa.alias_id = t_alias.alias_id
+							)
+							ORDER BY alias";
 
 		} else {
 
-			$consultaSQL = "SELECT t_alias.alias_id, alias, alias_imagen 
-							FROM t_alias						
-							WHERE codigo = $codigo and alias like '%$aliasActivo%' 
-							ORDER BY alias";			
+			$consultaSQL = "SELECT t_alias.alias_id, alias, alias_imagen
+							FROM t_alias
+							WHERE codigo = $codigo and alias like '%$aliasActivo%'
+							AND EXISTS (
+								SELECT 1 FROM t_placa
+								WHERE t_placa.alias_id = t_alias.alias_id
+							)
+							ORDER BY alias";
 		}
 
-		if ($pdo != null) {								
+		if ($pdo != null) {
 
-			$sql = $pdo->query($consultaSQL);
+			$sql = $pdo->prepare($consultaSQL);
+			$sql->execute();
 
 			$rs = [];
 			while ($row = $sql->fetch(\PDO::FETCH_ASSOC)) {
@@ -197,6 +208,35 @@ class sql {
 		$pdo = null;
 	}
 
+
+	function conPrestadores($codigo){
+
+		// el array es para que el JSON funcione con tíldes
+		$pdo = new \PDO(DB_Str, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+
+		if ($pdo != null) {
+
+			$consultaSQL = "SELECT t_ambitos_prestador.id_ambito, t_ambitos_prestador.nombre
+							FROM t_ambitos_prestador
+							INNER JOIN usuarios_roles ON t_ambitos_prestador.usuarios_roles_id = usuarios_roles.id
+							WHERE usuarios_roles.codigo_presu = :codigo AND t_ambitos_prestador.eliminado = 0
+							ORDER BY t_ambitos_prestador.nombre";
+
+			$sql = $pdo->prepare($consultaSQL);
+			$sql->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+			$sql->execute();
+
+			$rs = [];
+			while ($row = $sql->fetch(\PDO::FETCH_ASSOC)) {
+					$rs[] = [
+						'id_ambito' => $row['id_ambito'],
+						'nombre' => $row['nombre']
+					];
+			}
+            return $rs;
+		}
+		$pdo = null;
+	}
 
 	function conSolicitud($codigo){
 	    
@@ -288,7 +328,7 @@ class sql {
 		
 		if ($pdo != null) {		
 			
-			$consultaSQL = "SELECT t_activo.id_activo, clase, modelo, marca, color, 
+			$consultaSQL = "SELECT t_activo.id_activo, clase, modelo, marca, t_color.color AS color, 
 							numero_activo, t_placa.id_placa, placa 
 							FROM t_activo						
 							INNER JOIN t_marca 
@@ -430,7 +470,7 @@ class sql {
 		
 		if ($pdo != null) {								
 
-				$consultaSQL = "SELECT id_placa, clase, modelo, marca, color, 
+				$consultaSQL = "SELECT id_placa, clase, modelo, marca, t_color.color AS color, 
 								numero_activo, solicitud_detalle_cantidad, placa, serial 
 								FROM t_activo
 								INNER JOIN t_activo_general
@@ -474,7 +514,7 @@ class sql {
 		
 		if ($pdo != null) {		
 			
-			$consultaSQL = "SELECT id_placa, clase, modelo, marca, color, placa, numero_activo 
+			$consultaSQL = "SELECT id_placa, clase, modelo, marca, t_color.color AS color, placa, numero_activo 
 							FROM t_activo						
 							INNER JOIN t_marca 
 								ON t_activo.id_marca = t_marca.id_marca
@@ -1033,7 +1073,7 @@ function conActivos_Ubicacion_por_Fondos($id_fondos, $codigo){
 								ON t_placa.id_activo = t_activo.id_activo and codigo = '$codigo'
 							INNER JOIN t_lugar
 								ON t_placa.id_lugar = t_lugar.id_lugar							
-							WHERE id_fondos = $id_fondos and activo = 1
+							WHERE id_fondos = $id_fondos and t_placa.activo = 1
 							ORDER BY placa ASC";
 
 		$sql = $pdo->query($consultaSQL);

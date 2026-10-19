@@ -18,7 +18,10 @@
  * Logica por cambio:
  *   activo=true:  valida cadena activa (formulario/modulo/subsistema/accion)
  *                 INSERT IGNORE INTO permisos + INSERT IGNORE INTO roles_permisos
- *   activo=false: DELETE FROM roles_permisos + DELETE FROM permisos (si huerfano)
+ *   activo=false: DELETE FROM roles_permisos (solo la asignacion del rol).
+ *                 La fila del catalogo 'permisos' se conserva para que la accion
+ *                 siga ligada al formulario; su ciclo de vida lo administra
+ *                 Gestion de Formularios.
  *
  * Seguridad:
  *   - Valida sesion Azure
@@ -101,12 +104,6 @@ try {
           AND a.eliminado = 0";
     $stmtValidarCadena = $conexionBD->prepare($sqlValidarCadena);
 
-    $sqlCheckPermisoUsado = "SELECT COUNT(*) AS total FROM roles_permisos WHERE permiso_id = ?";
-    $stmtCheckUsado = $conexionBD->prepare($sqlCheckPermisoUsado);
-
-    $sqlDeletePermiso = "DELETE FROM permisos WHERE id = ?";
-    $stmtDeletePerm = $conexionBD->prepare($sqlDeletePermiso);
-
     foreach ($cambios as $cambio) {
         $formulario_id = isset($cambio['formulario_id']) ? (int)$cambio['formulario_id'] : 0;
         $accion_id = isset($cambio['accion_id']) ? (int)$cambio['accion_id'] : 0;
@@ -143,6 +140,10 @@ try {
 
         } else {
             // REVOCAR permiso
+            // Solo se elimina la asignacion del rol al permiso.
+            // La fila del catalogo 'permisos' se conserva para que la accion
+            // siga ligada al formulario aunque ningun rol la tenga; su ciclo
+            // de vida lo administra Gestion de Formularios.
             // 1. Obtener el permiso_id
             $stmtBuscar->execute([$formulario_id, $accion_id]);
             $row = $stmtBuscar->fetch(PDO::FETCH_ASSOC);
@@ -150,16 +151,8 @@ try {
             if ($row) {
                 $permiso_id = (int)$row['id'];
 
-                // 2. Eliminar la asignacion del rol
+                // 2. Eliminar unicamente la asignacion del rol
                 $stmtDeleteRP->execute([$rol_id, $permiso_id]);
-
-                // 3. Si ningun otro rol usa este permiso, limpiarlo
-                $stmtCheckUsado->execute([$permiso_id]);
-                $usado = (int)$stmtCheckUsado->fetch(PDO::FETCH_ASSOC)['total'];
-
-                if ($usado === 0) {
-                    $stmtDeletePerm->execute([$permiso_id]);
-                }
 
                 $procesados++;
             }

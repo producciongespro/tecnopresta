@@ -448,6 +448,9 @@ if ($sid) {
                                     <input type="hidden" id="usuarioIdBuscado" value="">
                                 </div>
                             </div>
+                            <div id="avisoUsuarioCreado" class="alert alert-info py-2 px-3 mb-3 small" style="display:none;">
+                                <i class="bi bi-info-circle me-1"></i> Usuario creado automaticamente desde el servicio del MEP.
+                            </div>
                         </div>
 
                         <!-- Usuario actual (solo para editar) -->
@@ -906,6 +909,7 @@ if ($sid) {
         document.getElementById('seccionBuscarUsuario').style.display = '';
         document.getElementById('seccionUsuarioActual').style.display = 'none';
         document.getElementById('resultadoBusqueda').style.display = 'none';
+        document.getElementById('avisoUsuarioCreado').style.display = 'none';
         document.getElementById('inputCedula').value = '';
         document.getElementById('usuarioIdBuscado').value = '';
 
@@ -1102,6 +1106,7 @@ if ($sid) {
             if (!data.success) {
                 mostrarError(data.message || 'Usuario no encontrado');
                 document.getElementById('resultadoBusqueda').style.display = 'none';
+                document.getElementById('avisoUsuarioCreado').style.display = 'none';
                 document.getElementById('usuarioIdBuscado').value = '';
                 return;
             }
@@ -1113,6 +1118,7 @@ if ($sid) {
             document.getElementById('correoUsuarioBuscado').textContent = u.correo;
             document.getElementById('usuarioIdBuscado').value = u.id;
             document.getElementById('resultadoBusqueda').style.display = '';
+            document.getElementById('avisoUsuarioCreado').style.display = data.creado ? '' : 'none';
 
             // Cargar codigo presupuestario asociado al usuario encontrado
             const inputCodigo = document.getElementById('inputCodigoPresu');

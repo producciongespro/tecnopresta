@@ -254,7 +254,7 @@ if ($sid) {
     }
     .accion-badge.bloqueada {
         opacity: 0.30;
-        cursor: not-allowed;
+        cursor: help;
         border-style: dashed;
         background: transparent !important;
     }
@@ -347,6 +347,13 @@ if ($sid) {
                 </h5>
                 <span class="badge bg-secondary" id="contadorPermisos">0 permisos</span>
             </div>
+            <div class="alert alert-info mb-0 rounded-0 border-start border-info border-4">
+                <i class="bi bi-lock-fill me-2"></i>
+                Las acciones marcadas con candado no estan habilitadas para ese formulario.
+                Para poder asignarlas a un rol, primero habilite la accion en
+                <strong>Gestion de Formularios</strong> (edite el formulario y marque la accion)
+                y luego regrese a esta pantalla.
+            </div>
             <div class="card-body" id="arbolContainer">
                 <div class="text-center text-muted py-4">
                     <i class="bi bi-arrow-up-circle" style="font-size: 2rem;"></i>
@@ -424,6 +431,30 @@ if ($sid) {
                     </div>
                     <div class="modal-footer centered border-0 pt-0">
                         <button type="button" class="gestor-btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Aviso Permiso Bloqueado -->
+        <div class="modal fade gestor-overlay" id="modalAvisoPermiso" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered gestor-modal">
+                <div class="modal-content">
+                    <div class="modal-body text-center py-4">
+                        <div class="gestor-modal-icon warning">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                        <p class="mt-3 mb-0 fw-semibold" id="modalAvisoPermisoTexto">Accion no habilitada</p>
+                        <p class="mt-2 mb-0 text-muted small" id="modalAvisoPermisoAyuda">
+                            Debe habilitar la accion en <strong>Gestion de Formularios</strong>
+                            para poder asignarla al rol.
+                        </p>
+                    </div>
+                    <div class="modal-footer centered border-0 pt-0">
+                        <button type="button" class="gestor-btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="navegar.php?ruta=gestor_formularios_n.php" class="gestor-btn-primary">
+                            <i class="bi bi-box-arrow-up-right"></i> Ir a Gestion de Formularios
+                        </a>
                     </div>
                 </div>
             </div>
@@ -527,6 +558,15 @@ if ($sid) {
     function mostrarError(mensaje) {
         document.getElementById('modalErrorTexto').textContent = mensaje;
         mostrarModal('modalError');
+    }
+
+    function avisoPermisoBloqueado(el) {
+        const formNombre = el.getAttribute('data-form-nombre') || '';
+        const accionNombre = el.getAttribute('data-accion-nombre') || '';
+        document.getElementById('modalAvisoPermisoTexto').innerHTML =
+            'La accion <strong>' + escapeHtml(accionNombre) + '</strong> no esta habilitada ' +
+            'para el formulario <strong>' + escapeHtml(formNombre) + '</strong>.';
+        mostrarModal('modalAvisoPermiso');
     }
 
     // ============================================================
@@ -775,7 +815,10 @@ if ($sid) {
             } else {
                 html += '<span class="accion-badge bloqueada" ' +
                             'style="border-color:' + color + ';color:' + color + ';" ' +
-                            'title="' + escapeHtml(accion.nombre) + ': Acción no disponible. Asignar en Gestión de Formularios.">' +
+                            'onclick="avisoPermisoBloqueado(this)" ' +
+                            'data-form-nombre="' + escapeHtml(form.nombre) + '" ' +
+                            'data-accion-nombre="' + escapeHtml(accion.nombre) + '" ' +
+                            'title="' + escapeHtml(accion.nombre) + ': No esta habilitada para este formulario. Para asignarla aqui, primero vaya a Gestion de Formularios, edite el formulario y habilite esta accion.">' +
                         '<i class="bi bi-lock-fill" style="font-size:0.6rem;margin-right:2px;"></i>' +
                         escapeHtml(accion.nombre) +
                         '</span>';

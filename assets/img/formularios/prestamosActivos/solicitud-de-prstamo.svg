@@ -1,0 +1,146 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Colores -->
+  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#192952"></stop>
+    <stop offset="100%" stop-color="#0035A0"></stop>
+  </linearGradient>
+
+  <linearGradient id="goldMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#F2DAB1"></stop>
+  </linearGradient>
+
+  <linearGradient id="greenMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#34D399"></stop>
+    <stop offset="100%" stop-color="#059669"></stop>
+  </linearGradient>
+
+  <linearGradient id="lightMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#FFFFFF"></stop>
+    <stop offset="100%" stop-color="#F8FAFC"></stop>
+  </linearGradient>
+
+  <!-- sombra -->
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.16"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- CONTENEDOR PRINCIPAL -->
+<g filter="url(#shadow)">
+
+  <!-- fondo -->
+  <rect x="92" y="78" width="328" height="348" rx="32" fill="url(#blueMain)"></rect>
+
+  <!-- interior -->
+  <rect x="118" y="104" width="276" height="296" rx="24" fill="url(#lightMain)"></rect>
+
+</g>
+
+<!-- HEADER -->
+<g filter="url(#shadow)">
+
+  <rect x="188" y="54" width="136" height="54" rx="16" fill="url(#blueMain)"></rect>
+
+  <circle cx="256" cy="81" r="7" fill="white"></circle>
+
+</g>
+
+<!-- PANEL CENTRAL -->
+<g filter="url(#shadow)">
+
+  <rect x="146" y="138" width="220" height="224" rx="26" fill="white" stroke="#D9D9D9" stroke-width="4"></rect>
+
+</g>
+
+<!-- USUARIO -->
+<g filter="url(#shadow)">
+
+  <circle cx="202" cy="212" r="28" fill="url(#blueMain)"></circle>
+
+  <!-- cabeza -->
+  <circle cx="202" cy="202" r="10" fill="white"></circle>
+
+  <!-- cuerpo -->
+  <path d="M188 224
+           C188 214 194 210 202 210
+           C210 210 216 214 216 224" stroke="white" stroke-width="5" stroke-linecap="round"></path>
+
+</g>
+
+<!-- FLECHA -->
+<g filter="url(#shadow)">
+
+  <path d="M238 212H292" stroke="url(#goldMain)" stroke-width="8" stroke-linecap="round"></path>
+
+  <path d="M278 198L292 212L278 226" stroke="url(#goldMain)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- EQUIPO TECNOLÓGICO -->
+<g filter="url(#shadow)">
+
+  <!-- laptop -->
+  <rect x="300" y="184" width="48" height="34" rx="7" fill="url(#blueMain)"></rect>
+
+  <rect x="294" y="218" width="60" height="7" rx="3.5" fill="#94A3B8"></rect>
+
+  <!-- pantalla -->
+  <rect x="308" y="192" width="32" height="18" rx="3" fill="white"></rect>
+
+</g>
+
+<!-- FORMULARIO / SOLICITUD -->
+<g filter="url(#shadow)">
+
+  <!-- documento -->
+  <rect x="176" y="274" width="160" height="56" rx="16" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="3"></rect>
+
+  <!-- líneas -->
+  <rect x="198" y="290" width="74" height="8" rx="4" fill="#CBD5E1"></rect>
+
+  <rect x="198" y="306" width="52" height="6" rx="3" fill="#D6DCE5"></rect>
+
+  <!-- botón -->
+  <rect x="286" y="286" width="28" height="28" rx="8" fill="url(#greenMain)"></rect>
+
+  <path d="M300 292V308" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M292 300H308" stroke="white" stroke-width="4" stroke-linecap="round"></path>
+
+</g>
+
+<!-- BADGE SUPERIOR -->
+<g filter="url(#shadow)">
+
+  <circle cx="348" cy="146" r="28" fill="url(#goldMain)"></circle>
+
+  <!-- icono préstamo -->
+  <path d="M338 146H358" stroke="#192952" stroke-width="5" stroke-linecap="round"></path>
+
+  <path d="M350 138L358 146L350 154" stroke="#192952" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- FOOTER -->
+<g filter="url(#shadow)">
+
+  <rect x="164" y="382" width="184" height="40" rx="16" fill="url(#blueMain)"></rect>
+
+  <!-- mini icon -->
+  <circle cx="192" cy="402" r="8" fill="url(#goldMain)"></circle>
+
+  <path d="M188 402H196" stroke="#192952" stroke-width="2.5" stroke-linecap="round"></path>
+
+  <!-- líneas -->
+  <rect x="214" y="392" width="72" height="7" rx="3.5" fill="white"></rect>
+
+  <rect x="214" y="404" width="48" height="6" rx="3" fill="#D6DCE5"></rect>
+
+</g>
+
+</svg>

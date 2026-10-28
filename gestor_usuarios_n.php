@@ -23,6 +23,9 @@ if (!defined('ACCESO_SEGURO')) {
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+if (!headers_sent()) {
+    header('Content-Type: text/html; charset=UTF-8');
+}
 
 require_once __DIR__ . '/usuarioAzure.php';
 require_once __DIR__ . '/auth.php';
@@ -54,7 +57,7 @@ if ($sid) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor del Sistema - Administracion de Usuarios</title>
+    <title>Gestor del Sistema - Administraci&oacute;n de Usuarios</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -315,7 +318,7 @@ if ($sid) {
                     <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #C8A951;"></i>
                 </div>
                 <div class="col">
-                    <h1 class="mb-0" style="color: #fff; font-weight: 600;">Administracion de Usuarios</h1>
+                    <h1 class="mb-0" style="color: #fff; font-weight: 600;">Administraci&oacute;n de Usuarios</h1>
                     <p class="mb-0" style="color: rgba(255,255,255,0.8);">
                         Asigne y gestione roles de acceso al sistema para los usuarios registrados
                     </p>
@@ -333,7 +336,7 @@ if ($sid) {
                                 <i class="bi bi-search text-muted"></i>
                             </span>
                             <input type="text" class="form-control" id="buscarUsuario"
-                                   placeholder="Buscar por nombre, cedula o correo..."
+                                   placeholder="Buscar por nombre, c&eacute;dula o correo..."
                                    oninput="filtrarUsuarios()">
                         </div>
                     </div>
@@ -370,9 +373,9 @@ if ($sid) {
                         <thead>
                             <tr>
                                 <th style="width:30%;">Usuario</th>
-                                <th style="width:12%;">Cedula</th>
+                                <th style="width:12%;">C&eacute;dula</th>
                                 <th style="width:30%;">Roles Asignados</th>
-                                <th style="width:15%;">Ultimo Acceso</th>
+                                <th style="width:15%;">&Uacute;ltimo Acceso</th>
                                 <th style="width:13%; text-align:center;">Acciones</th>
                             </tr>
                         </thead>
@@ -418,8 +421,8 @@ if ($sid) {
                                 <i class="bi bi-exclamation-diamond-fill me-1"></i> Advertencia: Rol Root
                             </div>
                             <div class="root-warning-text">
-                                El rol <strong>Root</strong> otorga control total del sistema. El usuario podra gestionar
-                                usuarios, roles, permisos, configuraciones criticas y eliminar registros.
+                                El rol <strong>Root</strong> otorga control total del sistema. El usuario podr&aacute; gestionar
+                                usuarios, roles, permisos, configuraciones cr&iacute;ticas y eliminar registros.
                             </div>
                             <div class="root-warning-count">
                                 Actualmente existen <strong id="rootCountActual">0</strong> usuario(s) con rol Root.
@@ -427,10 +430,10 @@ if ($sid) {
                         </div>
                         <!-- Busqueda de usuario (solo para asignar) -->
                         <div id="seccionBuscarUsuario">
-                            <label class="form-label">Buscar usuario por cedula</label>
+                            <label class="form-label">Buscar usuario por c&eacute;dula</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" id="inputCedula"
-                                       placeholder="Ingrese la cedula..." maxlength="30"
+                                       placeholder="Ingrese la c&eacute;dula..." maxlength="30"
                                        onkeydown="if (event.key === 'Enter') { event.preventDefault(); buscarUsuarioPorCedula(); }">
                                 <button class="btn btn-mep-primary" type="button" onclick="buscarUsuarioPorCedula()">
                                     <i class="bi bi-search"></i>
@@ -449,7 +452,7 @@ if ($sid) {
                                 </div>
                             </div>
                             <div id="avisoUsuarioCreado" class="alert alert-info py-2 px-3 mb-3 small" style="display:none;">
-                                <i class="bi bi-info-circle me-1"></i> Usuario creado automaticamente desde el servicio del MEP.
+                                <i class="bi bi-info-circle me-1"></i> Usuario creado autom&aacute;ticamente desde el servicio del MEP.
                             </div>
                         </div>
 
@@ -477,9 +480,9 @@ if ($sid) {
 
                         <!-- Codigo presupuestario -->
                         <div class="mb-3" id="seccionCodigoPresu">
-                            <label class="form-label">Codigo Presupuestario</label>
+                            <label class="form-label">C&oacute;digo Presupuestario</label>
                             <input type="text" class="form-control" id="inputCodigoPresu"
-                                   placeholder="Ingrese el codigo presupuestario..." value="">
+                                   placeholder="Ingrese el c&oacute;digo presupuestario..." value="">
                         </div>
 
                         <!-- Seleccion de rol -->
@@ -551,12 +554,12 @@ if ($sid) {
                         <div class="gestor-modal-icon warning">
                             <i class="bi bi-exclamation-triangle"></i>
                         </div>
-                        <p class="mt-3 mb-0 fw-semibold" id="modalConfirmacionTexto">¿Esta seguro?</p>
+                        <p class="mt-3 mb-0 fw-semibold" id="modalConfirmacionTexto">&iquest;Est&aacute; seguro?</p>
                     </div>
                     <div class="modal-footer centered border-0 pt-0">
                         <button type="button" class="gestor-btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="gestor-btn-danger" id="btnConfirmarAccion">
-                            <i class="bi bi-check-lg"></i> Si, continuar
+                            <i class="bi bi-check-lg"></i> S&iacute;, continuar
                         </button>
                     </div>
                 </div>
@@ -571,7 +574,7 @@ if ($sid) {
                         <div class="gestor-modal-icon success">
                             <i class="bi bi-check-lg"></i>
                         </div>
-                        <p class="mt-3 mb-0 fw-semibold" id="modalExitoTexto">Operacion exitosa</p>
+                        <p class="mt-3 mb-0 fw-semibold" id="modalExitoTexto">Operaci&oacute;n exitosa</p>
                     </div>
                     <div class="modal-footer centered border-0 pt-0">
                         <button type="button" class="gestor-btn-primary" data-bs-dismiss="modal">Aceptar</button>
@@ -952,7 +955,7 @@ if ($sid) {
             return parseInt(d.usuario_rol_id) === parseInt(usuarioRolId);
         });
         if (!detalle) {
-            mostrarError('No se encontro el registro del rol');
+            mostrarError('No se encontr\u00f3 el registro del rol');
             return;
         }
 
@@ -1095,7 +1098,7 @@ if ($sid) {
     async function buscarUsuarioPorCedula() {
         const cedula = document.getElementById('inputCedula').value.trim();
         if (!cedula) {
-            mostrarError('Ingrese una cedula para buscar');
+            mostrarError('Ingrese una c\u00e9dula para buscar');
             return;
         }
 
@@ -1151,8 +1154,8 @@ if ($sid) {
             }
             // Confirmacion doble con SweetAlert-style
             mostrarConfirmacion(
-                'ATENCION: Esta a punto de asignar el rol Root a un usuario. ' +
-                'Este rol otorga control TOTAL del sistema. ¿Desea continuar?',
+                'ATENCI\u00d3N: Est\u00e1 a punto de asignar el rol Root a un usuario. ' +
+                'Este rol otorga control TOTAL del sistema. \u00bfDesea continuar?',
                 async function() {
                     await ejecutarGuardado();
                 }
@@ -1202,7 +1205,7 @@ if ($sid) {
                     mostrarError(data.message);
                 }
             } catch (e) {
-                mostrarError('Error de conexion: ' + e.message);
+                mostrarError('Error de conexi\u00f3n: ' + e.message);
             }
 
         } else if (modoModal === 'editar') {
@@ -1229,7 +1232,7 @@ if ($sid) {
                     mostrarError(data.message);
                 }
             } catch (e) {
-                mostrarError('Error de conexion: ' + e.message);
+                mostrarError('Error de conexi\u00f3n: ' + e.message);
             }
         }
     }
@@ -1313,7 +1316,7 @@ if ($sid) {
                 mostrarError(data.message);
             }
         } catch (e) {
-            mostrarError('Error de conexion: ' + e.message);
+            mostrarError('Error de conexi\u00f3n: ' + e.message);
         }
     }
 
@@ -1323,7 +1326,7 @@ if ($sid) {
             return parseInt(d.usuario_rol_id) === parseInt(usuarioRolId);
         });
         if (!detalle) {
-            mostrarError('No se encontro el registro del rol');
+            mostrarError('No se encontr\u00f3 el registro del rol');
             return;
         }
 
@@ -1333,7 +1336,7 @@ if ($sid) {
         const nombreUsuario = usuario ? usuario.nombre : '';
 
         mostrarConfirmacion(
-            '¿Desea eliminar el rol "' + detalle.rol + '" de ' + nombreUsuario + '?',
+            '\u00bfDesea eliminar el rol "' + detalle.rol + '" de ' + nombreUsuario + '?',
             async function() {
                 ocultarModal('modalDetalleRoles');
                 await ejecutarEliminarRol(usuarioRolId);
@@ -1361,7 +1364,7 @@ if ($sid) {
         if (rolesUsuario.length === 1) {
             const r = rolesUsuario[0];
             mostrarConfirmacion(
-                '¿Desea eliminar el rol "' + r.rol + '" de ' + usuario.nombre + '?',
+                '\u00bfDesea eliminar el rol "' + r.rol + '" de ' + usuario.nombre + '?',
                 function() {
                     ejecutarEliminarRol(r.usuario_rol_id);
                 }

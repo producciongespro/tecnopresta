@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Documento Ejecutivo - Sistema TecnoPresta v1.1</title>
+    <style>
+        @page {
+            margin: 25mm 20mm 25mm 20mm;
+            @top-right { content: "TecnoPresta v1.1 — MEP Costa Rica"; font-size: 8pt; color: #777; }
+            @bottom-center { content: "Página " counter(page) " de " counter(pages); font-size: 9pt; color: #555; }
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            line-height: 1.6;
+            font-size: 10.5pt;
+        }
+        .header-mep {
+            text-align: center;
+            border-bottom: 3px solid #003876;
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+        }
+        .header-mep h1 {
+            color: #003876;
+            font-size: 20pt;
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header-mep h2 {
+            color: #cc9c48;
+            font-size: 13pt;
+            margin: 0 0 6px 0;
+            font-weight: 600;
+        }
+        .header-mep .meta {
+            font-size: 9pt;
+            color: #555;
+            font-weight: 500;
+        }
+        h2.section-title {
+            color: #003876;
+            font-size: 13pt;
+            border-left: 4px solid #cc9c48;
+            padding-left: 8px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        h3.sub-title {
+            color: #1d2958;
+            font-size: 11pt;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 9pt;
+        }
+        table, th, td {
+            border: 1px solid #dcdcdc;
+        }
+        th {
+            background-color: #003876;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        td {
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8fafd;
+        }
+        .highlight-box {
+            background-color: #f0f4f9;
+            border-left: 4px solid #003876;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 8pt;
+            font-weight: 600;
+            border-radius: 4px;
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+        .badge-gold { background-color: #fef3c7; color: #92400e; }
+        .badge-blue { background-color: #dbeafe; color: #1e40af; }
+        .badge-green { background-color: #dcfce7; color: #166534; }
+        ul {
+            margin: 6px 0 12px 20px;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .footer-note {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 8.5pt;
+            color: #64748b;
+            text-align: center;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-mep">
+        <h1>Ministerio de Educación Pública</h1>
+        <h2>Dirección de Recursos Tecnológicos en Educación (DRTE)</h2>
+        <div class="meta">
+            <strong>DOCUMENTO EJECUTIVO DE PROYECTO: SISTEMA TECNOPRESTA (v1.1)</strong><br>
+            Plataforma Nacional de Gestión de Activos Tecnológicos, Préstamos y Soporte Técnico<br>
+            Portal Oficial: <a href="https://tecnopresta.mep.go.cr/" style="color:#003876;">https://tecnopresta.mep.go.cr/</a> | Octubre 2026
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Resumen Ejecutivo:</strong> TecnoPresta v1.1 es el sistema informático institucional del MEP diseñado para centralizar, controlar y auditar el ciclo de vida de los activos tecnológicos en todos los centros educativos de Costa Rica. La plataforma integra la administración de inventario físico, los préstamos a la comunidad educativa mediante boletas digitales, el soporte técnico presencial y remoto con Microsoft Teams, y la supervisión documental y presupuestaria nacional.
+    </div>
+
+    <h2 class="section-title">1. Ficha Técnica Institucional</h2>
+    <table>
+        <tr>
+            <th style="width: 30%;">Parámetro</th>
+            <th style="width: 70%;">Detalle Institucional</th>
+        </tr>
+        <tr>
+            <td><strong>Nombre Oficial</strong></td>
+            <td><strong>TecnoPresta</strong> — Sistema de Préstamo e Inventario de Equipos Tecnológicos</td>
+        </tr>
+        <tr>
+            <td><strong>Institución Titular</strong></td>
+            <td>Ministerio de Educación Pública de Costa Rica (MEP)</td>
+        </tr>
+        <tr>
+            <td><strong>Dependencia Técnica</strong></td>
+            <td>Dirección de Recursos Tecnológicos en Educación (DRTE)</td>
+        </tr>
+        <tr>
+            <td><strong>Versión del Sistema</strong></td>
+            <td><strong>v1.1</strong> (Nueva Arquitectura Modular, Gobernanza Dinámica y Seguridad O(1))</td>
+        </tr>
+        <tr>
+            <td><strong>Población Usuaria</strong></td>
+            <td>Directores, Bibliotecólogos, Directores Regionales, Asesores de Tecnología, Docentes de aula, Personal de Mesa de Servicios e Ingenieros de Soporte.</td>
+        </tr>
+        <tr>
+            <td><strong>Acceso y Autenticación</strong></td>
+            <td>Single Sign-On (SSO) con cuenta institucional de Azure Active Directory (<strong>@mep.go.cr</strong>). Compatible como Progressive Web App (PWA).</td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">2. ¿Qué es TecnoPresta y cuál es su Finalidad?</h2>
+    <p>
+        TecnoPresta nació bajo el alero del Programa Nacional de Tecnologías Móviles (PNTM) y ha evolucionado hacia un ecosistema robusto e integral para atender tres necesidades estratégicas del Ministerio de Educación Pública:
+    </p>
+    <ul>
+        <li><strong>Transparencia y Control Patrimonial:</strong> Conocer con exactitud qué equipos existen en cada escuela y colegio (laptops, impresoras, proyectores, tabletas, parlantes), su estado operativo y la fuente de fondos públicos con que se adquirieron (FONATEL, PRONIE, Ley 9999, donaciones).</li>
+        <li><strong>Fomento del Uso Educativo con Resguardo Legal:</strong> Facilitar que los equipos tecnológicos salgan de las bodegas hacia las aulas mediante un sistema ágil de solicitud y préstamo digital, respaldado con boletas de servicio auditables y control de devoluciones.</li>
+        <li><strong>Continuidad del Servicio Educativo:</strong> Canalizar los requerimientos de reparación, mantenimiento y soporte técnico de los equipos a través de una mesa de ayuda conectada con cuadrillas virtuales (vía Microsoft Teams) y visitas a sitio en las 27 Direcciones Regionales.</li>
+    </ul>
+
+    <h2 class="section-title">3. Jerarquía y Arquitectura Funcional</h2>
+    <p>
+        A diferencia de los sistemas tradicionales estáticos, TecnoPresta v1.1 implementa una estructura de navegación y autorización de <strong>4 niveles jerárquicos</strong>:
+    </p>
+    <div style="text-align: center; margin: 10px 0; font-weight: bold; color: #003876;">
+        Subsistemas &nbsp;&rarr;&nbsp; Módulos &nbsp;&rarr;&nbsp; Formularios &nbsp;&rarr;&nbsp; Acciones (Permisos Granulares)
+    </div>
+    <p>
+        Cada formulario valida una de las <strong>11 acciones del sistema</strong>: <code>ver</code>, <code>crear</code>, <code>editar</code>, <code>eliminar</code>, <code>exportar</code>, <code>importar</code>, <code>aprobar</code>, <code>asignar</code>, <code>cerrar</code>, <code>escalar</code> y <code>auditar</code>.
+    </p>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">4. Principales Módulos del Sistema</h2>
+
+    <h3 class="sub-title">A. Subsistema de Gestión de Inventario</h3>
+    <ul>
+        <li><strong>Registro de Nuevos Activos en 2 Fases:</strong> Búsqueda en catálogo maestro relacional (tipo, marca, modelo) y registro individual de unidades físicas con placa, serie, color estandarizado y origen presupuestario, evitando duplicados en tiempo real.</li>
+        <li><strong>Consulta Unificada de Activos (13 Modos):</strong> Reporte analítico con filtros por condición (excelente, regular, malo, robado), disponibilidad (prestable, en uso), y situación administrativa (bajas, donaciones), con exportación directa a Excel y PDF con formato ministerial.</li>
+        <li><strong>Catálogos Maestros:</strong> Estandarización de modelos técnicos, marcas, categorías y lugares/recintos institucionales.</li>
+        <li><strong>Incidentes y Bajas:</strong> Registro de equipos reportados como hurtados/robados, pérdidas y gestión de bajas técnicas.</li>
+    </ul>
+
+    <h3 class="sub-title">B. Subsistema de Préstamos y Devoluciones</h3>
+    <ul>
+        <li><strong>Solicitud con Carrito de Préstamo:</strong> Docentes y funcionarios pueden solicitar varios equipos a la vez para sus lecciones o actividades institucionales.</li>
+        <li><strong>Aprobación y Boleta de Servicio:</strong> Emisión automática de comprobante formal con horarios de inicio y fin.</li>
+        <li><strong>Control de Devoluciones:</strong> Verificación de integridad física, reporte de irregularidades o faltantes de accesorios.</li>
+        <li><strong>Ámbitos de Prestador:</strong> Nueva función que restringe a cada prestador a sus áreas de custodia (ej. Laboratorio de Informática, Biblioteca o Área INCO), evitando el préstamo indebido de equipos de otros departamentos.</li>
+    </ul>
+
+    <h3 class="sub-title">C. Subsistema de Servicios y Soporte Técnico</h3>
+    <ul>
+        <li><strong>Mesa de Servicios y Tickets:</strong> Reporte y seguimiento de fallas de hardware, software y conectividad.</li>
+        <li><strong>Citas Virtuales en Microsoft Teams:</strong> Sincronización automática con calendarios de Outlook y generación de enlaces de reunión mediante Microsoft Graph API.</li>
+        <li><strong>Planificación de Giras en Sitio:</strong> Calendario de disponibilidad de técnicos y registro anticipado de itinerarios, rutas y viáticos de hospedaje.</li>
+    </ul>
+
+    <h3 class="sub-title">D. Subsistema de Supervisión y Documentación Nacional</h3>
+    <ul>
+        <li><strong>Actas y Certificaciones:</strong> Carga y validación digital de certificaciones anuales de inventario firmadas por los Directores.</li>
+        <li><strong>Monitoreo de Cumplimiento:</strong> Tablero de control de centros con certificaciones entregadas versus instituciones pendientes.</li>
+    </ul>
+
+    <h3 class="sub-title">E. Subsistema de Administración del Sistema (Gestor del Sistema)</h3>
+    <ul>
+        <li><strong>Gobernanza Dinámica:</strong> Gestión visual de subsistemas, módulos, formularios y matriz de permisos por rol sin tocar código.</li>
+        <li><strong>Administración de Usuarios:</strong> Asignación multirol y multicentro, con confirmación estricta para rol Root.</li>
+    </ul>
+
+    <h2 class="section-title">5. Cuadro Comparativo: Mejoras de la Nueva Versión (v1.1)</h2>
+    <table>
+        <tr>
+            <th style="width: 25%;">Dimensión</th>
+            <th style="width: 35%;">Versión Anterior (Legado)</th>
+            <th style="width: 40%;">Nueva Versión (v1.1)</th>
+        </tr>
+        <tr>
+            <td><strong>Estructura y Menús</strong></td>
+            <td>Menús estáticos grabados en código PHP. Cambios requerían editar múltiples scripts.</td>
+            <td><strong>100% Dinámico y Jerárquico</strong>. Módulos y formularios administrables visualmente desde la plataforma.</td>
+        </tr>
+        <tr>
+            <td><strong>Rendimiento</strong></td>
+            <td>Consultaba la base de datos (<code>COUNT(*)</code>) en cada clic, causando lentitud en horas pico.</td>
+            <td><strong>Autorización O(1) en Memoria</strong> de sesión. Carga instantánea y alta concurrencia.</td>
+        </tr>
+        <tr>
+            <td><strong>Seguridad</strong></td>
+            <td>Páginas expuestas a acceso directo por URL si no se validaban manualmente.</td>
+            <td><strong>Dispatcher Central (navegar.php)</strong> con lista blanca, candado <code>ACCESO_SEGURO</code> y anti-path-traversal.</td>
+        </tr>
+        <tr>
+            <td><strong>Esquema de Roles</strong></td>
+            <td>Un solo rol por usuario por centro (<code>LIMIT 1</code>). Sobreescrito en cada login.</td>
+            <td><strong>Multi-Rol y Multi-Centro persistente</strong>. Permite múltiples perfiles activos sin pérdida de asignaciones.</td>
+        </tr>
+        <tr>
+            <td><strong>Custodia de Préstamos</strong></td>
+            <td>Cualquier prestador podía prestar cualquier activo del centro educativo.</td>
+            <td><strong>Ámbitos de Prestador</strong> delimitados por recintos o laboratorios asignados.</td>
+        </tr>
+        <tr>
+            <td><strong>Reportes de Activos</strong></td>
+            <td>Reportes aislados y dispersos para cada condición.</td>
+            <td><strong>Motor Unificado (13 modos de consulta)</strong> con exportadores de alta legibilidad en Excel y PDF.</td>
+        </tr>
+        <tr>
+            <td><strong>Integración Nube</strong></td>
+            <td>Coordinación manual de soporte por correo.</td>
+            <td><strong>Integración nativa con Microsoft 365 (Graph API)</strong> para citas automáticas en Teams y Outlook.</td>
+        </tr>
+        <tr>
+            <td><strong>Movilidad</strong></td>
+            <td>Portal web estándar de escritorio.</td>
+            <td><strong>PWA (Progressive Web App)</strong> instalable en dispositivos móviles con notificaciones push.</td>
+        </tr>
+    </table>
+
+    <div class="footer-note">
+        <strong>Sistema TecnoPresta v1.1</strong> — Desarrollado por la Dirección de Recursos Tecnológicos en Educación (DRTE), MEP Costa Rica.<br>
+        Equipo de Desarrollo: Ing. Sandro Yee Vásquez, Ing. Mauricio Bermúdez Vargas, Ing. Erick Cerdas González.
+    </div>
+
+</body>
+</html>

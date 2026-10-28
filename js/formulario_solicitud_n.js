@@ -62,24 +62,12 @@ $(document).ready(function() {
       uiLibrary: 'bootstrap5'
     });
 
-    $('#horaRetiro').timepicker({
-      locale: 'es-es',
-      format: 'HH:MM',
-      uiLibrary: 'bootstrap5'
-    });
-  
     $('#fechaDevolucion').datepicker({
       locale: 'es-es',
       format: 'dd mm yyyy',
       uiLibrary: 'bootstrap5'
     });
 
-    $('#horaDevolucion').timepicker({
-      locale: 'es-es',
-      format: 'HH:MM',
-      uiLibrary: 'bootstrap5'
-    });
-  
     $("#btnGuardar").on("click", function(event) {
       
       event.preventDefault();    
@@ -154,7 +142,7 @@ window.onbeforeunload = function(){
 function cargaComboSoftware() 
 {
   
-  fetch('sql/select_Caracteristica_softwareGestor.php')
+  fetch('sql_n/select_Caracteristica_softwareGestor.php')
   .then(function(response) 
   {
           
@@ -190,7 +178,7 @@ function cargaComboSoftware()
 function cargaComboSeccion() 
 {
   
-  fetch('sql/selectSeccion_Gestor.php')
+  fetch('sql_n/selectSeccion_Gestor.php')
   .then(function(response) 
   {
           
@@ -678,7 +666,7 @@ function buscarRepetido(alias_id) {
     let activo_nombre = $('#txtBuscar').val();
     $('#colCardsBuscar').empty();
     
-    fetch('sql/selectActivoAliasGestor.php?'
+    fetch('sql_n/selectActivoAliasGestor.php?'
     + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
     .then(function(response) {
 
@@ -718,7 +706,7 @@ function buscarRepetido(alias_id) {
     }).then();
 
 
-    fetch('sql/selectActivoGestor.php?'
+    fetch('sql_n/selectActivoGestor.php?'
     + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
     .then(function(response) {
 
@@ -1481,8 +1469,9 @@ function buscarRepetido(alias_id) {
       formData.append('seccion_Id', cboSeccionId);
       formData.append('solicitud_uso_externo', txtBoleta);
       formData.append('solicitud_boleta', booBoleta);
+      formData.append('ambitoPrestadorSeleccionado', window.sessionStorage.getItem('ambitoPrestadorSeleccionado') || '');
 
-      fetch('sql/insertSolicitudGestor.php', {
+      fetch('sql_n/insertSolicitudGestor.php', {
       method: 'POST', 
       body: formData,     
       }).then(function(response) {
@@ -1647,7 +1636,7 @@ function buscarRepetido(alias_id) {
   function salir() {
 
     // window.location.assign('formulario_menu_prestamo.html');
-    window.location.assign('navegar.php?ruta=formulario_buscar_alias_n.php');
+    window.location.assign('formulario_buscar_alias_n.php');
     return true;
 
 

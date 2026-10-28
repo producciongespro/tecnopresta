@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Sombras suaves estilo UI moderno -->
+    <filter id="shadow-monitor" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.12" />
+    </filter>
+    <filter id="shadow-badge" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0e3a8a" flood-opacity="0.25" />
+    </filter>
+    <filter id="shadow-small" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+
+    <!-- Gradientes -->
+    <linearGradient id="screen-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="gold-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="stand-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo sutil decorativo transparente/claro (ajustado a 512x512) -->
+  <rect width="512" height="512" rx="32" fill="#f8fafc" />
+
+  <!-- Grupo contenedor para centrar perfectamente el diseño original de 500x500 en el lienzo de 512x512 -->
+  <g transform="translate(6, 6)">
+    
+    <!-- Base y soporte del monitor (detrás de la pantalla) -->
+    <g id="soporte">
+      <!-- Cuello del monitor -->
+      <rect x="215" y="290" width="70" height="115" rx="14" fill="url(#stand-grad)" />
+      <!-- Pie/base inferior azul marino -->
+      <rect x="170" y="415" width="160" height="24" rx="12" fill="#0f2347" />
+    </g>
+
+    <!-- Monitor Principal -->
+    <g id="monitor" filter="url(#shadow-monitor)">
+      <!-- Borde exterior blanco con trazo suave -->
+      <rect x="110" y="80" width="280" height="200" rx="28" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
+      <rect x="110" y="80" width="280" height="200" rx="28" fill="none" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+
+      <!-- Acento dorado lateral izquierdo (referencia imagen) -->
+      <path d="M 115 110 L 118 110 A 3 3 0 0 1 121 113 L 121 247 A 3 3 0 0 1 118 250 L 115 250 Z" fill="#e5d0a6" />
+
+      <!-- Cámara web superior -->
+      <rect x="200" y="52" width="100" height="38" rx="12" fill="#0f2347" />
+      <circle cx="250" cy="71" r="6" fill="#ffffff" />
+
+      <!-- Pantalla interna azul oscuro -->
+      <rect x="145" y="120" width="210" height="115" rx="16" fill="url(#screen-grad)" />
+
+      <!-- Contenido dentro de la pantalla (Mini Cine + Noticiero) -->
+      <!-- Líneas de conexión punteadas entre nodos de la pantalla -->
+      <line x1="195" y1="175" x2="250" y2="175" stroke="#93c5fd" stroke-width="3" stroke-dasharray="4 4" opacity="0.8" />
+      <line x1="250" y1="175" x2="305" y2="175" stroke="#93c5fd" stroke-width="3" stroke-dasharray="4 4" opacity="0.8" />
+
+      <!-- Nodo Izquierdo: Claqueta de Cine / Video -->
+      <rect x="165" y="152" width="36" height="36" rx="9" fill="#ffffff" filter="url(#shadow-small)" />
+      <!-- Icono Claqueta miniatura -->
+      <rect x="172" y="160" width="22" height="6" rx="2" fill="#0f2347" />
+      <line x1="177" y1="160" x2="175" y2="166" stroke="#ffffff" stroke-width="1.5" />
+      <line x1="183" y1="160" x2="181" y2="166" stroke="#ffffff" stroke-width="1.5" />
+      <rect x="172" y="168" width="22" height="14" rx="2" fill="#2563eb" />
+      <polygon points="180,172 187,175 180,178" fill="#ffffff" />
+
+      <!-- Nodo Central: Lente de Proyector / Carrete Cine con indicador verificado -->
+      <!-- Aro blanco exterior con marcas de enfoque de cámara -->
+      <circle cx="250" cy="175" r="28" fill="#ffffff" />
+      <circle cx="250" cy="175" r="24" fill="none" stroke="#e2e8f0" stroke-width="2" />
+      <!-- Marcas del enfoque -->
+      <line x1="250" y1="147" x2="250" y2="151" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="250" y1="199" x2="250" y2="203" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="222" y1="175" x2="226" y2="175" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="274" y1="175" x2="278" y2="175" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Centro dorado / carrete -->
+      <circle cx="250" cy="175" r="14" fill="url(#gold-grad)" />
+      <!-- Círculo interior lente -->
+      <circle cx="250" cy="175" r="6" fill="#78350f" opacity="0.4" />
+      <circle cx="250" cy="175" r="3" fill="#ffffff" />
+
+      <!-- Badge dorado superior verificado del nodo central -->
+      <circle cx="250" cy="138" r="10" fill="url(#gold-grad)" />
+      <path d="M 246 138 L 249 141 L 255 135" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+
+      <!-- Nodo Derecho: Noticia / Periódico digital -->
+      <rect x="300" y="150" width="34" height="40" rx="7" fill="#ffffff" filter="url(#shadow-small)" />
+      <rect x="306" y="157" width="12" height="8" rx="1.5" fill="#3b82f6" />
+      <line x1="322" y1="158" x2="328" y2="158" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" />
+      <line x1="322" y1="163" x2="328" y2="163" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" />
+      <line x1="306" y1="171" x2="328" y2="171" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+      <line x1="306" y1="176" x2="328" y2="176" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+      <line x1="306" y1="181" x2="320" y2="181" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" />
+    </g>
+
+    <!-- 3 Insignias Circulares Inferiores -->
+
+    <!-- Insignia 1 (Izquierda): Noticia / Edición de Contenido del Cine -->
+    <g id="badge-noticia" filter="url(#shadow-badge)">
+      <circle cx="130" cy="335" r="48" fill="#1d4ed8" />
+      
+      <!-- Tarjeta blanca de noticia con líneas de texto -->
+      <rect x="108" y="312" width="40" height="46" rx="8" fill="#ffffff" />
+      <!-- Tira de cabecera tipo cinta de película / titular -->
+      <rect x="114" y="318" width="28" height="6" rx="2" fill="#f59e0b" />
+      <!-- Líneas de noticias -->
+      <line x1="116" y1="332" x2="136" y2="332" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+      <line x1="116" y1="340" x2="140" y2="340" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+      <line x1="116" y1="347" x2="130" y2="347" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+
+      <!-- Punto de notificación dorado superior -->
+      <circle cx="152" cy="312" r="9" fill="url(#gold-grad)" stroke="#ffffff" stroke-width="2" />
+    </g>
+
+    <!-- Elemento Central: Lista / Ficha de Noticias Publicadas en el Lobby -->
+    <g id="badge-documento-central" filter="url(#shadow-small)">
+      <rect x="228" y="310" width="48" height="60" rx="10" fill="#ffffff" stroke="#f1f5f9" stroke-width="2" />
+      <!-- Cabecera de video/película destacada -->
+      <rect x="235" y="318" width="34" height="12" rx="3" fill="#0f2347" />
+      <polygon points="249,321 256,324 249,327" fill="#fbbf24" />
+      <!-- Líneas de notas -->
+      <line x1="236" y1="338" x2="268" y2="338" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+      <line x1="236" y1="346" x2="268" y2="346" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+      <line x1="236" y1="353" x2="254" y2="353" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Tag dorado superior derecho -->
+      <circle cx="274" cy="308" r="8" fill="url(#gold-grad)" stroke="#ffffff" stroke-width="2" />
+    </g>
+
+    <!-- Insignia 3 (Derecha): Distribución / Difusión a Pantallas del Lobby con Escudo de Seguridad -->
+    <g id="badge-difusion-escudo" filter="url(#shadow-badge)">
+      <circle cx="370" cy="335" r="48" fill="#1d4ed8" />
+
+      <!-- Red / Difusión a múltiples pantallas/receptores -->
+      <line x1="355" y1="348" x2="370" y2="326" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="385" y1="348" x2="370" y2="326" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+      <!-- Nodos terminales -->
+      <circle cx="355" cy="348" r="7" fill="#ffffff" />
+      <circle cx="385" cy="348" r="7" fill="#ffffff" />
+      <circle cx="370" cy="324" r="7" fill="#ffffff" />
+
+      <!-- Escudo dorado con check de publicación aprobada -->
+      <path d="M 374 316 L 394 320 C 394 336 384 348 374 354 C 364 348 354 336 354 320 Z" 
+            fill="url(#gold-grad)" stroke="#ffffff" stroke-width="2" filter="url(#shadow-small)" />
+      <!-- Check blanco dentro del escudo -->
+      <path d="M 368 333 L 373 338 L 382 328" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+  </g>
+</svg>

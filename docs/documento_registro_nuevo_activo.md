@@ -3,6 +3,7 @@
 **Sistema:** TecnoPresta v1.1  
 **Módulo:** Gestión de Inventario → Gestión de Activos / Catálogos  
 **Fecha:** Agosto 2026  
+**Última actualización:** Octubre 2026 (fuente presupuestaria pasa a relacionarse en `t_placa`)  
 **Archivos involucrados:** 7 archivos PHP
 
 ---
@@ -11,7 +12,7 @@
 
 Formulario de dos fases (SPA-like) para registrar un nuevo activo con placa, serial y color:
 
-1. **Fase de búsqueda:** El usuario escribe un texto de búsqueda (tipo, marca o modelo) y opcionalmente selecciona un fondo presupuestario. El sistema retorna **únicamente** los activos que cumplan todas las condiciones de la cadena relacional.
+1. **Fase de búsqueda:** El usuario escribe un texto de búsqueda (tipo, marca o modelo). El sistema retorna **únicamente** los activos que cumplan todas las condiciones de la cadena relacional. El filtro por fondo presupuestario existe tanto en el endpoint como en la UI (`#fondo_select`), pero actualmente está **oculto** (`d-none`) y no se exige para buscar.
 2. **Fase de registro:** Al seleccionar un activo, se muestra su detalle (imagen, tipo, marca, modelo). El usuario selecciona un color de la paleta, ingresa placa, serial y origen presupuestario para completar el registro.
 
 ---
@@ -30,9 +31,9 @@ Formulario de dos fases (SPA-like) para registrar un nuevo activo con placa, ser
 
 | Archivo | Descripción |
 |---------|-------------|
-| `gestor_catalogo_modelos_n.php` | UI del catálogo maestro de modelos (tabla + modales) |
-| `sql/gestor_catalogo_modelos_n.php` | Endpoint AJAX de datos (modelos, fondos, relación modelo-fondos) |
-| `actualizar_gestor_catalogo_modelos_n.php` | Endpoint AJAX de acciones CRUD (crear/editar/toggle/guardar_fondos) |
+| `gestor_catalogo_modelos_n.php` | UI del catálogo maestro de modelos y combinaciones tipo + marca + modelo (tabla + modales) |
+| `sql/gestor_catalogo_modelos_n.php` | Endpoint AJAX de datos (tipos, marcas, modelos y combinaciones) |
+| `actualizar_gestor_catalogo_modelos_n.php` | Endpoint AJAX de acciones CRUD (`crear_modelo`, `editar_modelo`, `toggle_modelo`, `crear_combo`, `editar_combo`, `eliminar_combo`) |
 | `funciones_modelos_n.php` | Funciones reutilizables: `normalizarModelo()`, `obtenerIdModelo()`, `obtenerOCrearModelo()`, `obtenerModeloPorId()` |
 
 ---
@@ -41,12 +42,14 @@ Formulario de dos fases (SPA-like) para registrar un nuevo activo con placa, ser
 
 ```
 t_placa
-  └── id_activo → t_activo.id_activo
-        ├── id_ag → t_activo_general.id_ag  (tipo/clase + imagen)
-        ├── id_marca → t_marca.id_marca     (marca)
-        └── modelo_id → t_modelos.id_modelo  (modelo)
-              └── id_modelo → t_modelo_fondos.id_modelo  (fondo presupuestario)
+  ├── id_activo → t_activo.id_activo
+  │     ├── id_ag → t_activo_general.id_ag  (tipo/clase + imagen)
+  │     ├── id_marca → t_marca.id_marca     (marca)
+  │     └── modelo_id → t_modelos.id_modelo  (modelo)
+  └── id_fondos → t_fondos.id_fondos         (fuente/origen presupuestario)
 ```
+
+> **Regla vigente:** La fuente presupuestaria se relaciona **directamente en `t_placa`** (`t_placa.id_fondos`). Cada unidad física registrada puede tener su propio fondo. **No** existe relación modelo–fondo: la tabla `t_modelo_fondos` quedó como legado y no participa en la búsqueda ni en el registro.
 
 ### Condiciones para registrar un activo
 
@@ -55,10 +58,9 @@ Para que un activo aparezca en la búsqueda y pueda ser registrado, debe cumplir
 | # | Condición | Tabla verificada |
 |---|-----------|------------------|
 | 1 | El modelo existe y está activo (`mdl_elm = 0`) | `t_modelos` |
-| 2 | El modelo está asociado a al menos un fondo presupuestario | `t_modelo_fondos` |
-| 3 | Existe al menos un registro en `t_activo` con `modelo_id` que apunte al modelo | `t_activo` |
-| 4 | El `id_ag` del `t_activo` existe en `t_activo_general` | `t_activo_general` |
-| 5 | El `id_marca` del `t_activo` existe en `t_marca` | `t_marca` |
+| 2 | Existe al menos un registro en `t_activo` con `modelo_id` que apunte al modelo | `t_activo` |
+| 3 | El `id_ag` del `t_activo` existe en `t_activo_general` | `t_activo_general` |
+| 4 | El `id_marca` del `t_activo` existe en `t_marca` | `t_marca` |
 
 ---
 
@@ -82,12 +84,11 @@ FROM t_activo a
 INNER JOIN t_activo_general ag ON a.id_ag = ag.id_ag
 INNER JOIN t_marca m ON a.id_marca = m.id_marca
 INNER JOIN t_modelos tm ON a.modelo_id = tm.id_modelo
-INNER JOIN t_modelo_fondos mf ON tm.id_modelo = mf.id_modelo
 WHERE tm.mdl_elm = 0
   AND a.modelo_id IS NOT NULL
   AND a.id_ag IS NOT NULL
   AND a.id_marca IS NOT NULL
-  [AND mf.id_fondos = ?]
+  [AND EXISTS (SELECT 1 FROM t_placa p WHERE p.id_activo = a.id_activo AND p.id_fondos = ?)]
   [AND (tm.modelo LIKE ? OR ag.clase LIKE ? OR m.marca LIKE ?)]
 GROUP BY ag.id_ag, ag.clase, ag.imagen, m.id_marca, m.marca, tm.id_modelo, tm.modelo
 ORDER BY ag.clase ASC, m.marca ASC, tm.modelo ASC
@@ -99,6 +100,8 @@ ORDER BY ag.clase ASC, m.marca ASC, tm.modelo ASC
 |--------|----------------|-----------|
 | Fondo presupuestario | `id_fondos` | Opcional (default: todos) |
 | Texto de búsqueda | `busqueda` | Opcional (busca en modelo, tipo y marca) |
+
+> **Comportamiento del filtro de fondo:** cuando se envía `id_fondos`, el endpoint exige que exista al menos una unidad física en `t_placa` para ese `id_activo` con ese fondo (`EXISTS`). No consulta `t_modelo_fondos`. En la UI actual el select `#fondo_select` está oculto (`d-none`), por lo que normalmente se busca sin este filtro.
 
 ### Respuesta JSON
 
@@ -136,7 +139,7 @@ ORDER BY ag.clase ASC, m.marca ASC, tm.modelo ASC
 | `color_hex` | string | Sí | Color en formato hexadecimal (#RRGGBB) |
 | `placa` | string | Sí | Placa del activo (max 50 chars) |
 | `serial` | string | Sí | Serial del activo (max 50 chars) |
-| `id_fondos` | int | Sí | ID del fondo presupuestario |
+| `id_fondos` | int | Sí | ID del fondo presupuestario (se valida su existencia en `t_fondos`) |
 
 ### Cadena de validaciones (6 pasos)
 
@@ -145,7 +148,7 @@ Paso 1: Validar datos de entrada (POST)
     ↓ OK
 Paso 2: Verificar modelo en t_modelos (mdl_elm = 0)
     ↓ OK
-Paso 3: Verificar asociación a fondo (t_modelo_fondos)
+Paso 3: Verificar que el fondo exista en t_fondos
     ↓ OK
 Paso 4: Verificar id_activo en t_activo + INNER JOIN t_activo_general/t_marca
     ↓ OK
@@ -155,6 +158,8 @@ Paso 5b: Verificar serial duplicado en t_placa (con detalle de departamento)
     ↓ OK
 Paso 6: INSERT en t_placa
 ```
+
+> **Paso 3:** se ejecuta `SELECT id_fondos FROM t_fondos WHERE id_fondos = ? LIMIT 1`. La tabla `t_fondos` solo tiene las columnas `id_fondos` y `fondos`, por lo que la validación de existencia es completa. **No** se valida contra `t_modelo_fondos` (relación eliminada de la lógica de negocio).
 
 > **Detalle de duplicados:** En los pasos 5 y 5b, si la placa o el serial ya existen, el sistema compara el `codigo` (centro educativo) de la placa existente con el del usuario actual para indicar si el duplicado pertenece al mismo centro o a otro:
 
@@ -210,8 +215,9 @@ El color se almacena como hexadecimal en `t_placa.color` (varchar(7), default '#
 
 1. **No se crean nuevos registros en `t_activo`**: El proceso solo registra unidades físicas en `t_placa` vinculadas a `t_activo` existentes.
 2. **`id_color` no se usa en WHERE**: Solo se almacena el hex en `t_placa.color`.
-3. **Fondo es opcional en búsqueda**, pero **requerido en registro**.
+3. **Fondo es opcional en búsqueda**, pero **requerido en registro** y **validado contra `t_fondos`**.
 4. **Solo aparecen activos registrables**: Los `INNER JOIN` en la búsqueda garantizan que solo se muestran activos con cadena relacional completa.
+5. **La fuente presupuestaria se relaciona en `t_placa`** (`id_fondos`): cada unidad física registrada lleva su propio fondo. No se usa `t_modelo_fondos` ni se exige que el modelo tenga fondos asignados.
 
 ---
 
@@ -237,17 +243,20 @@ El color se almacena como hexadecimal en `t_placa.color` (varchar(7), default '#
 | Tabla | Campos clave |
 |-------|-------------|
 | `t_modelos` | `id_modelo`, `modelo`, `mdl_elm` |
-| `t_modelo_fondos` | `id_modelo`, `id_fondos` (PK compuesta) |
 | `t_activo` | `id_activo`, `id_ag`, `id_marca`, `modelo_id` |
 | `t_activo_general` | `id_ag`, `clase`, `imagen` |
 | `t_marca` | `id_marca`, `marca` |
 | `t_placa` | `id_placa`, `placa`, `serial`, `id_activo`, `codigo`, `id_estado`, `prestar`, `activo`, `id_fondos`, `color` |
-| `t_fondos` | `id_fondos`, `fondos` |
+| `t_fondos` | `id_fondos` (PK), `fondos` |
+
+> **`t_placa.id_fondos`:** columna `int(4) NOT NULL` **sin clave foránea** en la base de datos. La integridad referencial se garantiza en `ajax_registro_activo_n.php` mediante la consulta a `t_fondos` (Paso 3).
+
+> **`t_modelo_fondos` (legado):** la tabla existe en la base de datos pero está vacía y ya no se consulta ni se escribe desde ningún flujo activo. No es un requisito para registrar activos.
 
 ### Datos mínimos requeridos
 
 - `t_modelos` debe tener registros con `mdl_elm = 0`
-- `t_modelo_fondos` debe vincular los modelos con fondos presupuestarios
+- `t_fondos` debe tener al menos un registro (el formulario lo exige en la fase de registro)
 - `t_activo` debe tener registros con `modelo_id` apuntando a `t_modelos.id_modelo`
 - `t_activo_general` y `t_marca` deben tener los registros correspondientes a los `id_ag` e `id_marca` de `t_activo`
 
@@ -257,6 +266,7 @@ El color se almacena como hexadecimal en `t_placa.color` (varchar(7), default '#
 
 - El campo `codigo` en `t_placa` debe coincidir con el `CentrosEducativosDondeTrabaja` del funcionario Azure.
 - La paleta de colores es fija (12 colores); no depende de la tabla `t_color`.
+- La fuente presupuestaria se elige por unidad física en la fase de registro y se guarda en `t_placa.id_fondos`; no se asigna desde el catálogo de modelos.
 - El formulario existe en versiones legacy (`in_formulario_agregar_modelo_placa_serie_N.php`) que no deben ser modificadas.
 - El registro en navegación (`sql/registro_formulario_registro_activos.sql`) debe ejecutarse en MySQL para que el formulario aparezca en el menú.
 
@@ -266,34 +276,39 @@ El color se almacena como hexadecimal en `t_placa.color` (varchar(7), default '#
 
 ### 10.1 Propósito
 
-CRUD del catálogo maestro de modelos de activos (`t_modelos`) y asignación de fuentes presupuestarias (`t_modelo_fondos`). Es el complemento administrativo del registro de activos: permite crear, editar, activar/desactivar modelos y asociarlos a fondos.
+Catálogo maestro de modelos de activos (`t_modelos`) y de las **combinaciones Tipo + Marca + Modelo**, que se materializan como registros en `t_activo` (`id_ag`, `id_marca`, `modelo_id`). Es el complemento administrativo del registro de activos: permite crear modelos, crear/editar/eliminar combinaciones y activar/desactivar modelos.
+
+> **La fuente presupuestaria ya no se administra aquí.** El fondo se selecciona al registrar cada unidad física y se guarda en `t_placa.id_fondos` (ver secciones 4 y 5).
 
 ### 10.2 Arquitectura
 
 | Archivo | Función |
 |---------|---------|
-| `gestor_catalogo_modelos_n.php` | UI: tabla de modelos con acciones, modales para crear/editar modelo, asignar fondos, confirmar/toggle |
-| `sql/gestor_catalogo_modelos_n.php` | Endpoint GET de datos: retorna JSON con `modelos`, `fondos` y `fondos_por_modelo` |
-| `actualizar_gestor_catalogo_modelos_n.php` | Endpoint POST de acciones: `crear_modelo`, `editar_modelo`, `toggle_modelo`, `guardar_fondos` |
+| `gestor_catalogo_modelos_n.php` | UI: tabla de combinaciones (Tipo, Marca, Modelo, Unidades físicas, Filas `t_activo`, Acciones) con modales de crear/editar/eliminar y creación rápida de modelo |
+| `sql/gestor_catalogo_modelos_n.php` | Endpoint GET de datos: retorna JSON con `tipos`, `marcas`, `modelos` y `combos` |
+| `actualizar_gestor_catalogo_modelos_n.php` | Endpoint POST de acciones: `crear_modelo`, `editar_modelo`, `toggle_modelo`, `crear_combo`, `editar_combo`, `eliminar_combo` |
 | `funciones_modelos_n.php` | Funciones compartidas usadas por otros procesos de modelos |
 
 ### 10.3 Tablas involucradas
 
 | Tabla | Lectura | Escritura |
 |-------|---------|-----------|
-| `t_modelos` | Sí (endpoint de datos) | Sí (crear/editar/toggle) |
-| `t_modelo_fondos` | Sí (relación modelo-fondo) | Sí (guardar_fondos: DELETE + INSERT en transacción) |
-| `t_fondos` | Sí (catálogo de fuentes presupuestarias) | No |
-| `t_activo` | Sí (conteo de activos asociados por `modelo_id`) | No |
+| `t_modelos` | Sí (endpoint de datos) | Sí (`crear_modelo`, `editar_modelo`, `toggle_modelo`) |
+| `t_activo` | Sí (combinaciones y conteos) | Sí (`crear_combo`, `editar_combo`, `eliminar_combo`) |
+| `t_activo_general` | Sí (catálogo de tipos) | No |
+| `t_marca` | Sí (catálogo de marcas) | No |
+| `t_placa` | Sí (conteo de unidades físicas por combinación) | No |
 
 ### 10.4 Acciones CRUD
 
-| Acción | SQL | Descripción |
-|--------|-----|-------------|
+| Acción | SQL / efecto | Descripción |
+|--------|--------------|-------------|
 | `crear_modelo` | `INSERT INTO t_modelos (modelo, mdl_elm, created_by, created_at, updated_at) VALUES (?, 0, ?, NOW(), NOW())` | Crea un modelo activo solo con su nombre |
 | `editar_modelo` | `UPDATE t_modelos SET modelo = ?, updated_at = NOW() WHERE id_modelo = ?` | Renombra el modelo |
 | `toggle_modelo` | `UPDATE t_modelos SET mdl_elm = ?, updated_at = NOW() WHERE id_modelo = ?` | 0 = activo, 1 = desactivado |
-| `guardar_fondos` | `DELETE FROM t_modelo_fondos WHERE id_modelo = ?` + `INSERT INTO t_modelo_fondos (id_modelo, id_fondos) VALUES (?, ?)` en transacción | Reemplaza todas las asociaciones modelo-fondo |
+| `crear_combo` | `INSERT INTO t_activo (id_ag, id_marca, modelo, modelo_id, id_color) VALUES (?, ?, '', ?, 1)` | Crea la combinación; valida tipo, marca y modelo, y rechaza duplicados; puede crear el modelo al vuelo con `obtenerOCrearModelo()` |
+| `editar_combo` | `UPDATE t_activo SET id_ag = ?, id_marca = ?, modelo_id = ?, modelo = '' WHERE id_ag = ? AND id_marca = ? AND modelo_id = ?` | Reasigna todas las filas de `t_activo` de la combinación origen; valida que la combinación destino no exista |
+| `eliminar_combo` | `DELETE FROM t_activo WHERE id_ag = ? AND id_marca = ? AND modelo_id = ?` | Solo permite eliminar si la combinación **no tiene unidades físicas** en `t_placa` |
 
 ### 10.5 Modelo de datos — derivación de tipo y marca
 
@@ -305,7 +320,7 @@ t_activo.id_ag     → t_activo_general.id_ag  (tipo/clase)
 t_activo.id_marca  → t_marca.id_marca        (marca)
 ```
 
-Por esta razón, la tabla de modelos no muestra columnas de tipo ni marca: solo nombre, activos asociados, fuentes presupuestarias, estado y acciones.
+Por esta razón, la tabla del gestor muestra las columnas **Tipo**, **Marca**, **Modelo**, **Unidades físicas**, **Filas `t_activo`** y **Acciones** (sin columnas de fuente presupuestaria ni de estado).
 
 ### 10.6 Registro en navegación
 
@@ -315,11 +330,13 @@ El formulario se registra en el menú vía `sql/catalogo_modelos_registro.sql` (
 
 ## 11. Scripts SQL obsoletos (NO EJECUTAR)
 
-Los siguientes scripts intentan agregar o usar las columnas `id_ag` e `id_marca` en `t_modelos`, que **no existen** en el esquema real de la BD. **No deben ejecutarse.**
+Los siguientes scripts intentan agregar o usar las columnas `id_ag` e `id_marca` en `t_modelos`, que **no existen** en el esquema real de la BD, o mantienen la relación modelo–fondo que ya fue eliminada de la lógica de negocio. **No deben ejecutarse.**
 
 | Archivo | Problema |
 |---------|----------|
 | `sql/esquema_t_modelos.sql` | Contiene `ALTER TABLE t_modelos ADD COLUMN id_ag`, `ADD COLUMN id_marca` y elimina el índice único `uq_modelo`. La BD real usa `t_modelos` de 6 columnas con índice `uq_modelo (modelo)`. |
-| `sql/migracion_modelos_fondos.sql` | Sus `INSERT INTO t_modelos (modelo, id_ag, id_marca, ...)` y `UPDATE ... AND a.id_ag = tm.id_ag` fallarían por columnas inexistentes. |
+| `sql/migracion_modelos_fondos.sql` | Sus `INSERT INTO t_modelos (modelo, id_ag, id_marca, ...)` y `UPDATE ... AND a.id_ag = tm.id_ag` fallarían por columnas inexistentes. Además crea y puebla `t_modelo_fondos`, relación que ya no se utiliza. |
 
-**Alternativa correcta:** La siembra de modelos y la asignación de `modelo_id` en `t_activo` deben hacerse mediante las funciones de `funciones_modelos_n.php` (deduplicación por nombre de modelo) o con `sql/catalogo_modelos.sql`, que crea `t_modelos` y `t_modelo_fondos` con el esquema real de 6 columnas.
+> **Nota sobre `sql/catalogo_modelos.sql`:** su sección 3 crea la tabla puente `t_modelo_fondos` (legado). El resto del script (creación de `t_modelos` de 6 columnas y siembra de modelos) sigue siendo válido, pero `t_modelo_fondos` ya no es necesaria y puede omitirse.
+
+**Alternativa correcta:** La siembra de modelos y la asignación de `modelo_id` en `t_activo` deben hacerse mediante las funciones de `funciones_modelos_n.php` (deduplicación por nombre de modelo) o con `sql/catalogo_modelos.sql`, que crea `t_modelos` con el esquema real de 6 columnas.

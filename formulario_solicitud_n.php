@@ -181,13 +181,13 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
             <div>
                 <h4 class="mb-0 fw-bold"><i class="bi bi-file-text me-2"></i>Solicitar Equipo</h4>
             </div>
-            <div>
+            <!-- <div>
                 <small>
                     <a href="contactenos_n.php?rep=Error en formulario solicitud" class="text-white text-decoration-none opacity-75">
                         <i class="bi bi-envelope"></i> Reportar
                     </a>
                 </small>
-            </div>
+            </div> -->
         </div>
 
         <div class="row justify-content-center">
@@ -432,6 +432,6 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
     <script src="gijgo/gijgo.min.js" type="text/javascript"></script>
     <script src="gijgo/messages.es-es.js" type="text/javascript"></script>
 
-    <script src="js/formulario_solicitud_n.js?version=2"></script>
+    <script src="js/formulario_solicitud_n.js?version=2.1"></script>
 </body>
 </html>

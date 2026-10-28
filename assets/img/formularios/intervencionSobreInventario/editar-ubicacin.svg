@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+<defs>
+<linearGradient id="blue" x1="120" y1="80" x2="390" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#2D67B1"/><stop offset="1" stop-color="#021A53"/></linearGradient>
+<linearGradient id="gold" x1="320" y1="150" x2="410" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#D8B36A"/><stop offset="1" stop-color="#B78B39"/></linearGradient>
+<linearGradient id="gray" x1="210" y1="310" x2="300" y2="430" gradientUnits="userSpaceOnUse"><stop stop-color="#EEF2F6"/><stop offset="1" stop-color="#C8D2DE"/></linearGradient>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".16"/></filter>
+</defs>
+<!-- Marco -->
+<g filter="url(#shadow)"><rect x="108" y="78" width="296" height="214" rx="22" fill="white" stroke="#021A53" stroke-width="6"/><rect x="198" y="46" width="116" height="42" rx="14" fill="url(#blue)"/><circle cx="256" cy="67" r="7" fill="white"/></g>
+<rect x="108" y="112" width="14" height="150" rx="7" fill="url(#gold)" opacity=".30"/>
+<!-- Búsqueda y edición de ubicación -->
+<g filter="url(#shadow)">
+<rect x="148" y="122" width="216" height="122" rx="16" fill="url(#blue)"/>
+<!-- Filtros -->
+<rect x="160" y="134" width="94" height="27" rx="7" fill="white"/>
+<path d="M171 141H180M171 147H184M171 153H178" stroke="#2D67B1" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M188 141H242M188 148H238M188 155H229" stroke="#B9C5D2" stroke-width="3" stroke-linecap="round"/>
+<path d="M243 143L248 148L243 153" stroke="#021A53" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="258" y="134" width="94" height="27" rx="7" fill="white"/>
+<!-- pin de ubicación -->
+<path d="M269 143C269 139 272 137 276 137C280 137 283 139 283 143C283 148 276 153 276 153C276 153 269 148 269 143Z" fill="#2D67B1"/>
+<circle cx="276" cy="143" r="2.2" fill="white"/>
+<path d="M288 141H339M288 148H332M288 155H323" stroke="#B9C5D2" stroke-width="3" stroke-linecap="round"/>
+<!-- flecha de búsqueda -->
+<path d="M174 176H211" stroke="white" stroke-width="4" stroke-linecap="round"/><path d="M203 168L213 176L203 184" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- lista de activos -->
+<rect x="160" y="188" width="125" height="43" rx="7" fill="white"/>
+<rect x="168" y="196" width="10" height="10" rx="2" fill="white" stroke="#2D67B1" stroke-width="2.5"/><path d="M170 201L173 204L178 198" stroke="#D8B36A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="184" y="196" width="30" height="5" rx="2.5" fill="#164687"/><rect x="184" y="204" width="48" height="5" rx="2.5" fill="#E1E7EE"/><rect x="184" y="213" width="38" height="5" rx="2.5" fill="#E1E7EE"/>
+<rect x="168" y="213" width="10" height="10" rx="2" fill="white" stroke="#B9C5D2" stroke-width="2.5"/>
+<!-- ubicación actual -->
+<rect x="293" y="171" width="59" height="60" rx="8" fill="white"/>
+<path d="M304 188L322 179L340 188V215H304V188Z" fill="#E7ECF2" stroke="#164687" stroke-width="2.5"/>
+<path d="M300 188H344" stroke="#164687" stroke-width="3" stroke-linecap="round"/>
+<rect x="319" y="198" width="7" height="17" rx="1.5" fill="url(#gold)"/>
+<circle cx="339" cy="177" r="9" fill="url(#gold)"/><path d="M335 177L338 180L343 174" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- lápiz -->
+<path d="M270 201L278 193L286 201L278 209L270 209V201Z" fill="url(#gold)"/><path d="M273 198L281 206" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</g>
+<!-- Centro educativo / ubicación origen -->
+<g filter="url(#shadow)">
+<circle cx="120" cy="360" r="52" fill="url(#blue)"/>
+<path d="M91 349L120 334L149 349V385H91V349Z" fill="white"/><path d="M86 349H154" stroke="#021A53" stroke-width="5" stroke-linecap="round"/>
+<rect x="114" y="363" width="12" height="22" rx="2" fill="url(#gold)" stroke="#021A53" stroke-width="3"/><rect x="100" y="358" width="9" height="11" rx="2" fill="#2D67B1"/><rect x="131" y="358" width="9" height="11" rx="2" fill="#2D67B1"/>
+<!-- pin --> <path d="M143 328C143 323 147 320 152 320C157 320 161 323 161 328C161 334 152 341 152 341C152 341 143 334 143 328Z" fill="url(#gold)"/><circle cx="152" cy="327" r="2.5" fill="white"/>
+</g>
+<!-- Reubicación -->
+<g filter="url(#shadow)">
+<rect x="214" y="312" width="84" height="122" rx="16" fill="url(#gray)"/>
+<!-- mapa/ubicaciones -->
+<rect x="229" y="328" width="54" height="52" rx="7" fill="white"/>
+<path d="M235 335L247 331L265 337L277 333V372L265 376L247 370L235 374V335Z" fill="#EEF2F6" stroke="#B9C5D2" stroke-width="2"/>
+<path d="M247 332V370M265 337V376" stroke="#2D67B1" stroke-width="2"/>
+<path d="M238 352C238 347 242 344 246 344C250 344 253 347 253 352C253 358 246 364 246 364C246 364 238 358 238 352Z" fill="url(#gold)"/><circle cx="246" cy="351" r="2" fill="white"/>
+<!-- flechas de traslado -->
+<path d="M237 394H275" stroke="#164687" stroke-width="4" stroke-linecap="round"/><path d="M245 404H267" stroke="#B9C5D2" stroke-width="4" stroke-linecap="round"/>
+<path d="M256 389V417M248 409L256 417L264 409" stroke="url(#gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<!-- Activo y nueva ubicación -->
+<g filter="url(#shadow)">
+<circle cx="392" cy="360" r="52" fill="url(#blue)"/>
+<!-- computadora -->
+<rect x="362" y="338" width="42" height="30" rx="4" fill="white"/><rect x="358" y="369" width="50" height="6" rx="3" fill="white"/>
+<!-- pin destino -->
+<path d="M405 349C405 344 409 341 414 341C419 341 423 344 423 349C423 355 414 362 414 362C414 362 405 355 405 349Z" fill="url(#gold)"/><circle cx="414" cy="348" r="2.5" fill="white"/>
+<!-- lápiz de edición -->
+<path d="M378 389L390 377L399 386L387 398H378V389Z" fill="url(#gold)"/><path d="M381 386L390 395" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+<!-- check --> <circle cx="424" cy="388" r="10" fill="url(#gold)"/><path d="M419 388L423 392L430 384" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<!-- Base -->
+<g filter="url(#shadow)"><rect x="168" y="448" width="176" height="28" rx="12" fill="url(#blue)"/></g>
+</svg>

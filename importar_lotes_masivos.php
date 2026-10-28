@@ -121,7 +121,7 @@ function verificarDuplicados($link, $datos) {
  */
 function validarEstructura($datos, $headers) {
     $errores = [];
-    $camposEsperados = 9; // Número de campos esperados
+    $camposEsperados = (count($headers) === 10) ? 10 : 9; // Soporta 10 columnas (con Color) o 9 (asume #000000 por defecto)
     
     foreach ($datos as $index => $fila) {
         $numFila = $index + 2; // +2 por el encabezado y el índice 0
@@ -158,6 +158,14 @@ function validarEstructura($datos, $headers) {
         $idActivo = trim($fila[2]);
         if ($idActivo !== '' && !preg_match('/^[0-9-]+$/', $idActivo)) {
             $errores[] = "Fila {$numFila}: Campo 'id_activo' solo debe contener números y guiones (valor: '{$idActivo}')";
+        }
+        
+        // Validar Color (formato hexadecimal #RRGGBB si se incluye en la columna 10)
+        if (isset($fila[9]) && trim($fila[9]) !== '') {
+            $colorVal = trim($fila[9]);
+            if (!preg_match('/^#[0-9A-Fa-f]{6}$/', $colorVal)) {
+                $errores[] = "Fila {$numFila}: Campo 'Color' debe estar en formato hexadecimal #RRGGBB (ej. #000000) (valor: '{$colorVal}')";
+            }
         }
     }
     
@@ -229,8 +237,8 @@ function generarReporteErrores($errores, $duplicados, $totalFilas) {
     $html .= '<strong>💡 Sugerencias:</strong><br>';
     $html .= '1. Corrija los errores en el archivo CSV y vuelva a intentarlo.<br>';
     $html .= '2. Asegúrese de que no haya placas o seriales duplicados en la base de datos.<br>';
-    $html .= '3. Revise que el archivo tenga exactamente 9 columnas.<br>';
-    $html .= '4. Verifique que los campos numéricos no tengan texto.<br>';
+    $html .= '3. Revise que el archivo tenga las 10 columnas de la plantilla oficial (incluyendo Color).<br>';
+    $html .= '4. Verifique que los campos numéricos no tengan texto y el color sea hexadecimal (#000000).<br>';
     $html .= '</div>';
     
     $html .= '<div style="margin-top: 20px; text-align: center;">';
@@ -292,7 +300,7 @@ try {
     $headers = fgetcsv($handle, 0, ',');
     if ($headers === false || count($headers) < 9) {
         fclose($handle);
-        throw new Exception("El archivo no tiene una estructura válida. Se esperaban 9 columnas.");
+        throw new Exception("El archivo no tiene una estructura válida. Se esperaban las columnas de la plantilla (incluyendo Color).");
     }
     
     // Leer datos
@@ -379,7 +387,8 @@ try {
         activo, 
         id_fondos, 
         alias_id, 
-        id_lugar
+        id_lugar,
+        color
     ) VALUES ";
     
     $valores = [];
@@ -394,6 +403,8 @@ try {
         $activo = mysqli_real_escape_string($link, trim($fila[6]));
         $idFondos = mysqli_real_escape_string($link, trim($fila[7]));
         $aliasId = mysqli_real_escape_string($link, trim($fila[8]));
+        $colorRaw = isset($fila[9]) && trim($fila[9]) !== '' ? trim($fila[9]) : '#000000';
+        $color = mysqli_real_escape_string($link, $colorRaw);
         
         $valores[] = "(
             '{$placa}',
@@ -405,7 +416,8 @@ try {
             {$activo},
             {$idFondos},
             '{$aliasId}',
-            0
+            0,
+            '{$color}'
         )";
     }
     

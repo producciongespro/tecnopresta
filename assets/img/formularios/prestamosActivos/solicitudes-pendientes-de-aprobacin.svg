@@ -1,0 +1,148 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Colores -->
+  <linearGradient id="blueMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#192952"></stop>
+    <stop offset="100%" stop-color="#0035A0"></stop>
+  </linearGradient>
+
+  <linearGradient id="goldMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#CFAC65"></stop>
+    <stop offset="100%" stop-color="#F2DAB1"></stop>
+  </linearGradient>
+
+  <linearGradient id="greenMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#34D399"></stop>
+    <stop offset="100%" stop-color="#059669"></stop>
+  </linearGradient>
+
+  <linearGradient id="orangeMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F59E0B"></stop>
+    <stop offset="100%" stop-color="#FBBF24"></stop>
+  </linearGradient>
+
+  <linearGradient id="lightMain" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#FFFFFF"></stop>
+    <stop offset="100%" stop-color="#F8FAFC"></stop>
+  </linearGradient>
+
+  <!-- sombra -->
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.16"></feDropShadow>
+  </filter>
+
+</defs>
+
+<!-- CONTENEDOR PRINCIPAL -->
+<g filter="url(#shadow)">
+
+  <rect x="92" y="78" width="328" height="348" rx="32" fill="url(#blueMain)"></rect>
+
+  <rect x="118" y="104" width="276" height="296" rx="24" fill="url(#lightMain)"></rect>
+
+</g>
+
+<!-- HEADER -->
+<g filter="url(#shadow)">
+
+  <rect x="188" y="54" width="136" height="54" rx="16" fill="url(#blueMain)"></rect>
+
+  <circle cx="256" cy="81" r="7" fill="white"></circle>
+
+</g>
+
+<!-- PANEL CENTRAL -->
+<g filter="url(#shadow)">
+
+  <rect x="146" y="138" width="220" height="224" rx="26" fill="white" stroke="#D9D9D9" stroke-width="4"></rect>
+
+</g>
+
+<!-- LISTA DE ACTIVOS -->
+<g filter="url(#shadow)">
+
+  <!-- activo 1 -->
+  <rect x="166" y="166" width="180" height="48" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
+
+  <!-- laptop -->
+  <rect x="180" y="178" width="34" height="22" rx="4" fill="url(#blueMain)"></rect>
+
+  <rect x="176" y="200" width="42" height="5" rx="2.5" fill="#94A3B8"></rect>
+
+  <!-- líneas -->
+  <rect x="232" y="180" width="72" height="7" rx="3.5" fill="#CBD5E1"></rect>
+
+  <rect x="232" y="193" width="52" height="5" rx="2.5" fill="#D6DCE5"></rect>
+
+  <!-- estado -->
+  <circle cx="322" cy="190" r="10" fill="url(#orangeMain)"></circle>
+
+</g>
+
+<g filter="url(#shadow)">
+
+  <!-- activo 2 -->
+  <rect x="166" y="228" width="180" height="48" rx="14" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
+
+  <!-- tablet -->
+  <rect x="182" y="238" width="28" height="32" rx="5" fill="url(#blueMain)"></rect>
+
+  <circle cx="196" cy="264" r="2" fill="white"></circle>
+
+  <!-- líneas -->
+  <rect x="232" y="242" width="78" height="7" rx="3.5" fill="#CBD5E1"></rect>
+
+  <rect x="232" y="255" width="48" height="5" rx="2.5" fill="#D6DCE5"></rect>
+
+  <!-- estado -->
+  <circle cx="322" cy="252" r="10" fill="url(#greenMain)"></circle>
+
+</g>
+
+<!-- HISTORIAL -->
+<g filter="url(#shadow)">
+
+  <rect x="176" y="302" width="160" height="34" rx="12" fill="url(#blueMain)"></rect>
+
+  <!-- reloj -->
+  <circle cx="206" cy="319" r="10" fill="url(#goldMain)"></circle>
+
+  <path d="M206 314V319L210 322" stroke="#192952" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- timeline -->
+  <line x1="228" y1="319" x2="300" y2="319" stroke="white" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6"></line>
+
+</g>
+
+<!-- BADGE SUPERIOR -->
+<g filter="url(#shadow)">
+
+  <circle cx="348" cy="146" r="28" fill="url(#goldMain)"></circle>
+
+  <!-- historial -->
+  <circle cx="348" cy="146" r="11" stroke="#192952" stroke-width="4" fill="none"></circle>
+
+  <path d="M348 140V146L353 149" stroke="#192952" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</g>
+
+<!-- FOOTER -->
+<g filter="url(#shadow)">
+
+  <rect x="164" y="382" width="184" height="40" rx="16" fill="url(#blueMain)"></rect>
+
+  <!-- mini laptop -->
+  <rect x="182" y="394" width="16" height="10" rx="2" fill="url(#goldMain)"></rect>
+
+  <rect x="180" y="404" width="20" height="3" rx="1.5" fill="#F2DAB1"></rect>
+
+  <!-- líneas -->
+  <rect x="216" y="392" width="72" height="7" rx="3.5" fill="white"></rect>
+
+  <rect x="216" y="404" width="50" height="6" rx="3" fill="#D6DCE5"></rect>
+
+</g>
+
+</svg>

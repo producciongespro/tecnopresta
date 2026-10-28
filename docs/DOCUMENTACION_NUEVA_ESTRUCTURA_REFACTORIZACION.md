@@ -2,8 +2,8 @@
 
 **Sistema:** TecnoPresta — Ministerio de Educación Pública de Costa Rica
 **Ámbito del documento:** Estructura del sistema, menú dinámico, dispatcher (enrutador), usuarios, roles y permisos.
-**Versión del documento:** 1.0
-**Fecha:** Septiembre 2026
+**Versión del documento:** 1.1
+**Fecha:** Octubre 2026 (v1.0 — Septiembre 2026)
 
 ---
 
@@ -36,6 +36,9 @@
 17. [Convenciones de nomenclatura](#17-convenciones-de-nomenclatura)
 18. [Evolución futura y recomendaciones](#18-evolución-futura-y-recomendaciones)
 19. [Anexos](#19-anexos)
+    - [A. Referencia de archivos clave de la nueva arquitectura](#a-referencia-de-archivos-clave-de-la-nueva-arquitectura)
+    - [B. Correspondencia de rutas navegables](#b-correspondencia-de-rutas-navegables)
+    - [C. Consulta de Activos — arquitectura del reporte genérico](#c-consulta-de-activos--arquitectura-del-reporte-genérico)
 
 ---
 
@@ -603,6 +606,9 @@ navegar.php?ruta=gestor_X_n.php&subsistema_id&modulo_id&formulario_id
 | Gestor | `gestor_formularios_n.php` + `actualizar_gestor_formularios_n.php` + `sql/gestor_formularios.php` | CRUD de formularios y sus acciones. |
 | Gestor | `gestor_roles_permisos_n.php` + `actualizar_gestor_roles_permisos_n.php` + `sql/gestor_roles.php` | Árbol de permisos por rol. |
 | Gestor | `gestor_usuarios_n.php` + `actualizar_gestor_usuarios_n.php` + `sql/gestor_usuario_n.php` | Administración de usuarios y roles. |
+| Reporte | `consulta_activos_n.php` | Reporte genérico de activos (13 tipos de consulta). Ver [anexo C](#c-consulta-de-activos--arquitectura-del-reporte-genérico). |
+| Reporte | `sql/consulta_activos_helper.php` | Capa de datos y utilidades del reporte de activos. |
+| Reporte | `sql/consulta_activos_modos.php` | Catálogo declarativo de los 13 modos de consulta. |
 | Layout | `partials/header.php`, `partials/footer.php` | Encabezado/pie reutilizables. |
 | BD | `ESTRUCTURA_TABLAS_LTECNOPRE.sql` | Esquema de `usuarios`, `usuarios_roles`, `t_roles`. |
 | BD | `sql/gestor_sistema_init.sql` | Inicialización del módulo Gestor del Sistema. |
@@ -618,3 +624,128 @@ navegar.php?ruta=formulario_sub_modulos.php&subsistema_id&modulo_id
 navegar.php?ruta=<archivo>.php&subsistema_id&modulo_id&formulario_id
                                                      → Formulario ejecutable
 ```
+
+### C. Consulta de Activos — arquitectura del reporte genérico
+
+**Versión:** 1.0 — Octubre 2026
+
+El formulario `consulta_activos_n.php` (antes `consulta_activos_donacion_n.php`) es un
+**reporte genérico de activos** con un selector de 13 tipos de consulta. Sustituye al
+formulario que solo listaba activos marcados para donación.
+
+#### C.1 Archivos
+
+| Archivo | Responsabilidad |
+|---------|-----------------|
+| `consulta_activos_n.php` | Vista (formulario, tabla, tarjetas, paginación) **y** los tres exportadores (Excel, PDF, impresión). |
+| `sql/consulta_activos_helper.php` | Capa de datos: construcción de filtros, conteo, listado, indicadores, instituciones, y utilidades de formato/escape. |
+| `sql/consulta_activos_modos.php` | **Fuente única de verdad** del catálogo de modos: clave, etiqueta, descripción, grupo, icono, color, título de documento, nombre de archivo y predicado SQL. |
+
+#### C.2 Catálogo de modos (13)
+
+| Grupo | Claves |
+|-------|--------|
+| General | `inventario` (modo por defecto) |
+| Condición del activo | `excelente`, `bueno`, `regular`, `malos`, `robados` |
+| Disponibilidad y uso | `prestables`, `no_prestables`, `en_uso`, `no_uso` |
+| Ubicación | `sin_ubicacion` |
+| Situación administrativa | `donacion`, `baja` |
+
+El **modo por defecto es `inventario`**: la vista base es el inventario completo de los
+activos del código presupuestario consultado. "Activos para Donación" es una de las
+opciones del desplegable, no el estado inicial.
+
+#### C.3 Contrato de URL
+
+```
+navegar.php?ruta=consulta_activos_n.php
+    &modo=<clave>          tipo de consulta (por defecto: inventario)
+    &fuente=<id_fondos>    fuente presupuestaria (0 = todas)
+    &codigo=<4 dígitos>    código presupuestario — OBLIGATORIO
+    &baja=1                incluir activos dados de baja
+    &buscar=1              ejecutar la consulta
+    &pagina=<n>            página (100 filas por página)
+    &exportar=excel|pdf    exportar
+    &imprimir=1            vista de impresión
+```
+
+**Reglas de robustez del contrato:**
+
+- El **código presupuestario es obligatorio**. Sin él no se ejecuta ninguna consulta y
+  se muestra el estado *"Indique el código presupuestario para iniciar la consulta"*.
+  El reporte general "todos los centros / todos los códigos" **no existe** por diseño.
+- Una clave de `modo` inexistente → se aplica el modo por defecto **y** se muestra un
+  aviso. **Nunca** produce error SQL.
+- Una `fuente` inexistente → se consulta con todas las fuentes **y** se muestra un aviso.
+- El código se normaliza a 4 dígitos (`567` → `0567`); la búsqueda es de coincidencia
+  **exacta**, no de prefijo.
+
+#### C.4 Filtro base y construcción única del WHERE
+
+`cag_construir_filtros()` es el **único** lugar donde se compone el `WHERE`, y su
+resultado lo consumen el conteo, el listado y el cálculo de indicadores (antes cada
+función construía su propio `WHERE`, lo que admitía divergencias).
+
+```sql
+WHERE p.activo = 1                       -- en servicio
+  AND COALESCE(p.marcado,0) <> 1         -- no marcado para eliminación
+  AND p.codigo = ?                       -- OBLIGATORIO
+  AND p.id_fondos = ?                    -- opcional (0 = todas)
+```
+
+- El modo `baja` es el único que **omite** `p.activo = 1`, porque su propósito es listar
+  los dados de baja; por eso el checkbox "Incluir activos dados de baja" no aplica en él.
+- El checkbox "Incluir activos dados de baja" también relaja `p.activo = 1` en los demás modos.
+- El orden es `p.placa ASC, p.id_placa ASC`. **No** se ordena por `p.codigo`: es un
+  `varchar` y el orden lexicográfico (`0959` después de `4163`) es incorrecto.
+
+#### C.5 Indicadores
+
+Los 4 indicadores (Donación / Robados / Prestables / En uso) se obtienen en **una sola
+consulta agregada** y se presentan de tres formas coherentes entre sí: badges por fila,
+fila de totales (`tfoot`) y tarjetas de resumen con el desglose de los `NULL`:
+
+| Indicador | Desglose |
+|-----------|----------|
+| Donación | *sin marcar* (`donar IS NULL`) |
+| Prestables | *no prestables* (`prestar = 0`) |
+| En uso | *sin uso* (`enuso = 0`) · *sin evaluar* (`enuso IS NULL`) |
+
+> Los valores `NULL` se tratan como un estado propio ("sin evaluar" / "sin marcar"),
+> **no** como ceros. La base de datos no se modifica.
+
+#### C.6 Exportadores
+
+Excel (PhpSpreadsheet), PDF (mPDF) e impresión comparten el mismo juego de datos y la
+misma estructura de 12 columnas con badges de estado. Los tres cambian el título del
+documento y agregan la fila *"Tipo de consulta"* al resumen según el modo activo.
+
+- La exportación usa **una sola consulta** para obtener todas las filas, independientemente
+  del tamaño del resultado (antes el listado se paginaba en bloques de 500 para PDF y
+  1000 para Excel, con una consulta por bloque).
+- En Excel las celdas de metadatos se escriben con `setCellValueExplicit(..., TYPE_STRING)`
+  para que un código con cero inicial (p. ej. `0959`) no se convierta en número.
+- En Excel las celdas con badge (Estado, Donación, Robados, Prestables, En uso) usan
+  **fuente negra** sobre un **tinte claro** del color (`cag_color_tinte()`), no los colores
+  saturados de Bootstrap: el cian `#0dcaf0` con letra blanca —o cualquier fondo oscuro con
+  letra negra— es ilegible. Todos los tintes superan el contraste WCAG AA de 4.5:1.
+- Los tintes se devuelven en hexadecimal de **6 posiciones sin `#`** porque PhpSpreadsheet
+  rechaza el formato con almohadilla (`validateColor()`) y deja la celda **sin relleno**;
+  eso, combinado con la fuente blanca anterior, producía texto invisible sobre fondo blanco.
+- El PDF y la impresión usan estilos en línea en lugar de clases de Bootstrap.
+
+#### C.7 Despliegue
+
+El formulario se registra en la tabla `formularios` con la **ruta física** del archivo:
+
+```sql
+UPDATE formularios SET ruta = 'consulta_activos_n.php' WHERE id = 41;
+```
+
+**Orden obligatorio:** publicar primero el archivo renombrado y después aplicar el
+`UPDATE` (al revés, el menú apuntaría a un archivo inexistente).
+
+> **Importante:** `rutas_permitidas` se construye **al iniciar sesión**
+> (`sql/formulario_principal.php`), a partir del valor de `formularios.ruta`. Tras el
+> `UPDATE`, los usuarios deben **volver a iniciar sesión** para que su sesión contenga
+> la ruta nueva.

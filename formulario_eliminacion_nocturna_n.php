@@ -390,11 +390,16 @@ $logcodigo = $_SESSION['codigo'];
                                 tr.classList.add('row-revertido');
 
                                 var firstTd = tr.cells[0];
-                                firstTd.innerHTML = '<input type="checkbox" class="selectall" name="idsplacas[]" value="' + id + '"/>';
+                                if (tr.dataset.prestado === '1') {
+                                    firstTd.innerHTML = '<span title="No se puede eliminar: activo prestado"><input type="checkbox" class="selectall" disabled aria-label="Activo prestado, no se puede seleccionar"/></span>';
+                                } else {
+                                    firstTd.innerHTML = '<input type="checkbox" class="selectall" name="idsplacas[]" value="' + id + '"/>';
+                                }
 
                                 var lastTd = tr.cells[tr.cells.length - 1];
-                                if (lastTd.querySelector('.badge-marcado')) {
-                                    lastTd.innerHTML = '';
+                                var badgeMarcado = lastTd.querySelector('.badge-marcado');
+                                if (badgeMarcado) {
+                                    badgeMarcado.remove();
                                 }
 
                                 setTimeout(function() {

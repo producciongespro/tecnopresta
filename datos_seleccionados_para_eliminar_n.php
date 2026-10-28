@@ -39,16 +39,34 @@ $logcodigo = $_SESSION['codigo'];
 $logcodigo = $usuario_azure['codigoPresu'] ?? '';
 
 if (isset($_POST['fondos'])) {
-    $fondos = $_POST['fondos'];
+    $fondos = intval($_POST['fondos']);
 
-    $consulta = mysqli_query($link, "SELECT Ta.id_activo, Tg.clase, Tm.marca, Ta.modelo, Tc.color, Tp.id_placa, Tp.placa, Tp.serial, Tp.id_estado, Tp.codigo, Tp.activo, Tp.marcado
+    $sql = "SELECT Ta.id_activo, Tg.clase, Tm.marca, Ta.modelo, Tc.color, Tp.id_placa, Tp.placa, Tp.serial, Tp.id_estado, Tp.codigo, Tp.activo, Tp.marcado,
+            EXISTS (
+                SELECT 1
+                FROM t_prestamo_detalle pd
+                WHERE pd.prestamo_detalle_id_placa = Tp.id_placa
+                  AND pd.prestamo_detalle_devuelto = 0
+            ) AS prestado
         FROM t_activo Ta
         INNER JOIN t_marca Tm ON Ta.id_marca = Tm.id_marca 
         INNER JOIN t_color Tc ON Ta.id_color = Tc.id_color
         INNER JOIN t_placa Tp ON Ta.id_activo = Tp.id_activo
         INNER JOIN t_activo_general Tg ON Ta.id_ag = Tg.id_ag 
-        WHERE Tp.codigo = '$logcodigo' AND Tp.id_fondos = '$fondos'
-        ORDER BY Tp.placa ASC") or die(mysqli_error($link));
+        WHERE Tp.codigo = ? AND Tp.id_fondos = ?
+        ORDER BY Tp.placa ASC";
+
+    $stmt = $link->prepare($sql);
+    if (!$stmt) {
+        die(mysqli_error($link));
+    }
+    $stmt->bind_param("si", $logcodigo, $fondos);
+    $stmt->execute();
+    $consulta = $stmt->get_result();
+
+    if (!$consulta) {
+        die('Error al obtener los activos: ' . mysqli_error($link));
+    }
 
     if (mysqli_num_rows($consulta) > 0) {
         echo '<table class="activos-table">
@@ -68,9 +86,11 @@ if (isset($_POST['fondos'])) {
 
         while ($activos = mysqli_fetch_array($consulta)) {
             $es_marcado = $activos['marcado'] == 1;
+            $es_prestado = (int) $activos['prestado'] === 1;
             $row_class = $es_marcado ? 'table-marcado' : '';
+            $row_prestado = $es_prestado ? ' data-prestado="1"' : '';
 
-            echo '<tr class="' . $row_class . '">
+            echo '<tr class="' . $row_class . '"' . $row_prestado . '>
                 <td class="td-check">';
             if ($es_marcado) {
                 echo '<div class="d-flex align-items-center gap-1 flex-wrap">
@@ -79,6 +99,8 @@ if (isset($_POST['fondos'])) {
                         <i class="bi bi-arrow-counterclockwise"></i> Revertir
                     </button>
                 </div>';
+            } elseif ($es_prestado) {
+                echo '<span title="No se puede eliminar: activo prestado"><input type="checkbox" class="selectall" disabled aria-label="Activo prestado, no se puede seleccionar"/></span>';
             } else {
                 echo '<input type="checkbox" class="selectall" name="idsplacas[]" value="' . $activos['id_placa'] . '"/>';
             }
@@ -90,6 +112,9 @@ if (isset($_POST['fondos'])) {
                 <td class="td-placa">' . $activos['placa'] . '</td>
                 <td class="td-serial"><span class="activos-serial">' . $activos['serial'] . '</span></td>
                 <td class="td-estado">';
+            if ($es_prestado) {
+                echo '<span class="badge bg-info text-dark me-1" title="Activo con préstamo activo"><i class="bi bi-person-lock me-1"></i>Prestado</span>';
+            }
             if ($es_marcado) {
                 echo '<span class="badge-marcado"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pendiente</span>';
             }
@@ -102,6 +127,7 @@ if (isset($_POST['fondos'])) {
         echo '<p>No se encontraron datos.</p>';
     }
 
+    $stmt->close();
     mysqli_close($link);
 }
 ?>

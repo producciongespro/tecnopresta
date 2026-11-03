@@ -12,6 +12,9 @@
  * 3) Si el usuario ya existe, sincroniza el nombre completo.
  * 4) Si no existe, lo crea (o reactiva) en usuarios con los
  *    datos del WS (nombre, correo, sexo, azure_id).
+ * 5) Resuelve los centros educativos/codigos presupuestarios:
+ *    primero el WS del MEP; si no hay, el rol activo; luego
+ *    t_lista_blanca. Con varios centros exige seleccion manual.
  *
  * Seguridad:
  * - Valida sesion Azure
@@ -24,8 +27,7 @@ header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../usuarioAzure.php';
 require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/bd.php';
-
-const WS_CONSULTA_FUNCIONARIO = 'https://apps.mep.go.cr/wstecnopresta/servicio.asmx?WSDL';
+require_once __DIR__ . '/ws_mep.php';
 
 $usuario_azure = obtenerUsuarioSesion();
 if (!$usuario_azure) {
@@ -40,39 +42,12 @@ if (!esUsuarioRoot()) {
     exit;
 }
 */
-$cedula = isset($_GET['cedula']) ? trim($_GET['cedula']) : '';
+$cedula = (isset($_GET['cedula']) && is_scalar($_GET['cedula'])) ? trim((string) $_GET['cedula']) : '';
 
 if (empty($cedula)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Debe proporcionar una cedula']);
     exit;
-}
-
-/**
- * Consulta el WS del MEP y devuelve el primer registro del funcionario.
- * - Retorna null si el servicio responde vacio o no encuentra la cedula.
- * - Lanza excepcion si el transporte/SOAP falla (WS caido, sin extension, etc.).
- */
-function consultarFuncionarioWS(string $cedula): ?array {
-    if (!class_exists('SoapClient')) {
-        throw new RuntimeException('La extension SOAP de PHP no esta habilitada');
-    }
-
-    $client = new SoapClient(WS_CONSULTA_FUNCIONARIO, [
-        'connection_timeout' => 15,
-        'exceptions' => true,
-    ]);
-
-    $resWs = $client->ConsultaFuncionario(['str_identificacion' => $cedula]);
-    $datosWs = json_decode((string) ($resWs->ConsultaFuncionarioResult ?? ''), true);
-
-    if (!is_array($datosWs) || empty($datosWs)) {
-        return null;
-    }
-
-    $fWs = (isset($datosWs[0]) && is_array($datosWs[0])) ? $datosWs[0] : $datosWs;
-
-    return is_array($fWs) ? $fWs : null;
 }
 
 try {
@@ -86,10 +61,14 @@ try {
 
     // === 2. Consultar el WS del MEP una sola vez ===
     $cedulaWs = preg_replace('/\D/', '', $cedula);
+    $registrosWs = [];
+    $centrosWs = [];
     $ws = null;
     $wsError = '';
     try {
-        $ws = consultarFuncionarioWS($cedulaWs !== '' ? $cedulaWs : $cedula);
+        $registrosWs = consultarFuncionarioWS($cedulaWs !== '' ? $cedulaWs : $cedula);
+        $centrosWs = normalizarCentrosMep($registrosWs);
+        $ws = $registrosWs[0] ?? null;
     } catch (Throwable $e) {
         $wsError = $e->getMessage();
     }
@@ -238,44 +217,62 @@ try {
     }
 
     // === 3. Codigo presupuestario asociado al usuario ===
-    // 1) Asignaciones vigentes (usuarios_roles).
-    // 2) Respaldo historico por cedula (t_lista_blanca).
-    // 3) Datos del WS del MEP.
+    // 1) Centros del WS del MEP.
+    // 2) Si el WS falla o no devuelve centros: rol activo.
+    // 3) Si no hay rol: t_lista_blanca.
     // Si falla cualquier consulta, se responde igual sin el dato (no se rompe la busqueda).
     $usuario['codigo_presu'] = '';
-    try {
-        $sqlCode = "SELECT codigo_presu FROM usuarios_roles
-                    WHERE usuario_id = ? AND eliminado = 0 AND codigo_presu <> ''
-                    ORDER BY id DESC LIMIT 1";
-        $stmtCode = $conexionBD->prepare($sqlCode);
-        $stmtCode->execute([$usuario['id']]);
-        $codigoPresu = $stmtCode->fetchColumn();
-        if ($codigoPresu !== false && $codigoPresu !== null) {
-            $usuario['codigo_presu'] = trim((string) $codigoPresu);
-        }
+    $usuario['codigos_presu'] = [];
+    $usuario['requiere_seleccion'] = false;
+    $usuario['codigo_origen'] = 'ninguno';
+    $usuario['ws_disponible'] = $wsError === '';
+    $usuario['ws_sin_centros'] = $wsError === '' && empty($centrosWs);
 
-        if ($usuario['codigo_presu'] === '') {
-            $sqlLb = "SELECT codigo FROM t_lista_blanca
-                      WHERE cedula = ? AND codigo <> ''
-                      ORDER BY id_lista_blanca DESC LIMIT 1";
-            $stmtLb = $conexionBD->prepare($sqlLb);
-            $stmtLb->execute([$usuario['cedula']]);
-            $codigoLb = $stmtLb->fetchColumn();
-            if ($codigoLb !== false && $codigoLb !== null) {
-                $usuario['codigo_presu'] = trim((string) $codigoLb);
+    if (!empty($centrosWs)) {
+        $usuario['codigos_presu'] = $centrosWs;
+        $usuario['codigo_origen'] = 'ws';
+
+        if (count($centrosWs) === 1) {
+            $usuario['codigo_presu'] = $centrosWs[0]['codigo'];
+        } else {
+            // Con varios centros no se auto-selecciona ninguno: el
+            // administrador debe elegir el centro en el formulario.
+            $usuario['requiere_seleccion'] = true;
+        }
+    } else {
+        try {
+            $sqlCode = "SELECT codigo_presu FROM usuarios_roles
+                        WHERE usuario_id = ? AND eliminado = 0 AND codigo_presu <> ''
+                        ORDER BY id DESC LIMIT 1";
+            $stmtCode = $conexionBD->prepare($sqlCode);
+            $stmtCode->execute([$usuario['id']]);
+            $codigoPresu = $stmtCode->fetchColumn();
+            if ($codigoPresu !== false && $codigoPresu !== null) {
+                $usuario['codigo_presu'] = trim((string) $codigoPresu);
+                $usuario['codigo_origen'] = 'rol';
             }
-        }
-    } catch (Exception $e) {
-        // Se omite el codigo presupuestario; la busqueda del usuario no se afecta.
-    }
 
-    if ($usuario['codigo_presu'] === '' && $ws) {
-        $codigoWs = trim((string) ($ws['CentrosEducativosDondeTrabaja'] ?? ''));
-        if ($codigoWs === '') {
-            $codigoWs = trim((string) ($ws['Codigo_Presupuestario'] ?? ''));
+            if ($usuario['codigo_presu'] === '') {
+                $sqlLb = "SELECT codigo FROM t_lista_blanca
+                          WHERE cedula = ? AND codigo <> ''
+                          ORDER BY id_lista_blanca DESC LIMIT 1";
+                $stmtLb = $conexionBD->prepare($sqlLb);
+                $stmtLb->execute([$usuario['cedula']]);
+                $codigoLb = $stmtLb->fetchColumn();
+                if ($codigoLb !== false && $codigoLb !== null) {
+                    $usuario['codigo_presu'] = trim((string) $codigoLb);
+                    $usuario['codigo_origen'] = 'lista_blanca';
+                }
+            }
+        } catch (Exception $e) {
+            // Se omite el codigo presupuestario; la busqueda del usuario no se afecta.
         }
-        if ($codigoWs !== '') {
-            $usuario['codigo_presu'] = $codigoWs;
+
+        if ($usuario['codigo_presu'] !== '') {
+            $usuario['codigos_presu'] = [[
+                'codigo' => $usuario['codigo_presu'],
+                'dependencia' => '',
+            ]];
         }
     }
 

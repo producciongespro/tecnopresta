@@ -478,11 +478,15 @@ if ($sid) {
                             </select>
                         </div>
 
-                        <!-- Codigo presupuestario -->
+                        <!-- Centro educativo / Codigo presupuestario -->
                         <div class="mb-3" id="seccionCodigoPresu">
-                            <label class="form-label">C&oacute;digo Presupuestario</label>
+                            <label class="form-label">Centro educativo / C&oacute;digo Presupuestario</label>
+                            <select class="form-select" id="selectCodigoPresu" style="display:none;">
+                                <option value="">Seleccione el centro educativo...</option>
+                            </select>
                             <input type="text" class="form-control" id="inputCodigoPresu"
                                    placeholder="Ingrese el c&oacute;digo presupuestario..." value="">
+                            <div class="form-text" id="ayudaCodigoPresu"></div>
                         </div>
 
                         <!-- Seleccion de rol -->
@@ -626,6 +630,10 @@ if ($sid) {
     let modoModal = 'asignar'; // 'asignar' | 'editar'
     let usuarioRolEditando = null;
 
+    // Estado del codigo presupuestario en el modal.
+    let codigoPresuRequiereSeleccion = false;
+    let codigoPresuCargando = false;
+
     function getIconoRol(rol) {
         if (rol && rol.imagen && rol.imagen.trim() !== '') {
             const img = rol.imagen.trim();
@@ -645,6 +653,128 @@ if ($sid) {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
+    }
+
+    // ============================================================
+    // CODIGO PRESUPUESTARIO / CENTRO EDUCATIVO
+    // ============================================================
+
+    function resetCodigoPresu() {
+        codigoPresuRequiereSeleccion = false;
+
+        const input = document.getElementById('inputCodigoPresu');
+        const select = document.getElementById('selectCodigoPresu');
+        const ayuda = document.getElementById('ayudaCodigoPresu');
+
+        if (input) {
+            input.value = '';
+            input.readOnly = false;
+            input.style.display = '';
+        }
+        if (select) {
+            select.innerHTML = '<option value="">Seleccione el centro educativo...</option>';
+            select.value = '';
+            select.style.display = 'none';
+        }
+        if (ayuda) {
+            ayuda.textContent = '';
+        }
+    }
+
+    function renderCodigoPresu(usuario, codigoActual) {
+        resetCodigoPresu();
+
+        const input = document.getElementById('inputCodigoPresu');
+        const select = document.getElementById('selectCodigoPresu');
+        const ayuda = document.getElementById('ayudaCodigoPresu');
+        if (!input || !select || !ayuda) return;
+
+        const centros = (usuario && Array.isArray(usuario.codigos_presu))
+            ? usuario.codigos_presu.filter(function(c) { return c && c.codigo; })
+            : [];
+
+        const requiereSeleccion = !!(usuario && usuario.requiere_seleccion) && centros.length > 0;
+        codigoPresuRequiereSeleccion = requiereSeleccion;
+
+        if (requiereSeleccion) {
+            input.style.display = 'none';
+            input.value = '';
+            input.readOnly = false;
+
+            let html = '<option value="">Seleccione el centro educativo...</option>';
+            centros.forEach(function(c) {
+                const codigo = escapeHtml(c.codigo);
+                const dep = c.dependencia ? escapeHtml(c.dependencia) : '';
+                const label = dep !== '' ? codigo + ' \u2014 ' + dep : codigo;
+                html += '<option value="' + codigo + '">' + label + '</option>';
+            });
+            select.innerHTML = html;
+
+            const actual = String(codigoActual || '');
+            const existeActual = centros.some(function(c) {
+                return String(c.codigo) === actual;
+            });
+            select.value = existeActual ? actual : '';
+            select.style.display = '';
+            ayuda.textContent = 'Este funcionario labora en varios centros. Seleccione el centro para el rol.';
+            return;
+        }
+
+        select.style.display = 'none';
+        select.innerHTML = '<option value="">Seleccione el centro educativo...</option>';
+
+        const codigoWs = (usuario && usuario.codigo_presu) ? String(usuario.codigo_presu) : '';
+        const actual = String(codigoActual || '');
+        const origen = (usuario && usuario.codigo_origen) ? usuario.codigo_origen : 'ninguno';
+
+        input.style.display = '';
+        // Con un unico centro del WS, ese codigo manda. Si el WS no
+        // devolvio centros, en edicion se conserva el codigo del rol
+        // que se esta editando; en asignacion se usa el respaldo.
+        input.value = (origen === 'ws') ? (codigoWs || actual) : (actual || codigoWs);
+        input.readOnly = origen === 'ws' && codigoWs !== '';
+
+        if (origen === 'ws') {
+            ayuda.textContent = 'Centro detectado desde el servicio del MEP.';
+        } else if (usuario && usuario.ws_sin_centros) {
+            ayuda.textContent = 'El MEP no report\u00f3 centros educativos. Se mantiene el c\u00f3digo del rol o de la lista blanca; verifique el centro.';
+        } else if (origen === 'rol') {
+            ayuda.textContent = 'No se pudo consultar el MEP. C\u00f3digo tomado del rol actual; verifique el centro.';
+        } else if (origen === 'lista_blanca') {
+            ayuda.textContent = 'No se pudo consultar el MEP. C\u00f3digo tomado de la lista blanca; verifique el centro.';
+        } else if (usuario && usuario.ws_disponible === false) {
+            ayuda.textContent = 'No se pudo consultar el MEP. Ingrese el c\u00f3digo presupuestario manualmente.';
+        } else {
+            ayuda.textContent = '';
+        }
+    }
+
+    function obtenerCodigoPresuSeleccionado() {
+        const select = document.getElementById('selectCodigoPresu');
+        if (select && select.style.display !== 'none') {
+            return select.value.trim();
+        }
+        const input = document.getElementById('inputCodigoPresu');
+        return input ? input.value.trim() : '';
+    }
+
+    function validarCodigoPresuSeleccion() {
+        const codigo = obtenerCodigoPresuSeleccionado();
+
+        if (codigoPresuRequiereSeleccion && !codigo) {
+            mostrarError('Seleccione el centro educativo para continuar');
+            return null;
+        }
+        if (!codigo) {
+            mostrarError('Ingrese o seleccione el c\u00f3digo presupuestario');
+            return null;
+        }
+        if (!/^\d{3,4}$/.test(codigo)) {
+            mostrarError('El c\u00f3digo presupuestario debe tener 3 o 4 d\u00edgitos');
+            return null;
+        }
+
+        return codigo;
     }
 
     function mostrarModal(id) {
@@ -926,7 +1056,9 @@ if ($sid) {
         datos.subsistemas.forEach(function(s) {
             selectSub.innerHTML += '<option value="' + s.id + '">' + escapeHtml(s.nombre) + '</option>';
         });
-        document.getElementById('inputCodigoPresu').value = '';
+
+        codigoPresuCargando = false;
+        resetCodigoPresu();
 
         // Llenar roles (incluye Root)
         renderizarListaRoles();
@@ -945,16 +1077,18 @@ if ($sid) {
     // MODAL EDITAR ROL
     // ============================================================
 
-    function abrirModalEditar(usuarioRolId) {
+    async function abrirModalEditar(usuarioRolId) {
         modoModal = 'editar';
         rolSeleccionado = null;
         usuarioRolEditando = usuarioRolId;
+        codigoPresuCargando = true;
 
         // Buscar el detalle del rol
         const detalle = datos.detalle_roles.find(function(d) {
             return parseInt(d.usuario_rol_id) === parseInt(usuarioRolId);
         });
         if (!detalle) {
+            codigoPresuCargando = false;
             mostrarError('No se encontr\u00f3 el registro del rol');
             return;
         }
@@ -979,9 +1113,17 @@ if ($sid) {
             document.getElementById('correoUsuarioActual').textContent = usuario.correo;
         }
 
-        // Ocultar subsistema y codigo (no se modifican en edicion)
+        // En edicion se permite actualizar el codigo presupuestario.
+        // El subsistema no se modifica.
         document.getElementById('seccionSubsistema').style.display = 'none';
-        document.getElementById('seccionCodigoPresu').style.display = 'none';
+        document.getElementById('seccionCodigoPresu').style.display = '';
+        resetCodigoPresu();
+
+        const inputCodigo = document.getElementById('inputCodigoPresu');
+        const ayudaCodigo = document.getElementById('ayudaCodigoPresu');
+        inputCodigo.value = detalle.codigo_presu || '';
+        inputCodigo.readOnly = true;
+        ayudaCodigo.textContent = 'Consultando centros del MEP...';
 
         // Pre-seleccionar el rol actual
         renderizarListaRoles(detalle.rol_id);
@@ -1008,10 +1150,50 @@ if ($sid) {
             errorText.style.display = 'none';
         }
 
-        // Si el rol actual es Root, guardar queda deshabilitado hasta que el
-        // usuario escriba ROOT en el campo de confirmacion.
-        document.getElementById('btnGuardarAsignacion').disabled = esRootActual;
+        // Durante la consulta al MEP no se permite guardar.
+        document.getElementById('btnGuardarAsignacion').disabled = true;
         mostrarModal('modalAsignarRol');
+
+        if (!usuario || !usuario.cedula) {
+            codigoPresuCargando = false;
+            inputCodigo.readOnly = false;
+            ayudaCodigo.textContent = 'No se encontr\u00f3 la c\u00e9dula del usuario. Ingrese el c\u00f3digo manualmente.';
+            document.getElementById('btnGuardarAsignacion').disabled = esRootActual;
+            return;
+        }
+
+        try {
+            const resp = await fetch('sql/buscar_usuario_cedula_n.php?cedula=' + encodeURIComponent(usuario.cedula));
+            const data = await resp.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'No se pudo consultar el usuario');
+            }
+
+            // Evitar que una respuesta tardia pise otro modal abierto.
+            if (modoModal !== 'editar' || parseInt(usuarioRolEditando) !== parseInt(usuarioRolId)) {
+                return;
+            }
+
+            renderCodigoPresu(data.usuario, detalle.codigo_presu);
+        } catch (e) {
+            if (modoModal !== 'editar' || parseInt(usuarioRolEditando) !== parseInt(usuarioRolId)) {
+                return;
+            }
+
+            inputCodigo.style.display = '';
+            inputCodigo.value = detalle.codigo_presu || '';
+            inputCodigo.readOnly = false;
+            document.getElementById('selectCodigoPresu').style.display = 'none';
+            ayudaCodigo.textContent = 'No se pudo consultar el MEP. Se mantiene el c\u00f3digo actual; puede editarlo.';
+            codigoPresuRequiereSeleccion = false;
+        } finally {
+            if (modoModal === 'editar' && parseInt(usuarioRolEditando) === parseInt(usuarioRolId)) {
+                codigoPresuCargando = false;
+                const rootConfirmado = !esRootActual || inputConfirm.value === 'ROOT';
+                document.getElementById('btnGuardarAsignacion').disabled = !rootConfirmado;
+            }
+        }
     }
 
     // ============================================================
@@ -1073,7 +1255,7 @@ if ($sid) {
             confirmGroup.classList.remove('visible');
             inputConfirm.value = '';
             errorText.style.display = 'none';
-            document.getElementById('btnGuardarAsignacion').disabled = false;
+            document.getElementById('btnGuardarAsignacion').disabled = codigoPresuCargando;
         }
     }
 
@@ -1084,7 +1266,7 @@ if ($sid) {
 
         if (input.value === 'ROOT') {
             errorText.style.display = 'none';
-            btn.disabled = false;
+            btn.disabled = codigoPresuCargando;
         } else {
             errorText.style.display = '';
             btn.disabled = true;
@@ -1111,6 +1293,7 @@ if ($sid) {
                 document.getElementById('resultadoBusqueda').style.display = 'none';
                 document.getElementById('avisoUsuarioCreado').style.display = 'none';
                 document.getElementById('usuarioIdBuscado').value = '';
+                resetCodigoPresu();
                 return;
             }
 
@@ -1123,13 +1306,11 @@ if ($sid) {
             document.getElementById('resultadoBusqueda').style.display = '';
             document.getElementById('avisoUsuarioCreado').style.display = data.creado ? '' : 'none';
 
-            // Cargar codigo presupuestario asociado al usuario encontrado
-            const inputCodigo = document.getElementById('inputCodigoPresu');
-            if (inputCodigo && document.getElementById('seccionCodigoPresu').style.display !== 'none') {
-                inputCodigo.value = u.codigo_presu || '';
-            }
+            // Cargar centro/codigo presupuestario asociado al usuario encontrado.
+            renderCodigoPresu(u, null);
 
         } catch (e) {
+            resetCodigoPresu();
             mostrarError('Error al buscar usuario: ' + e.message);
         }
     }
@@ -1139,8 +1320,18 @@ if ($sid) {
     // ============================================================
 
     async function guardarAsignacion() {
+        if (codigoPresuCargando) {
+            mostrarError('Espere mientras se consultan los centros del MEP');
+            return;
+        }
+
         if (!rolSeleccionado) {
             mostrarError('Seleccione un rol');
+            return;
+        }
+
+        // Validar centro/codigo antes de confirmar o guardar.
+        if (!validarCodigoPresuSeleccion()) {
             return;
         }
 
@@ -1167,12 +1358,16 @@ if ($sid) {
     }
 
     async function ejecutarGuardado() {
+        if (codigoPresuCargando) {
+            mostrarError('Espere mientras se consultan los centros del MEP');
+            return;
+        }
 
         if (modoModal === 'asignar') {
             // Asignar nuevo rol
             const usuarioId = document.getElementById('usuarioIdBuscado').value;
             const subsistemaId = document.getElementById('selectSubsistema').value;
-            const codigoPresu = document.getElementById('inputCodigoPresu').value.trim();
+            const codigoPresu = validarCodigoPresuSeleccion();
 
             if (!usuarioId) {
                 mostrarError('Busque y seleccione un usuario primero');
@@ -1180,6 +1375,9 @@ if ($sid) {
             }
             if (!subsistemaId) {
                 mostrarError('Seleccione un subsistema');
+                return;
+            }
+            if (!codigoPresu) {
                 return;
             }
 
@@ -1199,7 +1397,7 @@ if ($sid) {
 
                 if (data.success) {
                     ocultarModal('modalAsignarRol');
-                    mostrarExito(data.message);
+                    mostrarExito(data.warning ? data.message + ' ' + data.warning : data.message);
                     await cargarDatos();
                 } else {
                     mostrarError(data.message);
@@ -1209,8 +1407,13 @@ if ($sid) {
             }
 
         } else if (modoModal === 'editar') {
-            // Editar rol existente
+            // Editar rol existente y actualizar su codigo presupuestario
             if (!usuarioRolEditando) return;
+
+            const codigoPresu = validarCodigoPresuSeleccion();
+            if (!codigoPresu) {
+                return;
+            }
 
             try {
                 const resp = await fetch('actualizar_gestor_usuarios_n.php', {
@@ -1219,14 +1422,15 @@ if ($sid) {
                     body: JSON.stringify({
                         accion: 'editar',
                         usuario_rol_id: parseInt(usuarioRolEditando),
-                        nuevo_rol_id: rolSeleccionado
+                        nuevo_rol_id: rolSeleccionado,
+                        codigo_presu: codigoPresu
                     })
                 });
                 const data = await resp.json();
 
                 if (data.success) {
                     ocultarModal('modalAsignarRol');
-                    mostrarExito(data.message);
+                    mostrarExito(data.warning ? data.message + ' ' + data.warning : data.message);
                     await cargarDatos();
                 } else {
                     mostrarError(data.message);
@@ -1269,6 +1473,7 @@ if ($sid) {
                     return parseInt(s.id) === parseInt(r.subsistema_id);
                 });
                 const subNombre = sub ? sub.nombre : 'Subsistema ' + r.subsistema_id;
+                const codigoRol = r.codigo_presu ? ' \u00b7 C\u00f3digo ' + escapeHtml(r.codigo_presu) : '';
 
                 html += '<div class="d-flex align-items-center justify-content-between p-3 bg-light rounded mb-2">';
                 html += '<div class="d-flex align-items-center gap-3">';
@@ -1276,7 +1481,7 @@ if ($sid) {
                 html += '<i class="bi ' + icono + '"></i></div>';
                 html += '<div>';
                 html += '<div class="fw-bold" style="font-size:0.9rem;">' + escapeHtml(r.rol) + '</div>';
-                html += '<small class="text-muted">' + escapeHtml(subNombre) + '</small>';
+                html += '<small class="text-muted">' + escapeHtml(subNombre) + codigoRol + '</small>';
                 html += '</div></div>';
                 html += '<div class="d-flex align-items-center gap-2">';
                 html += '<button class="accion-btn editar" title="Editar rol" onclick="ocultarModal(\'modalDetalleRoles\'); abrirModalEditar(' + r.usuario_rol_id + ');">';

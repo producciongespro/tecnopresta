@@ -369,7 +369,7 @@ $logcodigo = $_SESSION['codigo'];
         '</div>';
 
         var lastTd = tr.cells[tr.cells.length - 1];
-        lastTd.innerHTML = '<span class="badge-marcado"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pendiente</span>';
+        lastTd.insertAdjacentHTML('beforeend', '<span class="badge-marcado"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pendiente</span>');
     }
 
     function revertirMarcado(id, btn) {

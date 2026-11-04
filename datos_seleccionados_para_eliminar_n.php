@@ -87,6 +87,7 @@ if (isset($_POST['fondos'])) {
         while ($activos = mysqli_fetch_array($consulta)) {
             $es_marcado = $activos['marcado'] == 1;
             $es_prestado = (int) $activos['prestado'] === 1;
+            $es_desactivado = (int) $activos['activo'] === 0;
             $row_class = $es_marcado ? 'table-marcado' : '';
             $row_prestado = $es_prestado ? ' data-prestado="1"' : '';
 
@@ -112,6 +113,9 @@ if (isset($_POST['fondos'])) {
                 <td class="td-placa">' . $activos['placa'] . '</td>
                 <td class="td-serial"><span class="activos-serial">' . $activos['serial'] . '</span></td>
                 <td class="td-estado">';
+            if ($es_desactivado) {
+                echo '<span class="badge bg-secondary me-1" title="Activo desactivado o retirado"><i class="bi bi-slash-circle me-1"></i>Desactivado</span>';
+            }
             if ($es_prestado) {
                 echo '<span class="badge bg-info text-dark me-1" title="Activo con préstamo activo"><i class="bi bi-person-lock me-1"></i>Prestado</span>';
             }

@@ -39,32 +39,46 @@
 <!-- this.fotoPerfil = await window.obtenerFotoPerfil(); -->
 <!-- ================== HEADER ================== -->
 <div class="mep-header">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- ================== LOGO ================== -->
-            <div class="col-md-8">
-                <div class="mep-logo">
+    <div class="container-fluid px-3 px-lg-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <!-- ================== IDENTIDAD INSTITUCIONAL ================== -->
+            <div class="mep-identity-container d-flex align-items-center">
+                <!-- Bloque 1: Logo a la izquierda con recuadro blanco + Ministerio a la derecha alineados -->
+                <div class="mep-inst-item mep-block-main d-flex flex-row align-items-center">
                     <div class="mep-logo-box">
-                        <img src="assets/img/logo-mep.svg" 
+                        <img src="assets/img/NE_CR_CC.svg" 
                             alt="Logo del Ministerio de Educación Pública" 
                             class="mep-logo-icon" />
                     </div>
-                    <!-- Texto institucional -->
-                    <div class="ms-3">
-                        <div>MINISTERIO DE EDUCACI&Oacute;N P&Uacute;BLICA</div>
-                        <div class="gov-text">GOBIERNO DE COSTA RICA</div>
-                        <div class="gov-text" style="font-size: small;">DIRECCI&Oacute;N DE RECURSOS TECNOL&Oacute;GICOS EN EDUCACI&Oacute;N</div>
-                        <!-- <div class="unit-text">TecnoPresta -->
-                        <div class="gov-text" style="font-size: medium;">
-                            <span style="color: #fff" font-size="2.25rem">Tecno<span style="color: var(--mep-gold)">Presta</span></span>
-                        </div>
-                        
+                    <div class="mep-inst-text mep-text-collapsible ms-2">
+                        <span class="mep-inst-title">MINISTERIO DE EDUCACI&Oacute;N P&Uacute;BLICA</span>
+                        <span class="mep-inst-sub">GOBIERNO DE COSTA RICA</span>
+                        <span class="mep-inst-sub">Dirección de Recursos Tecnológicos en Educación</span>
                     </div>
+                </div>
+
+                <!-- Bloque 2: Dirección de Recursos Tecnológicos en Educación 
+                <div class="mep-inst-item mep-text-collapsible mep-divider-left">
+                    <span class="mep-inst-title">DIRECCI&Oacute;N</span>
+                    <span class="mep-inst-sub">DE RECURSOS TECNOL&Oacute;GICOS</span>
+                    <span class="mep-inst-sub">EN EDUCACI&Oacute;N</span>
+                </div> -->
+
+                <!-- Bloque 3: Departamento de Investigación, Desarrollo e Implementación 
+                <div class="mep-inst-item mep-text-collapsible mep-divider-left">
+                    <span class="mep-inst-title">DEPARTAMENTO</span>
+                    <span class="mep-inst-sub">DE INVESTIGACI&Oacute;N, DESARROLLO</span>
+                    <span class="mep-inst-sub">E IMPLEMENTACI&Oacute;N</span>
+                </div> -->
+
+                <!-- Bloque 4: Tecno en Blanco + Presta en Dorado -->
+                <div class="mep-inst-item mep-brand-item mep-divider-left">
+                    <span class="mep-brand-tecnopresta">Tecno<span class="mep-brand-gold">Presta</span></span>
                 </div>
             </div>
 
-            <!-- ================== USUARIO ================== -->
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <!-- ================== USUARIO / LOGIN ================== -->
+            <div class="mep-user-container text-end">
                 <!-- DROPDOWN -->
                 <div class="dropdown position-relative">
                     <!-- BOTÓN DROPDOWN -->
@@ -75,8 +89,8 @@
                         aria-expanded="false"
                         style="text-decoration: none;"
                     >                        
-                        <!-- Nombre -->
-                        <span class="me-2 text-white-50">
+                        <!-- Nombre (Oculto en móviles para mantener login compacto) -->
+                        <span class="me-2 text-white-50 text-end d-none d-md-inline-block">
                             <?= htmlspecialchars($nombreCompleto) ?>
                             <?php if ($rolNombre): ?>
                                 <br><small class="opacity-75"><?= htmlspecialchars($rolNombre) ?></small>
@@ -87,7 +101,8 @@
                             id="fotoUsuarioHeader"
                             src="<?= htmlspecialchars($fotoPerfil) ?>" 
                             class="rounded-circle"
-                            width="60"
+                            width="48"
+                            height="48"
                             alt="Foto del usuario"
                             style="object-fit: cover; border: 2px solid #fff;"
                         >
@@ -95,47 +110,42 @@
                     </a>
                     <!-- Dropdown MENU -->
                     <div class="dropdown-menu dropdown-menu-end user-dropdown shadow animate">                    
-                    <!-- Informamación superior -->                             
-                            <div class="dropdown-user-info d-flex align-items-center px-3 py-2">
-                            <!-- <div class="d-flex align-items-center px-3 py-2"> -->
-                                <!-- FOTO PEQUEÑA DEL DROPDOWN -->
-                                <img 
-                                    id="fotoUsuarioMini"
-                                    src="<?= htmlspecialchars($fotoPerfil) ?>"
-                                    class="user-mini-avatar"
-                                    alt="Foto mini usuario"
-                                >
-                                <div>
-                                    <div class="user-name">
-                                    <!-- <div class="fw-bold"> -->
-                                        <?= htmlspecialchars($nombreCompleto) ?>
-                                    </div>
-                                    <?php if ($rolNombre): ?>
-                                        <small class="text-muted fw-semibold">
-                                            <i class="bi bi-shield-check me-1"></i><?= htmlspecialchars($rolNombre) ?>
-                                        </small><br>
-                                    <?php endif; ?>
-                                    <small class="text-muted">
-                                        <?= htmlspecialchars($dependencia) ?>
-                                    </small>
+                        <!-- Información superior -->                             
+                        <div class="dropdown-user-info d-flex align-items-center px-3 py-2">
+                            <!-- FOTO PEQUEÑA DEL DROPDOWN -->
+                            <img 
+                                id="fotoUsuarioMini"
+                                src="<?= htmlspecialchars($fotoPerfil) ?>"
+                                class="user-mini-avatar"
+                                alt="Foto mini usuario"
+                            >
+                            <div>
+                                <div class="user-name">
+                                    <?= htmlspecialchars($nombreCompleto) ?>
                                 </div>
+                                <?php if ($rolNombre): ?>
+                                    <small class="text-muted fw-semibold">
+                                        <i class="bi bi-shield-check me-1"></i><?= htmlspecialchars($rolNombre) ?>
+                                    </small><br>
+                                <?php endif; ?>
+                                <small class="text-muted">
+                                    <?= htmlspecialchars($dependencia) ?>
+                                </small>
                             </div>
-                            <div class="dropdown-divider"></div>
-                            <!-- Perfil -->
-                            <a class="dropdown-item user-item" href="portal_perfil_n.php">
-                                <!-- <i class="bi bi-person-circle"></i> -->
-                                <i class="bi bi-person-circle me-2"></i>
-                                <span>Mi Perfil</span>
-                             </a>
-
-                            <a class="dropdown-item user-item logout-item" href="gameover.php">                            
-                                <!-- <i class="bi bi-box-arrow-right"></i> -->
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                <span>Cerrar Sesión</span>
-                             </a>
-
                         </div>
+                        <div class="dropdown-divider"></div>
+                        <!-- Perfil -->
+                        <a class="dropdown-item user-item" href="portal_perfil_n.php">
+                            <i class="bi bi-person-circle me-2"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+
+                        <a class="dropdown-item user-item logout-item" href="gameover.php">                            
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            <span>Cerrar Sesión</span>
+                        </a>
                     </div>
+                </div>
             </div>
         </div>
     </div>

@@ -155,7 +155,7 @@ $json_data = [
     'fecha' => $fecha_iso
 ];
 
-$json_compacto = json_encode($json_data);
+$json_compacto = json_encode($json_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
     http_response_code(500);
@@ -214,6 +214,46 @@ try {
     $pdf->SetFont('helvetica', '', 11);
     
     // ======================================================
+    // CONSULTAR DESCRIPCIÓN (CLASE, MARCA Y MODELO NUEVO/ANTIGUO) PARA VISUALIZACIÓN EN PDF
+    // (No altera el JSON canónico ni el attachment de auditoría)
+    // ======================================================
+    $descripcionesPorPlaca = [];
+    $sqlDesc = "
+        SELECT 
+            p.placa,
+            ag.clase,
+            ma.marca,
+            CASE 
+                WHEN a.modelo_id IS NOT NULL AND a.modelo_id > 0 AND m.modelo IS NOT NULL AND TRIM(m.modelo) <> '' 
+                    THEN TRIM(m.modelo)
+                WHEN a.modelo IS NOT NULL AND TRIM(a.modelo) <> '' 
+                    THEN TRIM(a.modelo)
+                ELSE 'Sin modelo'
+            END AS modelo_resuelto
+        FROM t_placa p
+        LEFT JOIN t_activo a ON p.id_activo = a.id_activo
+        LEFT JOIN t_activo_general ag ON a.id_ag = ag.id_ag
+        LEFT JOIN t_marca ma ON a.id_marca = ma.id_marca
+        LEFT JOIN t_modelos m ON a.modelo_id = m.id_modelo
+        WHERE p.id_fondos = ? AND p.codigo = ?
+    ";
+    $stmtDesc = $link->prepare($sqlDesc);
+    if ($stmtDesc) {
+        $stmtDesc->bind_param("is", $id_fondos, $codigo_centro);
+        $stmtDesc->execute();
+        $resDesc = $stmtDesc->get_result();
+        while ($rowD = $resDesc->fetch_assoc()) {
+            $partesDesc = array_filter([
+                trim((string)($rowD['clase'] ?? '')),
+                trim((string)($rowD['marca'] ?? '')),
+                trim((string)($rowD['modelo_resuelto'] ?? ''))
+            ], function($v) { return $v !== ''; });
+            $descripcionesPorPlaca[$rowD['placa']] = implode(' - ', $partesDesc);
+        }
+        $stmtDesc->close();
+    }
+
+    // ======================================================
     // CONTENIDO VISIBLE DEL PDF
     // ======================================================
     
@@ -231,21 +271,25 @@ try {
     <h3>ACTIVOS CERTIFICADOS</h3>
     <table border="1" cellpadding="4">
         <tr style="font-weight:bold;background-color:#dddddd;">
-            <td width="8%">#</td>
-            <td width="18%">Placa</td>
-            <td width="22%">Serial</td>
-            <td width="15%">Estado</td>
-            <td width="20%">Ubicación</td>
-            <td width="17%">Observación</td>
+            <td width="6%">#</td>
+            <td width="14%">Placa</td>
+            <td width="16%">Serial</td>
+            <td width="24%">Descripción / Modelo</td>
+            <td width="12%">Estado</td>
+            <td width="14%">Ubicación</td>
+            <td width="14%">Observación</td>
         </tr>';
     
     foreach ($activos as $i => $a) {
+        $placaItem = $a['placa'] ?? '';
+        $descTexto = $descripcionesPorPlaca[$placaItem] ?? '-';
         $html .= '<tr>
             <td>' . ($i + 1) . '</td>
-            <td>' . htmlspecialchars($a['placa']) . '</td>
-            <td>' . htmlspecialchars($a['serial']) . '</td>
-            <td>' . htmlspecialchars($a['estado']) . '</td>
-            <td>' . htmlspecialchars($a['ubicacion']) . '</td>
+            <td>' . htmlspecialchars($placaItem) . '</td>
+            <td>' . htmlspecialchars($a['serial'] ?? '') . '</td>
+            <td>' . htmlspecialchars($descTexto) . '</td>
+            <td>' . htmlspecialchars($a['estado'] ?? '') . '</td>
+            <td>' . htmlspecialchars($a['ubicacion'] ?? '') . '</td>
             <td>' . htmlspecialchars($a['observacion'] ?? '') . '</td>
         </tr>';
     }
@@ -271,6 +315,14 @@ try {
     if ($temp_json !== false) {
         file_put_contents($temp_json, $json_compacto);
         
+        // IMPORTANTE: TCPDF lee el archivo adjunto recién al ejecutar $pdf->Output()
+        // por lo que debe eliminarse al finalizar el script, NO antes de Output().
+        register_shutdown_function(function () use ($temp_json) {
+            if (file_exists($temp_json)) {
+                @unlink($temp_json);
+            }
+        });
+        
         if (file_exists($temp_json) && filesize($temp_json) > 0) {
             // Usar Annotation para FileAttachment
             // Esto funciona en TCPDF 6.x y versiones anteriores
@@ -284,7 +336,6 @@ try {
                 ]
             );
         }
-        @unlink($temp_json);
     }
     
     // ======================================================

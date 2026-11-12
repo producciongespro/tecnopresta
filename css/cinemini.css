@@ -1,0 +1,335 @@
+/* ==========================================================
+   Cine-Mini: Estilos y Animaciones CSS Ken Burns
+   Plataforma TecnoPresta
+   ========================================================== */
+
+/* Contenedor Flotante / Modal Cine-Mini */
+.cinemini-overlay {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 440px;
+    max-width: calc(100vw - 40px);
+    z-index: 1050;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #1a1a24;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.96);
+}
+
+.cinemini-overlay.cinemini-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Modo pantalla completa o centrado opcional */
+.cinemini-overlay.cinemini-centered {
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translate(-50%, -50%) scale(0.96);
+    width: 580px;
+}
+.cinemini-overlay.cinemini-centered.cinemini-visible {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Barra superior / Header */
+.cinemini-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(20,20,30,0.85) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    user-select: none;
+}
+
+.cinemini-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: linear-gradient(135deg, #e50914, #b20710);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.cinemini-tag::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #fff;
+    animation: cinemini-pulse 1.5s infinite;
+}
+
+@keyframes cinemini-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.cinemini-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+    flex-grow: 1;
+}
+
+.cinemini-close-btn {
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.2s, transform 0.2s;
+    outline: none;
+}
+
+.cinemini-close-btn:hover {
+    color: #ff4d4f;
+    transform: scale(1.15);
+}
+
+/* Visor Cinemático (Viewport) */
+.cinemini-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #0b0c10;
+    overflow: hidden;
+}
+
+/* Cada Diapositiva */
+.cinemini-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+    display: flex;
+    align-items: flex-end;
+}
+
+.cinemini-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+/* Imagen con efecto Ken Burns */
+.cinemini-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+}
+
+/* Variaciones de Ken Burns para dar dinamismo a la secuencia */
+.cinemini-slide.active .cinemini-img.kb-1 {
+    animation: kenburns-zoom-in 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+}
+.cinemini-slide.active .cinemini-img.kb-2 {
+    animation: kenburns-pan-right 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+}
+.cinemini-slide.active .cinemini-img.kb-3 {
+    animation: kenburns-pan-left 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+}
+.cinemini-slide.active .cinemini-img.kb-4 {
+    animation: kenburns-zoom-out 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+}
+.cinemini-slide.active .cinemini-img.kb-5 {
+    animation: kenburns-tilt-up 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+}
+
+@keyframes kenburns-zoom-in {
+    0% { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.12) translate(-1.5%, -1.5%); }
+}
+
+@keyframes kenburns-pan-right {
+    0% { transform: scale(1.1) translate(-3%, 0); }
+    100% { transform: scale(1.1) translate(3%, -1%); }
+}
+
+@keyframes kenburns-pan-left {
+    0% { transform: scale(1.08) translate(3%, 0); }
+    100% { transform: scale(1.12) translate(-3%, 1%); }
+}
+
+@keyframes kenburns-zoom-out {
+    0% { transform: scale(1.14) translate(1%, 2%); }
+    100% { transform: scale(1.0) translate(0, 0); }
+}
+
+@keyframes kenburns-tilt-up {
+    0% { transform: scale(1.05) translate(0, 2%); }
+    100% { transform: scale(1.13) translate(-1%, -2%); }
+}
+
+/* Gradiente de fondo para textos */
+.cinemini-caption {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 24px 16px 12px 16px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0,0,0,0.95) 100%);
+    color: #ffffff;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: transform 0.5s ease 0.3s, opacity 0.5s ease 0.3s;
+}
+
+.cinemini-slide.active .cinemini-caption {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cinemini-caption h5 {
+    margin: 0 0 4px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #48bb78; /* verde acento */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.cinemini-caption p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #cbd5e0;
+    line-height: 1.35;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Indicadores de progreso (barras/dots) */
+.cinemini-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background-color: #12131a;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cinemini-indicators {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.cinemini-dot {
+    width: 22px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cinemini-dot.active {
+    background-color: #3182ce;
+}
+
+.cinemini-dot-fill {
+    height: 100%;
+    width: 0%;
+    background-color: #63b3ed;
+}
+
+.cinemini-dot.active .cinemini-dot-fill {
+    width: 100%;
+    transition: width linear;
+}
+
+.cinemini-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cinemini-btn-icon {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    transition: color 0.2s;
+}
+
+.cinemini-btn-icon:hover {
+    color: #ffffff;
+}
+
+/* Botón flotante para reabrir si fue cerrado */
+.cinemini-reopen-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1060;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    color: #ffffff;
+    border: 1px solid #374151;
+    border-radius: 50px;
+    padding: 8px 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.cinemini-reopen-btn:hover,
+.cinemini-reopen-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #374151, #1f2937);
+    color: #6ee7b7;
+}
+
+@media (max-width: 576px) {
+    .cinemini-overlay {
+        bottom: 15px;
+        right: 15px;
+        left: 15px;
+        width: auto;
+    }
+
+    .cinemini-reopen-btn {
+        bottom: 16px;
+        right: 16px;
+        padding: 10px 18px;
+        font-size: 0.85rem;
+    }
+}

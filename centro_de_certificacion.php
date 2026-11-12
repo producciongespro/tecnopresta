@@ -19,10 +19,10 @@ if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
- if (!defined('ACCESO_SEGURO')) {
-     http_response_code(403);
-     exit('Acceso directo no permitido');
- }
+if (!defined('ACCESO_SEGURO')) {
+    http_response_code(403);
+    exit('Acceso directo no permitido');
+}
 
 require_once("conexion.php");
 $link = $mysqli;
@@ -60,7 +60,10 @@ $fecha = date("d-m-Y", $time);
     <!-- Bootstrap CSS -->
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
+        <!-- Estilos del menu principal y tablas MEP -->
+    <link rel="stylesheet" href="css/formulario_menu_principal.css?v=7">
+
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2">
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
 
     <title>Certificación de Inventario</title>
@@ -97,68 +100,106 @@ $fecha = date("d-m-Y", $time);
             font-family: 'Henderson Sans', sans-serif;
         }
         
+        /* ============================================
+           BOTÓN FLOTANTE REGRESAR
+           ============================================ */
         .btn-flotante-regresar {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
+            background: #1e2851ff;
+            color: #fff;
+            border: 2px solid #c8ae64ff;
+            box-shadow: 0 4px 15px rgba(30, 40, 81, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
         
         .btn-flotante-regresar:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            color: white;
+            background: #c8ae64ff;
+            border-color: #1e2851ff;
+            color: #fff;
+            box-shadow: 0 6px 25px rgba(30, 40, 81, 0.5);
         }
         
-        .btn-flotante-regresar i {
-            font-size: 32px;
+        .btn-flotante-regresar:active {
+            transform: scale(0.95);
         }
         
-        .btn-flotante-regresar::before {
-            content: "Volver al menú principal";
-            position: absolute;
-            right: 70px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
+        .btn-flotante-regresar i { 
+            font-size: 30px;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        /* ============================================
+           BOTÓN FLOTANTE ADMINISTRATIVO
+           ============================================ */
+        .btn-flotante-administrativo {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #1e2851ff;
+            color: #fff;
+            border: 2px solid #c8ae64ff;
+            box-shadow: 0 4px 15px rgba(30, 40, 81, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
             transition: all 0.3s ease;
+            z-index: 1000;
         }
         
-        .btn-flotante-regresar:hover::before {
-            opacity: 1;
-            visibility: visible;
+        .btn-flotante-administrativo:hover {
+            transform: scale(1.1);
+            background: #c8ae64ff;
+            border-color: #1e2851ff;
+            color: #fff;
+            box-shadow: 0 6px 25px rgba(30, 40, 81, 0.5);
         }
         
+        .btn-flotante-administrativo:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-flotante-administrativo i {
+            font-size: 30px;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 768px) {
+            .btn-flotante-regresar,
+            .btn-flotante-administrativo {
+                width: 48px;
+                height: 48px;
+            }
+            .btn-flotante-regresar i,
+            .btn-flotante-administrativo i {
+                font-size: 24px;
+            }
             .btn-flotante-regresar {
                 bottom: 20px;
                 right: 20px;
-                width: 50px;
-                height: 50px;
             }
-            .btn-flotante-regresar i {
-                font-size: 26px;
-            }
-            .btn-flotante-regresar::before {
-                display: none;
+            .btn-flotante-administrativo {
+                bottom: 80px;
+                right: 20px;
             }
         }
         
@@ -176,82 +217,20 @@ $fecha = date("d-m-Y", $time);
                 transform: translateY(0);
             }
         }
-        .btn-flotante-administrativo {
-            position: fixed;
-            bottom: 100px;  /* ARRIBA del otro (que está en 30px) */
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-        
-        .btn-flotante-administrativo:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            color: white;
-        }
-        
-        .btn-flotante-administrativo i {
-            font-size: 32px;
-        }
-        
-        .btn-flotante-administrativo::before {
-            content: "Administrar certificaciones";
-            position: absolute;
-            right: 70px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-flotante-administrativo:hover::before {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        @media (max-width: 768px) {
-            .btn-flotante-administrativo {
-                bottom: 90px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-            }
-            .btn-flotante-administrativo i {
-                font-size: 26px;
-            }
-            .btn-flotante-administrativo::before {
-                display: none;
-            }
-        }
     </style>
 </head>
-<body>
+<body class="layout-page">
 <?php include 'partials/header.php'; ?>
 
+<main class="contenido-principal">
 <div class="container mb-5">
     
-    <!-- NUEVO BOTÓN ADMINISTRATIVO - ARRIBA DEL FLOTANTE -->
+    <!-- BOTÓN ADMINISTRATIVO - ARRIBA DEL FLOTANTE -->
     <a href="navegar.php?ruta=administrativo_certificaciones.php" class="btn-flotante-administrativo" id="btnAdministrativo" title="Administrar certificaciones">
         <i class="bi bi-list-ul"></i>
     </a>
     
+    <!-- BOTÓN REGRESAR -->
     <a href="navegar.php?ruta=formulario_sub_modulos.php&subsistema_id=1&modulo_id=4" class="btn-flotante-regresar" id="btnRegresar" title="Volver al menú principal">
         <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
@@ -324,7 +303,7 @@ $fecha = date("d-m-Y", $time);
         </div>
     </div>
 </div>
-
+</main>
 <?php include 'partials/footer.php'; ?>
 </body>
 </html>

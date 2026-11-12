@@ -44,6 +44,7 @@ if (!mysqli_set_charset($link, "utf8")) {
 }
 
 date_default_timezone_set('America/Costa_Rica');
+
 /** $logusuario     = $_SESSION['cedula'];
 $lognombre      = $_SESSION['nombre'];
 $logtipo        = $_SESSION['tipo'];
@@ -73,8 +74,8 @@ $stmt_fondo->execute();
 $fondo = $stmt_fondo->get_result()->fetch_assoc();
 $stmt_fondo->close();
 
-// Activos
-$consultaSQL = "SELECT 
+// Activos (soporta tanto estructura antigua en t_activo.modelo como nueva en t_modelos.modelo)
+$consultaSQL = "SELECT DISTINCT
                     t_placa.id_placa,
                     t_placa.placa, 
                     t_placa.serial, 
@@ -82,16 +83,25 @@ $consultaSQL = "SELECT
                     t_estado.estado AS estado_texto,
                     t_marca.marca, 
                     t_activo_general.clase,
-                    t_activo.modelo,
+                    t_activo.modelo AS modelo_viejo,
+                    t_activo.modelo_id,
+                    t_modelos.modelo AS modelo_nuevo,
+                    CASE 
+                        WHEN t_activo.modelo_id IS NOT NULL AND t_activo.modelo_id > 0 AND t_modelos.modelo IS NOT NULL AND TRIM(t_modelos.modelo) <> '' 
+                            THEN TRIM(t_modelos.modelo)
+                        WHEN t_activo.modelo IS NOT NULL AND TRIM(t_activo.modelo) <> '' 
+                            THEN TRIM(t_activo.modelo)
+                        ELSE 'Sin modelo'
+                    END AS modelo,
                     t_lugar.lugar
                 FROM t_activo 
                 INNER JOIN t_activo_general ON t_activo_general.id_ag = t_activo.id_ag 
-                INNER JOIN t_marca         ON t_activo.id_marca = t_marca.id_marca 
-                INNER JOIN t_placa         ON t_placa.id_activo = t_activo.id_activo 
-                INNER JOIN t_lugar         ON t_placa.id_lugar = t_lugar.id_lugar 
-                INNER JOIN t_estado        ON t_placa.id_estado = t_estado.id_estado 
-                INNER JOIN t_fondos        ON t_placa.id_fondos = t_fondos.id_fondos 
-                INNER JOIN t_instituciones ON t_instituciones.codigo = t_placa.codigo 
+                INNER JOIN t_marca          ON t_activo.id_marca = t_marca.id_marca 
+                LEFT JOIN  t_modelos        ON t_activo.modelo_id = t_modelos.id_modelo
+                INNER JOIN t_placa          ON t_placa.id_activo = t_activo.id_activo 
+                INNER JOIN t_lugar          ON t_placa.id_lugar = t_lugar.id_lugar 
+                INNER JOIN t_estado         ON t_placa.id_estado = t_estado.id_estado 
+                INNER JOIN t_fondos         ON t_placa.id_fondos = t_fondos.id_fondos 
                 WHERE t_placa.id_fondos = ? AND t_placa.codigo = ? 
                 ORDER BY t_placa.placa ASC";
 
@@ -158,20 +168,44 @@ $total_desaparecidos = count($activos_desaparecidos);
     <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_3">
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
     <title>Certificación de Inventario — <?php echo htmlspecialchars($institucion['institucion']); ?></title>
     <style>
         body { font-family: 'Henderson Sans', sans-serif; background-color: #f5f5f5; }
         .btn-flotante-regresar {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            cursor: pointer; z-index: 1000; transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center; text-decoration: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #1e2851ff;
+            color: #fff;
+            border: 2px solid #c8ae64ff;
+            box-shadow: 0 4px 15px rgba(30, 40, 81, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
-        .btn-flotante-regresar:hover { transform: scale(1.1); color: white; }
-        .btn-flotante-regresar i { font-size: 32px; }
+        .btn-flotante-regresar:hover {
+            transform: scale(1.1);
+            background: #c8ae64ff;
+            border-color: #1e2851ff;
+            color: #fff;
+            box-shadow: 0 6px 25px rgba(30, 40, 81, 0.5);
+        }
+        .btn-flotante-regresar:active {
+            transform: scale(0.95);
+        }
+        .btn-flotante-regresar i {
+            font-size: 30px;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
         .table-activo-nuevo    { background-color: #d4edda !important; border-left: 4px solid #28a745; }
         .table-activo-cambio   { background-color: #fff3cd !important; border-left: 4px solid #ffc107; }
         .checkbox-revisado     { transform: scale(1.2); cursor: pointer; }
@@ -185,6 +219,19 @@ $total_desaparecidos = count($activos_desaparecidos);
         .numero-paso           { width: 32px; height: 32px; border-radius: 50%; display: inline-flex;
                                  align-items: center; justify-content: center; font-weight: bold;
                                  font-size: 14px; flex-shrink: 0; }
+
+        /* ── Responsive FAB regresar ── */
+        @media (max-width: 768px) {
+            .btn-flotante-regresar {
+                bottom: 20px;
+                right: 20px;
+                width: 48px;
+                height: 48px;
+            }
+            .btn-flotante-regresar i {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -579,7 +626,7 @@ document.getElementById('btnGenerarPdf').addEventListener('click', async functio
     fd.append('activos_json', JSON.stringify(activos));
 
     try {
-        const resp = await fetch('navegar.php?ruta=generar_pdf_certificacion.php', {
+        const resp = await fetch('generar_pdf_certificacion.php', {
             method: 'POST',
             body:   fd,
         });
@@ -640,8 +687,39 @@ document.getElementById('btnSubirPdf').addEventListener('click', async function 
     fd.append('pdf_firmado', inputFile.files[0]);
 
     try {
-        const resp   = await fetch('navegar.php?ruta=subir_certificacion.php', { method: 'POST', body: fd });
-        const result = await resp.json();
+        const resp = await fetch('subir_certificacion.php', {
+            method: 'POST',
+            body: fd,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const rawText = await resp.text();
+        let result = null;
+
+        try {
+            result = JSON.parse(rawText);
+        } catch (parseErr) {
+            // Si el servidor redirigió al login o devolvió HTML (<!doctype html...)
+            const pareceHtml = /^\s*</.test(rawText);
+            if (resp.redirected || resp.status === 401 || resp.status === 403 || (pareceHtml && /login|index\.html|sesi[oó]n|azure|microsoft/i.test(rawText))) {
+                result = {
+                    success: false,
+                    sesion_expirada: true,
+                    message: 'Su sesión expiró por inactividad mientras firmaba el documento. Por favor inicie sesión nuevamente y vuelva a subir este mismo PDF firmado en el Paso 3 (no necesita volver a generarlo ni firmarlo).'
+                };
+            } else if (resp.status === 413) {
+                result = {
+                    success: false,
+                    message: 'El archivo PDF firmado supera el límite de tamaño permitido por el servidor web (HTTP 413).'
+                };
+            } else {
+                console.error('Respuesta no-JSON del servidor:', rawText);
+                result = {
+                    success: false,
+                    message: `El servidor devolvió una respuesta inesperada (HTTP ${resp.status}). Si tardó varios minutos firmando el PDF, recargue la página para renovar su sesión y vuelva a subir el mismo PDF firmado en el Paso 3.`
+                };
+            }
+        }
 
         estado.style.display = 'none';
 
@@ -668,14 +746,30 @@ document.getElementById('btnSubirPdf').addEventListener('click', async function 
                 window.location.href = 'navegar.php?ruta=centro_de_certificacion.php';
             };
         } else {
-            document.getElementById('resultadoHeader').className  = 'modal-header bg-danger text-white';
-            document.getElementById('resultadoTitulo').innerHTML  = '<i class="bi bi-exclamation-triangle"></i> Error';
+            const esSesion = !!result.sesion_expirada;
+            document.getElementById('resultadoHeader').className  = esSesion ? 'modal-header bg-warning text-dark' : 'modal-header bg-danger text-white';
+            document.getElementById('resultadoTitulo').innerHTML  = esSesion
+                ? '<i class="bi bi-clock-history"></i> Sesión Expirada'
+                : '<i class="bi bi-exclamation-triangle"></i> Error';
             document.getElementById('resultadoMensaje').innerHTML = `
                 <div class="text-center">
-                    <i class="bi bi-x-circle fs-1 text-danger mb-3 d-block"></i>
+                    <i class="bi ${esSesion ? 'bi-person-exclamation text-warning' : 'bi-x-circle text-danger'} fs-1 mb-3 d-block"></i>
                     <p><strong>${result.message}</strong></p>
-                    <p class="small text-muted">Verifique que el PDF es el correcto y fue firmado con GAUDI.</p>
+                    <p class="small text-muted">
+                        ${esSesion
+                            ? 'Su PDF firmado sigue siendo válido por 24 horas. Solo inicie sesión de nuevo y súbalo directamente.'
+                            : 'Verifique que el PDF es el correcto y fue firmado con GAUDI.'}
+                    </p>
                 </div>`;
+            if (esSesion) {
+                document.getElementById('btnCerrarResultado').textContent = 'Ir a Iniciar Sesión';
+                document.getElementById('btnCerrarResultado').onclick = () => {
+                    window.location.href = 'index.html';
+                };
+            } else {
+                document.getElementById('btnCerrarResultado').textContent = 'Cerrar';
+                document.getElementById('btnCerrarResultado').onclick = null;
+            }
             btn.disabled = false;
         }
 
@@ -684,7 +778,7 @@ document.getElementById('btnSubirPdf').addEventListener('click', async function 
     } catch (e) {
         estado.style.display = 'none';
         btn.disabled = false;
-        alert('Error de red al subir el PDF: ' + e.message);
+        alert('No se pudo conectar con el servidor al subir el PDF. Verifique su conexión a internet e intente nuevamente. Detalle: ' + e.message);
     }
 });
 </script>

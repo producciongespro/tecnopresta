@@ -20,14 +20,61 @@
 
 /** session_start(); */
 
+// ── Garantizar siempre respuesta JSON limpia (incluso ante errores fatales o expiración de sesión) ──
+ob_start();
+@ini_set('display_errors', '0');
+@ini_set('memory_limit', '256M');
+@set_time_limit(120);
+
+$GLOBALS['__json_respuesta_enviada'] = false;
+
+function responderJson(array $payload, int $http_code = 200): void
+{
+    $GLOBALS['__json_respuesta_enviada'] = true;
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    if (!headers_sent()) {
+        http_response_code($http_code);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+register_shutdown_function(function () {
+    if (!empty($GLOBALS['__json_respuesta_enviada'])) {
+        return;
+    }
+    $err = error_get_last();
+    if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR], true)) {
+        error_log("subir_certificacion [FATAL]: {$err['message']} en {$err['file']}:{$err['line']}");
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        if (!headers_sent()) {
+            http_response_code(500);
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        echo json_encode([
+            'success' => false,
+            'message' => 'El servidor encontró un error interno al procesar el archivo PDF (' . $err['message'] . ').'
+        ], JSON_UNESCAPED_UNICODE);
+    }
+});
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/usuarioAzure.php';
 $usuario_azure = obtenerUsuarioSesion();
 if (!$usuario_azure) {
-    header("Location: index.html");
-    exit();
+    responderJson([
+        'success'         => false,
+        'sesion_expirada' => true,
+        'message'         => 'Su sesión ha expirado por inactividad mientras firmaba el documento. ' .
+                             'Por favor inicie sesión nuevamente y vuelva a subir este mismo PDF firmado en el Paso 3 (no necesita volver a generarlo ni firmarlo).'
+    ], 401);
 }
 
 header('Content-Type: application/json; charset=utf-8');
@@ -43,11 +90,28 @@ $link = $mysqli;
 mysqli_set_charset($link, "utf8");
 date_default_timezone_set('America/Costa_Rica');
 
+// ── Detectar si el servidor descartó $_FILES y $_POST por exceder post_max_size ──
+if (empty($_FILES) && empty($_POST) && isset($_SERVER['CONTENT_LENGTH']) && (int)$_SERVER['CONTENT_LENGTH'] > 0) {
+    $max_post = ini_get('post_max_size');
+    responderJson([
+        'success' => false,
+        'message' => "El archivo firmado supera el tamaño máximo de envío permitido por el servidor ({$max_post})."
+    ]);
+}
+
 // ── Validar que llegó el archivo ─────────────────────────────
 if (!isset($_FILES['pdf_firmado']) || $_FILES['pdf_firmado']['error'] !== UPLOAD_ERR_OK) {
     $err = $_FILES['pdf_firmado']['error'] ?? 'sin archivo';
-    echo json_encode(['success' => false, 'message' => "Error al recibir el archivo: código $err"]);
-    exit;
+    $mensajes_upload = [
+        UPLOAD_ERR_INI_SIZE   => 'El archivo excede el tamaño máximo permitido por la configuración del servidor (' . ini_get('upload_max_filesize') . ').',
+        UPLOAD_ERR_FORM_SIZE  => 'El archivo excede el tamaño máximo permitido por el formulario.',
+        UPLOAD_ERR_PARTIAL    => 'El archivo se subió solo parcialmente (corte de red). Intente subirlo nuevamente.',
+        UPLOAD_ERR_NO_FILE    => 'No se seleccionó ningún archivo PDF.',
+        UPLOAD_ERR_NO_TMP_DIR => 'Falta la carpeta temporal en el servidor.',
+        UPLOAD_ERR_CANT_WRITE => 'Error al escribir el archivo temporal en disco.',
+    ];
+    $msg_err = $mensajes_upload[$err] ?? "Error al recibir el archivo (código: $err).";
+    responderJson(['success' => false, 'message' => $msg_err]);
 }
 
 $archivo  = $_FILES['pdf_firmado'];
@@ -56,14 +120,12 @@ $tmp_path = $archivo['tmp_name'];
 // Validar magic bytes PDF
 $magic = file_get_contents($tmp_path, false, null, 0, 4);
 if ($magic !== '%PDF') {
-    echo json_encode(['success' => false, 'message' => 'El archivo no es un PDF válido']);
-    exit;
+    responderJson(['success' => false, 'message' => 'El archivo no es un PDF válido']);
 }
 
 // Limitar tamaño: 20 MB máximo
 if ($archivo['size'] > 20 * 1024 * 1024) {
-    echo json_encode(['success' => false, 'message' => 'El archivo excede el tamaño máximo permitido (20 MB)']);
-    exit;
+    responderJson(['success' => false, 'message' => 'El archivo excede el tamaño máximo permitido (20 MB)']);
 }
 
 // ======================================================
@@ -98,20 +160,31 @@ function extraerJsonDesdeAttachment(string $ruta): ?string
             foreach ($pdf->getObjects() as $obj) {
                 $content = $obj->getContent();
                 
-                // Buscar nuestro archivo adjunto por nombre
+                // Buscar nuestro archivo adjunto por nombre o por diccionario /EmbeddedFile
+                // (TCPDF usa el basename del tempnam, ej. cert_data_pS7mna o cert_sup_XXXXXX)
                 if (strpos($content, 'certificacion_data.json') !== false ||
-                    strpos($content, '/UF (certificacion_data.json)') !== false) {
+                    strpos($content, '/UF (certificacion_data.json)') !== false ||
+                    strpos($content, 'cert_data_') !== false ||
+                    strpos($content, 'cert_sup_') !== false ||
+                    strpos($content, '/Type /EmbeddedFile') !== false) {
                     
                     error_log("extraerJsonDesdeAttachment: Encontrado attachment en objeto");
                     
                     // Buscar el stream del attachment
-                    if (preg_match('/\/EmbeddedFile\s+<<.*?\/Length\s+(\d+).*?>>\s*stream\s*(.*?)\s*endstream/s', $content, $m)) {
-                        $length = (int)$m[1];
-                        $data = substr($m[2], 0, $length);
-                        error_log("extraerJsonDesdeAttachment: Length: $length, Data length: " . strlen($data));
+                    if (preg_match('/\/EmbeddedFile\b.*?>>\s*stream\r?\n?(.*?)\r?\n?endstream/s', $content, $m)) {
+                        $data = $m[1];
+                        if (preg_match('/\/Length\s+(\d+)/', $content, $ml)) {
+                            $length = (int)$ml[1];
+                            if ($length > 0 && strlen($data) >= $length) {
+                                $data = substr($data, 0, $length);
+                            }
+                        }
                         
                         // Intentar descomprimir
                         $decoded = @gzuncompress($data);
+                        if ($decoded === false) {
+                            $decoded = @gzinflate($data);
+                        }
                         if ($decoded !== false) {
                             $data = $decoded;
                             error_log("extraerJsonDesdeAttachment: Data descomprimida, nueva longitud: " . strlen($data));
@@ -119,8 +192,8 @@ function extraerJsonDesdeAttachment(string $ruta): ?string
                         
                         $json = trim($data);
                         if (!empty($json) && $json[0] === '{') {
-                            json_decode($json, true);
-                            if (json_last_error() === JSON_ERROR_NONE) {
+                            $parsed = json_decode($json, true);
+                            if (json_last_error() === JSON_ERROR_NONE && isset($parsed['uuid'], $parsed['version'])) {
                                 error_log("extraerJsonDesdeAttachment: ✅ JSON válido extraído correctamente");
                                 return $json;
                             } else {
@@ -135,7 +208,7 @@ function extraerJsonDesdeAttachment(string $ruta): ?string
         }
     }
     
-    // ── MÉTODO 2: Búsqueda binaria directa ──
+    // ── MÉTODO 2: Búsqueda binaria directa de cualquier /EmbeddedFile o nombre temporal de TCPDF ──
     error_log("extraerJsonDesdeAttachment: Usando búsqueda binaria");
     $contenido = file_get_contents($ruta);
     if ($contenido === false) {
@@ -143,33 +216,43 @@ function extraerJsonDesdeAttachment(string $ruta): ?string
         return null;
     }
     
-    // Buscar el nombre del archivo adjunto
-    if (preg_match('/\/UF\s*\(\/certificacion_data\.json\)/s', $contenido) ||
-        preg_match('/certificacion_data\.json/s', $contenido)) {
-        
-        error_log('extraerJsonDesdeAttachment - Encontrado referencia al attachment');
-        
-        // Buscar el stream del attachment
-        if (preg_match('/\/EmbeddedFile\s+<<.*?\/Length\s+(\d+).*?>>\s*stream\s*(.*?)\s*endstream/s', $contenido, $m)) {
-            $length = (int)$m[1];
-            $data = substr($m[2], 0, $length);
-            error_log("extraerJsonDesdeAttachment - Length: $length, Data length: " . strlen($data));
-            
-            // Intentar descomprimir
-            $decoded = @gzuncompress($data);
-            if ($decoded !== false) {
-                $data = $decoded;
-                error_log("extraerJsonDesdeAttachment - Data descomprimida, nueva longitud: " . strlen($data));
+    // Buscar todos los objetos /EmbeddedFile en el binario del PDF (TCPDF guarda el tempnam como cert_data_XXXX o cert_sup_XXXX)
+    if (preg_match_all('/<<[^>]*\/Type\s*\/EmbeddedFile\b[^>]*>>\s*stream\r?\n(.*?)\r?\nendstream/s', $contenido, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $m) {
+            $rawStream = $m[1];
+            if (preg_match('/\/Length\s+(\d+)/', $m[0], $ml)) {
+                $len = (int)$ml[1];
+                if ($len > 0 && strlen($rawStream) >= $len) {
+                    $rawStream = substr($rawStream, 0, $len);
+                }
             }
-            
-            $json = trim($data);
-            if (!empty($json) && $json[0] === '{') {
-                json_decode($json, true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    error_log('extraerJsonDesdeAttachment - ✅ JSON extraído correctamente');
-                    return $json;
-                } else {
-                    error_log('extraerJsonDesdeAttachment - JSON inválido: ' . json_last_error_msg());
+            $decoded = @gzuncompress($rawStream);
+            if ($decoded === false) {
+                $decoded = @gzinflate($rawStream);
+            }
+            $candidate = trim($decoded !== false ? $decoded : $rawStream);
+            if (!empty($candidate) && $candidate[0] === '{') {
+                $parsed = json_decode($candidate, true);
+                if (json_last_error() === JSON_ERROR_NONE && isset($parsed['uuid'], $parsed['version'])) {
+                    error_log('extraerJsonDesdeAttachment - ✅ JSON extraído correctamente desde /EmbeddedFile binario');
+                    return $candidate;
+                }
+            }
+        }
+    }
+
+    // Fallback adicional: escanear todos los streams comprimidos del PDF buscando el JSON canónico puro
+    if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $contenido, $allStreams)) {
+        foreach ($allStreams[1] as $rawStream) {
+            $decoded = @gzuncompress($rawStream);
+            if ($decoded !== false) {
+                $trimmed = trim($decoded);
+                if (!empty($trimmed) && $trimmed[0] === '{' && strpos($trimmed, '"certificacion_inventario"') !== false) {
+                    $parsed = json_decode($trimmed, true);
+                    if (json_last_error() === JSON_ERROR_NONE && isset($parsed['uuid'], $parsed['version'])) {
+                        error_log('extraerJsonDesdeAttachment - ✅ JSON extraído desde stream FlateDecode directo');
+                        return $trimmed;
+                    }
                 }
             }
         }
@@ -201,12 +284,11 @@ if ($json_canonico === null) {
 
 if ($json_canonico === null) {
     error_log("subir_certificacion: ❌ No se pudo extraer JSON por ningún método");
-    echo json_encode([
+    responderJson([
         'success' => false,
         'message' => 'El PDF no contiene el bloque de datos canónicos. ' .
                      'Verifique que es el PDF correcto generado por este sistema.'
     ]);
-    exit;
 }
 
 error_log("subir_certificacion: ✅ JSON extraído correctamente. Longitud: " . strlen($json_canonico));
@@ -214,19 +296,17 @@ error_log("subir_certificacion: ✅ JSON extraído correctamente. Longitud: " . 
 // ── Validar JSON ───────────────────────────────────────────────
 $datos = json_decode($json_canonico, true);
 if (!$datos || !isset($datos['uuid'], $datos['version'])) {
-    echo json_encode([
+    responderJson([
         'success' => false,
         'message' => 'El JSON incrustado en el PDF no es válido o está incompleto.'
     ]);
-    exit;
 }
 
 if ($datos['version'] !== 1 || $datos['tipo'] !== 'certificacion_inventario') {
-    echo json_encode([
+    responderJson([
         'success' => false,
         'message' => 'El documento no es una certificación de inventario válida.'
     ]);
-    exit;
 }
 
 $uuid = $datos['uuid'];
@@ -250,28 +330,26 @@ if (!$pendiente) {
     $stmt_dup->close();
 
     if ($duplicado) {
-        echo json_encode([
+        responderJson([
             'success' => false,
             'message' => 'Esta certificación ya fue procesada anteriormente.'
         ]);
     } else {
-        echo json_encode([
+        responderJson([
             'success' => false,
             'message' => 'El UUID del documento no es válido o el documento ha expirado (más de 24 horas). ' .
                          'Genere un nuevo PDF de certificación.'
         ]);
     }
-    exit;
 }
 
 // ── Validar que el funcionario que sube es el mismo que generó ─
 if ($pendiente['funcionario_id'] !== $usuario_azure['cedula']) {
-    echo json_encode([
+    responderJson([
         'success' => false,
         'message' => 'Este PDF fue generado por otro funcionario. ' .
                      'Solo el funcionario que generó el PDF puede subirlo.'
     ]);
-    exit;
 }
 
 // ── Hash SHA-256 del PDF ─────────────────────────────────────
@@ -280,8 +358,7 @@ $hash_sha256 = hash_file('sha256', $tmp_path);
 // ── VALIDACIÓN DE FIRMA — Capa 1: detección binaria ──────────
 $contenido_pdf = file_get_contents($tmp_path);
 if ($contenido_pdf === false) {
-    echo json_encode(['success' => false, 'message' => 'No se pudo leer el archivo PDF para validación.']);
-    exit;
+    responderJson(['success' => false, 'message' => 'No se pudo leer el archivo PDF para validación.']);
 }
 
 $tiene_byterange = str_contains($contenido_pdf, '/ByteRange');
@@ -294,12 +371,11 @@ $tiene_subfilter = (
 );
 
 if (!($tiene_byterange && $tiene_contents && $tiene_subfilter)) {
-    echo json_encode([
+    responderJson([
         'success' => false,
         'message' => 'El PDF no contiene una firma digital. ' .
                      'Firme el documento con GAUDI Móvil o GAUDI Desktop y vuelva a subirlo.'
     ]);
-    exit;
 }
 unset($contenido_pdf);
 
@@ -322,12 +398,11 @@ if ($pdfsig_bin !== '') {
     exec(escapeshellarg($pdfsig_bin) . ' ' . escapeshellarg($tmp_path) . ' 2>/dev/null', $_, $pdfsig_exit_code);
 
     if ($pdfsig_exit_code === 2) {
-        echo json_encode([
+        responderJson([
             'success' => false,
             'message' => 'El PDF contiene marcadores de firma pero pdfsig no detecta ninguna firma válida. ' .
                          'Asegúrese de completar el proceso de firma con GAUDI y vuelva a subir el archivo.'
         ]);
-        exit;
     }
 }
 
@@ -432,8 +507,9 @@ try {
     $stmt_del->close();
 
     mysqli_commit($link);
+    mysqli_close($link);
 
-    echo json_encode([
+    responderJson([
         'success'          => true,
         'message'          => 'Certificación registrada correctamente.',
         'certificacion_id' => $certificacion_id,
@@ -445,11 +521,10 @@ try {
 
 } catch (Exception $e) {
     mysqli_rollback($link);
+    mysqli_close($link);
     error_log('subir_certificacion - ' . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    responderJson(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
-
-mysqli_close($link);
 
 
 // ════════════════════════════════════════════════════════════════
@@ -534,12 +609,14 @@ function extraerTextoPdf(string $ruta): string
         if ($des !== false) {
             preg_match_all('/\(((?:[^()\\\\]|\\\\.)*)\)\s*Tj/s', $des, $tj);
             foreach ($tj[1] as $t) {
+                $t = strtr($t, ['\\(' => '(', '\\)' => ')', '\\\\' => '\\']);
                 $texto .= $t . "\n";
             }
             preg_match_all('/\[((?:[^\[\]]|\[.*?\])*)\]\s*TJ/s', $des, $tj_arr);
             foreach ($tj_arr[1] as $t) {
                 preg_match_all('/\(((?:[^()\\\\]|\\\\.)*)\)/', $t, $partes);
                 foreach ($partes[1] as $p) {
+                    $p = strtr($p, ['\\(' => '(', '\\)' => ')', '\\\\' => '\\']);
                     $texto .= $p;
                 }
                 $texto .= "\n";
@@ -616,6 +693,21 @@ function extraerJsonDeTexto(string $texto): ?string
     $json = substr($bloque, $j_ini, $j_fin - $j_ini + 1);
     $json = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $json);
 
+    // Des-escapar secuencias literales de PDF si aún persisten (ej. \(, \), \\)
+    if (strpos($json, '\\(') !== false || strpos($json, '\\)') !== false || strpos($json, '\\\\u') !== false) {
+        $json_unescaped = strtr($json, ['\\(' => '(', '\\)' => ')', '\\\\' => '\\']);
+        json_decode($json_unescaped, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $json_unescaped;
+        }
+        $json_unescaped_limpio = limpiarSaltosEnStrings($json_unescaped);
+        json_decode($json_unescaped_limpio, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $json_unescaped_limpio;
+        }
+        $json = $json_unescaped;
+    }
+
     json_decode($json, true);
     if (json_last_error() === JSON_ERROR_NONE) {
         return $json;
@@ -631,6 +723,29 @@ function extraerJsonDeTexto(string $texto): ?string
     json_decode($json_compacto, true);
     if (json_last_error() === JSON_ERROR_NONE) {
         return $json_compacto;
+    }
+
+    // Si el bloque de texto visible fue partido en múltiples líneas por TCPDF (ej. "LABOR\nATORIO" o "5CD\n8334KSD")
+    // y además la fuente estándar Helvetica está en ISO-8859-1 / Windows-1252 (ej. la letra Ñ = 0xD1 en "MUÑOZ"):
+    $candidatos_sin_saltos = [
+        str_replace(["\r\n", "\r", "\n"], '', $json),
+        limpiarSaltosEnStrings($json),
+        $json_compacto
+    ];
+
+    foreach ($candidatos_sin_saltos as $cand) {
+        json_decode($cand, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $cand;
+        }
+        // Si falló por JSON_ERROR_UTF8 (caracteres Latin1/Win1252 como Ñ, Á, É, Í, Ó, Ú en Helvetica de TCPDF)
+        if (json_last_error() === JSON_ERROR_UTF8 && function_exists('mb_convert_encoding')) {
+            $cand_utf8 = mb_convert_encoding($cand, 'UTF-8', 'Windows-1252');
+            json_decode($cand_utf8, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                return $cand_utf8;
+            }
+        }
     }
 
     return null;

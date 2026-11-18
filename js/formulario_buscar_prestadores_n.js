@@ -31,10 +31,81 @@ window.onload = function() {
   return '';
 } */
 
-function seleccionarPrestador(obj) {
+function cuentaArticulosPendientes() {
+  let total = 0;
+
+  ['sesionCanasta', 'sesionActivo'].forEach(function(clave) {
+    try {
+      let jsonData = JSON.parse(window.sessionStorage.getItem(clave));
+      if (Array.isArray(jsonData)) {
+        total += jsonData.length;
+      }
+    } catch (e) {
+      // JSON inválido se trata como solicitud vacía
+    }
+  });
+
+  return total;
+}
+
+function vaciaSolicitudEnCurso() {
+  window.sessionStorage.removeItem('sesionCanasta');
+  window.sessionStorage.removeItem('sesionActivo');
+  window.sessionStorage.removeItem('postSolicitud');
+  window.sessionStorage.removeItem('postSolicitudActivo');
+  window.sessionStorage.removeItem('solicitud_detalle');
+}
+
+function guardaPrestadorYNavega(obj) {
   window.sessionStorage.setItem('ambitoPrestadorSeleccionado', obj.id_ambito);
-  //window.location.href = "navegar.php?ruta=formulario_buscar_alias_n.php";
+  window.sessionStorage.setItem('ambitoPrestadorNombre', obj.nombre);
   window.location.href = "formulario_buscar_alias_n.php";
+}
+
+function seleccionarPrestador(obj) {
+
+  let ambitoActual = window.sessionStorage.getItem('ambitoPrestadorSeleccionado');
+
+  // Mismo prestador: se conserva la solicitud en curso
+  if (ambitoActual !== null && String(obj.id_ambito) === ambitoActual) {
+    guardaPrestadorYNavega(obj);
+    return false;
+  }
+
+  let pendientes = cuentaArticulosPendientes();
+
+  if (pendientes === 0) {
+    guardaPrestadorYNavega(obj);
+    return false;
+  }
+
+  // Una solicitud no puede mezclar artículos de distintos prestadores
+  let mensajeCambio = 'Tu carrito tiene artículos. Para cambiar de prestador es necesario vaciarlo.';
+
+  // Respaldo si SweetAlert2 no cargó
+  if (typeof Swal === 'undefined') {
+    if (window.confirm(mensajeCambio)) {
+      vaciaSolicitudEnCurso();
+      guardaPrestadorYNavega(obj);
+    }
+    return false;
+  }
+
+  Swal.fire({
+    icon: 'warning',
+    title: '¿Vaciar el carrito?',
+    text: mensajeCambio,
+    showCancelButton: true,
+    confirmButtonText: 'Vaciar carrito',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true
+  }).then(function(result) {
+    if (result.isConfirmed) {
+      vaciaSolicitudEnCurso();
+      guardaPrestadorYNavega(obj);
+    }
+  });
+
   return false;
 }
 
@@ -87,9 +158,20 @@ function cargaPrestadores() {
         } else {
 
           let contenedorError = document.getElementById("mensaje");
-          contenedorError.innerHTML='<div class="alert alert-danger">' +
-                                  '<strong>Aviso! </strong>' +
-                                      'No se han establecido prestadores, comuníquese con el administrador del sistema' +
+          contenedorError.innerHTML='<div class="aviso-sin-prestadores">' +
+                                  '<div class="alert alert-danger d-flex align-items-center gap-2 mb-3">' +
+                                      '<i class="bi bi-exclamation-triangle-fill fs-5"></i>' +
+                                      '<div><strong>Aviso! </strong>' +
+                                      'No se han establecido prestadores, comuníquese con el Director(a) del Centro Educativo</div>' +
+                                  '</div>' +
+                                  '<a href="guia_asignar_prestador_ambitos.php" class="guia-cta">' +
+                                      '<span class="guia-cta-icono"><i class="bi bi-lightbulb-fill"></i></span>' +
+                                      '<span class="guia-cta-texto">' +
+                                          '<span class="guia-cta-etiqueta">Guía paso a paso</span>' +
+                                          '<span>Para conocer cómo habilitar un funcionario para prestar activos tecnológicos, <strong>haga click aquí</strong></span>' +
+                                      '</span>' +
+                                      '<i class="bi bi-arrow-right-circle-fill guia-cta-flecha"></i>' +
+                                  '</a>' +
                                   '</div>';
         }
 

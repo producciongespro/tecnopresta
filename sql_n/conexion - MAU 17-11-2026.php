@@ -1,12 +1,9 @@
 <?php
 
 //Sitio conexion
-//const DB_Str = "mysql:host=localhost;dbname=tecnopre_pntm;charset=utf8mb4";
-//const DB_USER = "tecnopre_rootbd";
-//const DB_PASS = "2020*tecnopresta";
-const DB_Str = "mysql:host=localhost;dbname=ltecnopre;charset=utf8mb4";
-const DB_USER = "root";
-const DB_PASS = "";
+const DB_Str = "mysql:host=localhost;dbname=tecnopre_pntm;charset=utf8mb4";
+const DB_USER = "tecnopre_rootbd";
+const DB_PASS = "2020*tecnopresta";
 
 const Email = "tecnopresta@mep.go.cr";
 const Email_PASS = "tPrest@1977";

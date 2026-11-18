@@ -77,9 +77,9 @@ if (!defined('ACCESO_SEGURO')) {
       <br>
       <div class="solicitud-titulo-seccion">
         <h3><i class="bi bi-inbox"></i>Solicitudes Pendientes de Revisión</h3>
-        <!-- <a href="navegar.php?ruta=contactenos_n.php&rep=Error en formulario vista solicitud html" class="reporte-link">
+        <a href="navegar.php?ruta=contactenos_n.php&rep=Error en formulario vista solicitud html" class="reporte-link">
           <i class="bi bi-exclamation-triangle"></i>Reportar Incidencia / Error
-        </a> -->
+        </a>
       </div>
       <hr class="my-3">
     </div>

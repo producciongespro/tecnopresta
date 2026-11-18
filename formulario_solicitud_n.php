@@ -14,7 +14,7 @@ if (!defined('ACCESO_SEGURO')) {
     exit('Acceso directo no permitido');
 }
 */
-$ruta_regreso = 'formulario_solicitud_canasta_n.php';
+$ruta_regreso = 'formulario_buscar_alias_n.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -72,6 +72,14 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
         }
         .solicitud-header a:hover {
             color: #fff;
+        }
+        .solicitud-header .prestador-activo {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.85);
+        }
+        .solicitud-header .prestador-activo a {
+            color: #fff;
+            font-weight: 600;
         }
         .btn-mep-primary {
             background: var(--mep-accent, #CFAC65);
@@ -158,12 +166,10 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
             color: var(--mep-text, #2C3E50);
             margin-bottom: 4px;
         }
-        .gj-datepicker .form-control,
-        .gj-timepicker .form-control {
+        .gj-datepicker .form-control {
             border-radius: 8px;
         }
-        .gj-datepicker-md [role="right-icon"],
-        .gj-timepicker-md [role="right-icon"] {
+        .gj-datepicker-md [role="right-icon"] {
             top: 6px;
         }
         .modal-search-header {
@@ -173,21 +179,27 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
     </style>
 </head>
 <body class="layout-page">
-    <?php include 'partials/header.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/header.php'; ?>
+    </div>
 
     <div class="container py-4 contenido-principal">
         <!-- Header -->
         <div class="solicitud-header d-flex align-items-center justify-content-between">
             <div>
                 <h4 class="mb-0 fw-bold"><i class="bi bi-file-text me-2"></i>Solicitar Equipo</h4>
+                <div id="prestadorActivo" class="prestador-activo mt-1" style="display: none;">
+                    <i class="bi bi-person-badge me-1"></i>Solicitando a: <strong id="prestadorActivoNombre"></strong>
+                    <a href="navegar.php?ruta=formulario_buscar_prestadores_n.php" class="ms-2">Cambiar</a>
+                </div>
             </div>
-            <!-- <div>
+            <div>
                 <small>
                     <a href="contactenos_n.php?rep=Error en formulario solicitud" class="text-white text-decoration-none opacity-75">
                         <i class="bi bi-envelope"></i> Reportar
                     </a>
                 </small>
-            </div> -->
+            </div>
         </div>
 
         <div class="row justify-content-center">
@@ -207,7 +219,7 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
                     </div>
                     <div class="col-md-3 col-lg-2">
                         <label for="horaRetiro" class="form-label-custom">Hora de retiro</label>
-                        <input class="form-control" id="horaRetiro" autocomplete="off" />
+                        <input type="time" class="form-control" id="horaRetiro" autocomplete="off" />
                     </div>
                     <div class="col-md-5 col-lg-3">
                         <label for="fechaDevolucion" class="form-label-custom">Fecha de devolución</label>
@@ -215,7 +227,7 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
                     </div>
                     <div class="col-md-3 col-lg-2">
                         <label for="horaDevolucion" class="form-label-custom">Hora de devolución</label>
-                        <input class="form-control" id="horaDevolucion" autocomplete="off" />
+                        <input type="time" class="form-control" id="horaDevolucion" autocomplete="off" />
                     </div>
                 </div>
             </div>
@@ -423,7 +435,9 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
         <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
 
-    <?php include 'partials/footer.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/footer.php'; ?>
+    </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
@@ -432,6 +446,6 @@ $ruta_regreso = 'formulario_solicitud_canasta_n.php';
     <script src="gijgo/gijgo.min.js" type="text/javascript"></script>
     <script src="gijgo/messages.es-es.js" type="text/javascript"></script>
 
-    <script src="js/formulario_solicitud_n.js?version=2.1"></script>
+    <script src="js/formulario_solicitud_n.js?v=1.7"></script>
 </body>
 </html>

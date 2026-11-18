@@ -144,20 +144,20 @@ class insertSolicitud {
         $stmt = null;
         $this->pdo = null;
         
-        $email = new Email_Solicitud();
+         $email = new Email_Solicitud();
         		
-        $evia_email = $email->email_Solicitud($Dependencia,
-                                            $solicitud_uso, 
-                                            $para,                                 
-                                            $solicitud_nombre_funcionario,
-                                            $solicitud_Fecha_formato,
-                                            $prestamo_fechaRetiro_formato,
-                                            $solicitud_horaRetiro,
-                                            $prestamo_fechaDevolucion_formato,
-                                            $solicitud_horaDevolucion,
-                                            $arrayNombreAlias,
-                                            $arraySoftwareDescripcion,
-                                            $seccionDescripcion, $arrayActivos);
+         $evia_email = $email->email_Solicitud($Dependencia,
+                                             $solicitud_uso, 
+                                             $para,                                 
+                                             $solicitud_nombre_funcionario,
+                                             $solicitud_Fecha_formato,
+                                             $prestamo_fechaRetiro_formato,
+                                             $solicitud_horaRetiro,
+                                             $prestamo_fechaDevolucion_formato,
+                                             $solicitud_horaDevolucion,
+                                             $arrayNombreAlias,
+                                             $arraySoftwareDescripcion,
+                                             $seccionDescripcion, $arrayActivos);
     
         $evia_email = null;
 

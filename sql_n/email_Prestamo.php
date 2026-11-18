@@ -98,16 +98,20 @@ class Email_Prestamo
 
         }
             
-        $txtDependencia = utf8_decode($Dependencia);
-        $txtUso = utf8_decode($prestamo_uso);
-        $txtNombresFormato = utf8_decode($txtNombres);
-        $txtSoftwareDescripcionFormato = utf8_decode($txtSoftwareDescripcion);
-        $txtNombresFormatoNoSeleccionados = utf8_decode($txtNombresNoSeleccionados);
+        $txtDependencia = $Dependencia;
+        // utf8_decode() está obsoleta desde PHP 8.2. Ya no hace falta convertir:
+        // el correo se envía en UTF-8 (ver $phpmailer->CharSet más abajo).
+        $txtUso = $prestamo_uso;
+        $txtNombresFormato = $txtNombres;
+        $txtSoftwareDescripcionFormato = $txtSoftwareDescripcion;
+        $txtNombresFormatoNoSeleccionados = $txtNombresNoSeleccionados;
        
         $the_subject = "Resultado de la Solicitud de Equipo";
         $address_to = $para;
         $from_name = "Administrador";
         $phpmailer = new PHPMailer();
+        $phpmailer->CharSet = 'UTF-8';   // PHPMailer usa ISO-8859-1 por defecto
+        $phpmailer->Encoding = 'base64';
     
         // ---------- datos de la cuenta de Tecnopresta -------------------------------
         $phpmailer->Username = $this->correo;
@@ -158,6 +162,7 @@ class Email_Prestamo
         $phpmailer->Body .= "<img src=\"cid:encabezado\" width=\"100%\" alt=\"TecnoPresta - Ministerio de Educaci&oacute;n P&uacute;blica\" />";
         $phpmailer->Body .= "<h3> Estimado Funcionario (a) </h3>";
         $phpmailer->Body .="<p> <b> El Sistema de Inventario e Incidencias de Pr&eacute;stamos de Equipo  [Tecnopresta] </b> le informa:</p>";
+        $phpmailer->Body .= "<h1 style='margin:20px 0; padding:14px 10px; text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:28px; font-weight:bold; letter-spacing:1px; color:#003366; border-top:4px solid #003366; border-bottom:4px solid #003366;'>Resultado de Tr&aacute;mite Solicitud de Equipo</h1>";
 
         $phpmailer->Body .= "<div id='container'> <table style='width:100%'>
         <tbody>

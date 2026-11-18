@@ -111,13 +111,16 @@ try {
                                 SELECT apl.lugar_id, a.id_ambito, a.nombre
                                 FROM t_ambitos_prestador_lugar apl
                                 INNER JOIN (
-                                    SELECT lugar_id, MAX(id) AS max_id
-                                    FROM t_ambitos_prestador_lugar
-                                    GROUP BY lugar_id
+                                    SELECT apl2.lugar_id, MAX(apl2.id) AS max_id
+                                    FROM t_ambitos_prestador_lugar apl2
+                                    INNER JOIN t_ambitos_prestador a2 ON apl2.ambito_id = a2.id_ambito
+                                    INNER JOIN usuarios_roles ur2 ON a2.usuarios_roles_id = ur2.id
+                                    WHERE a2.id_instituciones = ? 
+                                      AND a2.eliminado = 0
+                                      AND ur2.eliminado = 0
+                                    GROUP BY apl2.lugar_id
                                 ) latest_apl ON apl.id = latest_apl.max_id
-                                INNER JOIN t_ambitos_prestador a ON apl.ambito_id = a.id_ambito 
-                                                                  AND a.id_instituciones = ? 
-                                                                  AND a.eliminado = 0
+                                INNER JOIN t_ambitos_prestador a ON apl.ambito_id = a.id_ambito
                             ) amb ON p.id_lugar = amb.lugar_id
                             WHERE p.codigo = ? AND p.id_placa IN ($placeholders_in)";
 
@@ -150,7 +153,7 @@ try {
             if (count($activos_sin_ambito) > 5) {
                 $lista_placas .= " y " . (count($activos_sin_ambito) - 5) . " más";
             }
-            throw new Exception("No se puede realizar la asignación. Los siguientes activos no tienen un ámbito asociado: " . $lista_placas . ". Configure primero el ámbito de sus ubicaciones de resguardo.");
+            throw new Exception("No se puede realizar la asignación. Los siguientes activos no tienen un ámbito asociado: " . $lista_placas . ". Configure primero el ámbito de sus ubicaciones de resguardo al asignar prestador.");
         }
 
         // Validación B: Todos los activos a asignar deben pertenecer al mismo ámbito entre sí
@@ -169,13 +172,16 @@ try {
                                      SELECT apl.lugar_id, a.id_ambito, a.nombre
                                      FROM t_ambitos_prestador_lugar apl
                                      INNER JOIN (
-                                         SELECT lugar_id, MAX(id) AS max_id
-                                         FROM t_ambitos_prestador_lugar
-                                         GROUP BY lugar_id
+                                         SELECT apl2.lugar_id, MAX(apl2.id) AS max_id
+                                         FROM t_ambitos_prestador_lugar apl2
+                                         INNER JOIN t_ambitos_prestador a2 ON apl2.ambito_id = a2.id_ambito
+                                         INNER JOIN usuarios_roles ur2 ON a2.usuarios_roles_id = ur2.id
+                                         WHERE a2.id_instituciones = ? 
+                                           AND a2.eliminado = 0
+                                           AND ur2.eliminado = 0
+                                         GROUP BY apl2.lugar_id
                                      ) latest_apl ON apl.id = latest_apl.max_id
-                                     INNER JOIN t_ambitos_prestador a ON apl.ambito_id = a.id_ambito 
-                                                                       AND a.id_instituciones = ? 
-                                                                       AND a.eliminado = 0
+                                     INNER JOIN t_ambitos_prestador a ON apl.ambito_id = a.id_ambito
                                  ) amb ON p.id_lugar = amb.lugar_id
                                  WHERE p.codigo = ? AND p.alias_id = ? AND p.activo = 1";
 

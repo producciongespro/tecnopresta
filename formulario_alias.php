@@ -44,7 +44,11 @@ $res_lugares = mysqli_query($link, "SELECT id_lugar, lugar FROM t_lugar WHERE ac
 // Catálogo de ámbitos de la institución
 $res_ambitos = false;
 if ($id_instituciones > 0) {
-    $stmt_amb = mysqli_prepare($link, "SELECT id_ambito, nombre FROM t_ambitos_prestador WHERE id_instituciones = ? AND eliminado = 0 ORDER BY nombre ASC");
+    $stmt_amb = mysqli_prepare($link, "SELECT ap.id_ambito, ap.nombre 
+                                       FROM t_ambitos_prestador ap
+                                       INNER JOIN usuarios_roles ur ON ap.usuarios_roles_id = ur.id
+                                       WHERE ap.id_instituciones = ? AND ap.eliminado = 0 AND ur.eliminado = 0 
+                                       ORDER BY ap.nombre ASC");
     mysqli_stmt_bind_param($stmt_amb, "i", $id_instituciones);
     mysqli_stmt_execute($stmt_amb);
     $res_ambitos = mysqli_stmt_get_result($stmt_amb);
@@ -71,11 +75,9 @@ mysqli_stmt_close($stmt_alias_init);
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';">
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css';">
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
+    <link rel="stylesheet" href="/assets/css/nueva-identidad.css?v=20260924_2">
     <!-- SweetAlert2 para modales y confirmaciones elegantes -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link href="sweetalert2/sweetalert2.min.css" rel="stylesheet">
-
 
     <title>Gestión de Alias y Numeración de Activos</title>
 
@@ -724,6 +726,23 @@ $(document).ready(function() {
 
     const modalAsignar = new bootstrap.Modal(document.getElementById('modalAsignarAlias'));
 
+    const URL_ASIGNAR_PRESTADOR = 'https://tecnopresta.mep.go.cr/navegar.php?ruta=formulario_crear_roles_n.php&subsistema_id=1&modulo_id=5';
+
+    // Muestra el error de asignación; si es por activos sin ámbito, agrega el link para asignar prestador
+    function mostrarErrorAsignacion(msg) {
+        let html = msg;
+        if (msg.indexOf('no tienen un ámbito asociado') !== -1) {
+            html += `
+                <div class="mt-3">
+                    <a href="${URL_ASIGNAR_PRESTADOR}" class="text-decoration-none">
+                        <i class="bi bi-person-plus"></i> Asignar prestador
+                    </a>
+                </div>
+            `;
+        }
+        Swal.fire('Error', html, 'error');
+    }
+
     // Generador de color determinista por alias_id para badges
     function getAliasColor(aliasId) {
         if (!aliasId || aliasId === 0) return { bg: '#f1f5f9', text: '#64748b', border: '#cbd5e1' };
@@ -882,6 +901,9 @@ $(document).ready(function() {
                 <span class="badge bg-warning-subtle text-dark border border-warning-subtle mt-1 d-inline-flex align-items-center gap-1" style="font-size: 0.73rem;" title="Ubicación sin ámbito asociado">
                     <i class="bi bi-exclamation-triangle"></i> Sin ámbito
                 </span>
+                <a href="https://tecnopresta.mep.go.cr/navegar.php?ruta=formulario_crear_roles_n.php&subsistema_id=1&modulo_id=5" class="ms-1 small text-decoration-none" style="font-size: 0.73rem;" title="Asignar un prestador a esta ubicación">
+                    <i class="bi bi-person-plus"></i> Asignar prestador
+                </a>
             `;
 
             html += `
@@ -1166,7 +1188,7 @@ $(document).ready(function() {
                             actualizarBarraFlotante();
                             cargarActivos(false);
                         } else {
-                            Swal.fire('Error', resp.error || 'No se pudo completar la asignación', 'error');
+                            mostrarErrorAsignacion(resp.error || 'No se pudo completar la asignación');
                         }
                     },
                     error: function(xhr) {
@@ -1182,7 +1204,7 @@ $(document).ready(function() {
                                 console.error('Respuesta cruda del servidor:', xhr.responseText);
                             }
                         }
-                        Swal.fire('Error', msg, 'error');
+                        mostrarErrorAsignacion(msg);
                     }
                 });
             }

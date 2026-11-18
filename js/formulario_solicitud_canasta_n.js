@@ -140,7 +140,9 @@ function buscar() {
   $('#resultadosDivider, #resultadosBusqueda').show();
   document.getElementById("btnLimpiarBusqueda").style.display = '';
 
-  fetch('sql/selectActivoAliasGestor.php?' + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+  let ambitoPrestadorSeleccionado = window.sessionStorage.getItem('ambitoPrestadorSeleccionado') || '';
+
+  fetch('sql_n/selectActivoAliasGestor.php?' + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
       if (response.ok) {
         response.json().then(function(data) {
@@ -153,7 +155,7 @@ function buscar() {
       console.error(err);
     });
 
-  fetch('sql/selectActivoGestor.php?' + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+  fetch('sql_n/selectActivoGestor.php?' + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
       if (response.ok) {
         response.json().then(function(data) {
@@ -303,13 +305,22 @@ window.onload = function() {
     return false;
   }
   
+  muestraPrestadorActivo();
   muestraContador();
   $('#colCards').empty();
   cargaDatosPantalla();
-  cargaDatosPantallaActivo();  
-        
+  cargaDatosPantallaActivo();
+
   return false;
 
+}
+
+function muestraPrestadorActivo() {
+  let nombrePrestador = window.sessionStorage.getItem('ambitoPrestadorNombre');
+  if (nombrePrestador) {
+    document.getElementById('prestadorActivoNombre').textContent = nombrePrestador;
+    document.getElementById('prestadorActivo').style.display = '';
+  }
 }
 
 function muestraContador() {
@@ -550,7 +561,7 @@ function guardar() {
       formData.append('prestamo_fechaDevolucion', prestamo_fechaDevolucion);
       formData.append('arrayArticulos', json);
 
-      fetch('sql/insertPrestamoGestor.php', {
+      fetch('sql_n/insertPrestamoGestor.php', {
       method: 'POST', 
       body: formData,     
       }).then(function(response) {

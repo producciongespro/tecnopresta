@@ -103,8 +103,9 @@ window.onload = function() {
       
     let boologin = login();
 
-    if (boologin) {      
-      
+    if (boologin) {
+
+      muestraPrestadorActivo();
       //cargaComboSoftware();
       //cargaComboSeccion();
       cargaDatosGestor();
@@ -130,6 +131,14 @@ window.onload = function() {
             
     return false;
 
+}
+
+function muestraPrestadorActivo() {
+  let nombrePrestador = window.sessionStorage.getItem('ambitoPrestadorNombre');
+  if (nombrePrestador) {
+    document.getElementById('prestadorActivoNombre').textContent = nombrePrestador;
+    document.getElementById('prestadorActivo').style.display = '';
+  }
 }
 
 window.onbeforeunload = function(){
@@ -665,9 +674,11 @@ function buscarRepetido(alias_id) {
         
     let activo_nombre = $('#txtBuscar').val();
     $('#colCardsBuscar').empty();
-    
+
+    let ambitoPrestadorSeleccionado = window.sessionStorage.getItem('ambitoPrestadorSeleccionado') || '';
+
     fetch('sql_n/selectActivoAliasGestor.php?'
-    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
 
       if(response.ok) {
@@ -707,7 +718,7 @@ function buscarRepetido(alias_id) {
 
 
     fetch('sql_n/selectActivoGestor.php?'
-    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
 
       if(response.ok) {

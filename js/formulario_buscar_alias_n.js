@@ -26,11 +26,20 @@ window.onload = function() {
     
   }
   
-  muestraContador();  
+  muestraPrestadorActivo();
+  muestraContador();
   buscar();
-      
+
   return false;
 
+}
+
+function muestraPrestadorActivo() {
+  let nombrePrestador = window.sessionStorage.getItem('ambitoPrestadorNombre');
+  if (nombrePrestador) {
+    document.getElementById('prestadorActivoNombre').textContent = nombrePrestador;
+    document.getElementById('prestadorActivo').style.display = '';
+  }
 }
 
 function getval(sel){             
@@ -170,8 +179,7 @@ function botonEnviaSolicitud(jsonArray, cantidad) {
   
   window.sessionStorage.setItem('postSolicitud',json);
   window.sessionStorage.setItem('botonEnviaSolicitud',true);
-  // window.location.assign('navegar.php?ruta=formulario_solicitud_canasta_n.php' + getModuleParams());
-  window.location.assign('formulario_solicitud_canasta_n.php');
+  window.location.assign('formulario_solicitud_n.php');
   return true;
   
 }
@@ -185,7 +193,6 @@ function botonEnviaSolicitudActivo(jsonArray) {
   
   window.sessionStorage.setItem('postSolicitudActivo',json);
   window.sessionStorage.setItem('botonEnviaSolicitud',true);
-  // window.location.assign('navegar.php?ruta=formulario_solicitud_n.php' + getModuleParams());
   window.location.assign('formulario_solicitud_n.php');
   return true;
   
@@ -365,7 +372,7 @@ function buscar() {
 function cargaDatosPantalla(rs) {
   rs.forEach(obj => {
     let colCard = document.createElement('div');
-    colCard.className = "col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4";
+    colCard.className = "col-12 col-sm-6 col-md-4 col-lg-3";
 
     let card = document.createElement('div');
     card.className = "card h-100";
@@ -427,7 +434,7 @@ function cargaDatosPantalla(rs) {
 function cargaDatosPantallaActivo(rs) {
   rs.forEach(obj => {
     let colCard = document.createElement('div');
-    colCard.className = "col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-4";
+    colCard.className = "col-12 col-sm-6 col-md-4 col-lg-3";
 
     let card = document.createElement('div');
     card.className = "card h-100";
@@ -517,10 +524,12 @@ function cargaDatosPantallaActivo(rs) {
 
 function cargaDatosBd(activo_nombre) {            
     
-    $('#fila').empty();    
-    
-    fetch('sql/selectActivoAliasGestor.php?'
-    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+    $('#fila').empty();
+
+    let ambitoPrestadorSeleccionado = window.sessionStorage.getItem('ambitoPrestadorSeleccionado') || '';
+
+    fetch('sql_n/selectActivoAliasGestor.php?'
+    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
 
       if(response.ok) {
@@ -574,8 +583,8 @@ function cargaDatosBd(activo_nombre) {
                                     '</div>';        
     }).then();
                            
-    fetch('sql/selectActivoGestor.php?'
-    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario}))
+    fetch('sql_n/selectActivoGestor.php?'
+    + new URLSearchParams({aliasActivo: activo_nombre, codigo: codigoPresupuestario, idAmbito: ambitoPrestadorSeleccionado}))
     .then(function(response) {
 
       if(response.ok) {

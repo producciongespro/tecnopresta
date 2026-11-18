@@ -34,9 +34,12 @@ class Email_Solicitud
                                     $seccionDescripcion, $arrayActivos) 
     {
         try {
-            require "/home/tecnopresta/PHPMailer/src/SMTP.php";
-            require "/home/tecnopresta/PHPMailer/src/PHPMailer.php";
-            require "/home/tecnopresta/PHPMailer/src/Exception.php";
+            // require "/home/tecnopresta/PHPMailer/src/SMTP.php";
+            // require "/home/tecnopresta/PHPMailer/src/PHPMailer.php";
+            // require "/home/tecnopresta/PHPMailer/src/Exception.php";
+             require "PHPMailer/src/SMTP.php";
+             require "PHPMailer/src/PHPMailer.php";
+             require "PHPMailer/src/Exception.php";
         } catch (\Throwable $th) {
             return false;
         }

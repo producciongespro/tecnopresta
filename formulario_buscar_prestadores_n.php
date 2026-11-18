@@ -40,7 +40,7 @@ if ($sid && $mid) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
     <link href="bootstrap5/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2">
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css">
     <link rel="stylesheet" href="css/formulario_menu_principal.css">
     <link rel="stylesheet" href="css/fondoresponsive.css">
     <link href="sweetalert2/sweetalert2.min.css" rel="stylesheet">
@@ -74,6 +74,93 @@ if ($sid && $mid) {
         }
         .card-prestador .card-title {
             color: #fff;
+        }
+
+        /* Aviso sin prestadores + enlace a la guía */
+        .aviso-sin-prestadores {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .guia-cta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+            border-radius: 14px;
+            text-decoration: none;
+            text-align: left;
+            color: #fff;
+            background: linear-gradient(135deg, var(--mep-primary, #192952) 0%, var(--mep-secondary, #0035A0) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 53, 160, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: guia-cta-pulso 2.4s ease-in-out infinite;
+        }
+        .guia-cta:hover,
+        .guia-cta:focus-visible {
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(0, 53, 160, 0.35);
+            animation-play-state: paused;
+        }
+        .guia-cta:focus-visible {
+            outline: 3px solid #fbbf24;
+            outline-offset: 3px;
+        }
+        .guia-cta-icono {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #192952;
+            background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.45);
+        }
+        .guia-cta-texto {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 0.98rem;
+            line-height: 1.45;
+        }
+        .guia-cta-texto strong {
+            color: #fde68a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .guia-cta-etiqueta {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #93c5fd;
+        }
+        .guia-cta-flecha {
+            flex-shrink: 0;
+            font-size: 1.75rem;
+            color: #fbbf24;
+            transition: transform 0.25s ease;
+        }
+        .guia-cta:hover .guia-cta-flecha {
+            transform: translateX(5px);
+        }
+        @keyframes guia-cta-pulso {
+            0%, 100% { box-shadow: 0 8px 24px rgba(0, 53, 160, 0.25), 0 0 0 0 rgba(251, 191, 36, 0.55); }
+            50%      { box-shadow: 0 8px 24px rgba(0, 53, 160, 0.25), 0 0 0 8px rgba(251, 191, 36, 0); }
+        }
+        @media (max-width: 576px) {
+            .guia-cta { padding: 14px 16px; gap: 12px; }
+            .guia-cta-icono { width: 40px; height: 40px; font-size: 1.25rem; }
+            .guia-cta-flecha { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .guia-cta { animation: none; }
+            .guia-cta, .guia-cta-flecha { transition: none; }
         }
     </style>
 </head>
@@ -114,6 +201,6 @@ if ($sid && $mid) {
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_buscar_prestadores_n.js?version=1.8"></script>
+    <script src="js/formulario_buscar_prestadores_n.js?version=2.5"></script>
 </body>
 </html>

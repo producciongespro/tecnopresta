@@ -61,7 +61,8 @@ try {
     echo $db_msj;
 } 
 catch (Exception $e) {		
-	console.log("Error de la aplicación: " + $e->getMessage());
+    error_log("Error de la aplicación: " . $e->getMessage());
+	// console.log("Error de la aplicación: " + $e->getMessage());
 	echo "Error al conectar con la base de datos: " . $e->getMessage() . "\n";
 	$db = null;
 	exit;

@@ -155,13 +155,17 @@ $json_data = [
     'fecha' => $fecha_iso
 ];
 
-$json_compacto = json_encode($json_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+require_once __DIR__ . '/certificacion_pdf_helper.php';
+$payloads = prepararPayloadsJsonCertificacion($json_data);
 
-if (json_last_error() !== JSON_ERROR_NONE) {
+if ($payloads === null) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Error generando JSON']);
     exit;
 }
+
+$json_compacto = $payloads['compacto'];
+$json_ascii    = $payloads['ascii'];
 
 // ======================================================
 // GUARDAR PENDIENTE
@@ -180,7 +184,7 @@ $stmt = $link->prepare("
 ");
 
 $stmt->bind_param(
-    "sssississss",
+    "sssisssssss",
     $uuid, $codigo_centro, $centro_nombre,
     $id_fondos, $fuente_nombre,
     $logusuario, $lognombre,
@@ -345,10 +349,16 @@ try {
     // con versiones anteriores del sistema.
     // El Attachment es el método principal.
     
+    // Guardar también copia ASCII pura en /Keywords (cuando es compacto) como respaldo adicional
+    if (strlen($json_ascii) <= 16384) {
+        $pdf->SetKeywords($json_ascii);
+    }
+
+    // Bloque BEGIN_JSON...END_JSON en ASCII puro (\uXXXX) para inmunidad ante fuentes Win-1252 de TCPDF
     $pdf->Ln(2);
     $pdf->SetFont('helvetica', '', 1);
     $pdf->SetTextColor(255, 255, 255);
-    $pdf->MultiCell(0, 1, 'BEGIN_JSON' . $json_compacto . 'END_JSON', 0, 'L', false, 1);
+    $pdf->MultiCell(0, 1, 'BEGIN_JSON' . $json_ascii . 'END_JSON', 0, 'L', false, 1);
     $pdf->SetTextColor(0, 0, 0);
     $pdf->SetFont('helvetica', '', 11);
     

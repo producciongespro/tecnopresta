@@ -36,13 +36,13 @@ function login() {
 }
 
 function cargaDatosBd() {
-  fetch('sql/selectVistaDevolucionGestor.php?'
+  fetch('sql_n/selectVistaDevolucionGestor.php?'
     + new URLSearchParams({codigo: codigoPresupuestario}))
     .then(function(response) {
       if(response.ok) {
         response.json().then(function(data) {
           if (data != null && data.length > 0) {
-            cargaDatosPantalla(data);
+            cargaDatosPantalla(data);            
           } else {
             document.getElementById("fila").innerHTML =
               '<div class="devolucion-empty">' +
@@ -90,7 +90,8 @@ function muestraHora(hora) {
 }
 
 function cargaDatosPantalla(rs) {
-  let dir = "formulario_devolucion_n.php";
+  let dir = "formulario_devolucion_n.php";  
+
   let fila = document.getElementById('fila');
   fila.innerHTML = '';
 
@@ -162,7 +163,7 @@ function cargaDatosPantalla(rs) {
     fila.appendChild(colCard);
 
     // Fetch detail items
-    fetch('sql/selectDevolucionDetalleActivosGestor.php?'
+    fetch('sql_n/selectDevolucionDetalleActivosGestor.php?'
       + new URLSearchParams({prestamo_Id: obj.prestamo_Id, codigo: codigoPresupuestario}))
       .then(function(response) {
         if(response.ok) {

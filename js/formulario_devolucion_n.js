@@ -156,7 +156,7 @@ function guardar() {
     formData.append('prestamo_incidente', booIncidencia);
     formData.append('prestamo_incidente_comentario', txtIncidencia);
 
-    fetch('sql/insertDevolucionGestor.php', {
+    fetch('sql_n/insertDevolucionGestor.php', {
       method: 'POST',
       body: formData,
     }).then(function(response) {
@@ -269,7 +269,7 @@ function guardar() {
 }
 
 function cargaDatosBd() {
-  fetch('sql/selectPrestamoDetalleActivoGestor.php?'
+  fetch('sql_n/selectPrestamoDetalleActivoGestor.php?'
           + new URLSearchParams({prestamo_Id: prestamo_Id, codigo: codigoPresupuestario}))
     .then(function(response) {
     if(response.ok) {
@@ -301,7 +301,7 @@ function cargaDatosBd() {
 }
 
 function cargaDatosBdPrestamoEncabezado() {
-  fetch('sql/selectPrestamoEncabezadoGestor.php?'
+  fetch('sql_n/selectPrestamoEncabezadoGestor.php?'
           + new URLSearchParams({prestamo_Id: prestamo_Id, codigo: codigoPresupuestario}))
     .then(function(response) {
     if(response.ok) {

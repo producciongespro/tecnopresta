@@ -73,14 +73,13 @@ $activado = 1;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- MEP Institutional Styles -->
-  <link rel="stylesheet" href="assets/css/nueva-identidad.css">
-  <link rel="stylesheet" href="css/formulario_menu_principal.css?v=7" />
+  <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2">
+  <link rel="stylesheet" href="css/formulario_menu_principal.css?v=8"/>
 </head>
 <body class="layout-page">
     <?php include 'partials/header.php'; ?>
 
     <!-- Hero Header MEP -->
-    <div class="container">
     <div class="hero-box mb-4 mt-2 fade-enter">
       <div class="row align-items-center">
         <div class="col-md-8">
@@ -103,7 +102,6 @@ $activado = 1;
           </a>
         </div>
       </div>
-    </div>
     </div>
 
     <!-- Buscador -->

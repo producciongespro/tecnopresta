@@ -14,7 +14,7 @@ if (!defined('ACCESO_SEGURO')) {
     exit('Acceso directo no permitido');
 }
 */
-$ruta_regreso = 'navegar.php?ruta=formulario_buscar_alias_n.php';
+$ruta_regreso = 'formulario_buscar_alias_n.php';
 if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     $ruta_regreso .= '&subsistema_id=' . intval($_GET['subsistema_id'] ?? 0)
     . '&modulo_id=' . intval($_GET['modulo_id'] ?? 0);
@@ -101,15 +101,29 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
             background: var(--mep-primary, #192952);
             color: #fff;
         }
+        .prestador-activo {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.85);
+        }
+        .prestador-activo a {
+            color: #fff;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="layout-page">
-    <?php include 'partials/header.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/header.php'; ?>
+    </div>
 
     <div class="container py-4 contenido-principal">
         <div class="cart-header d-flex align-items-center justify-content-between mb-4">
             <div>
                 <h4 class="mb-0 fw-bold"><i class="bi bi-cart3 me-2"></i>Carrito</h4>
+                <div id="prestadorActivo" class="prestador-activo mt-1" style="display: none;">
+                    <i class="bi bi-person-badge me-1"></i>Solicitando a: <strong id="prestadorActivoNombre"></strong>
+                    <a href="navegar.php?ruta=formulario_buscar_prestadores_n.php" class="ms-2">Cambiar</a>
+                </div>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="badge rounded-pill bg-light text-dark fs-6 px-3 py-2" id="contador">0</span>
@@ -251,10 +265,12 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
         <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
 
-    <?php include 'partials/footer.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/footer.php'; ?>
+    </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_solicitud_canasta_n.js?version=2"></script>
+    <script src="js/formulario_solicitud_canasta_n.js?version=2.1"></script>
 </body>
 </html>

@@ -22,7 +22,7 @@ if (!$usuario_azure) {
     echo json_encode(['success' => false, 'error' => 'Sesión no válida.']);
     exit;
 }
-para 
+
 if (empty($_POST['idsplacas'])) {
     echo json_encode(['success' => false, 'error' => 'No hay ningún activo seleccionado.']);
     exit;

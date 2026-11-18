@@ -44,7 +44,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
 
     <!-- Nueva Identidad Gráfica Gobierno de Costa Rica CSS -->
     <link rel="stylesheet" href="css/formulario_menu_principal.css?version=4" />
-    <link rel="stylesheet" href="assets/css/nueva-identidad.css"/>
+    <link rel="stylesheet" href="assets/css/nueva-identidad.css?v=20260924_2"/>
 
     <!-- Bootstrap Icons -->
     <link href="css/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
@@ -241,7 +241,7 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
 
-    <script src="js/formulario_devolucion_n.js?version=1"></script>
+    <script src="js/formulario_devolucion_n.js?version=1.2"></script>
 
   </main>
   <?php include 'partials/footer.php'; ?>

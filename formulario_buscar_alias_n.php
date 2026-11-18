@@ -3,17 +3,18 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/usuarioAzure.php';
+
 $usuario_azure = obtenerUsuarioSesion();
 if (!$usuario_azure) {
     header("Location: index.html");
     exit();
 }
-/*
-if (!defined('ACCESO_SEGURO')) {
+
+/* if (!defined('ACCESO_SEGURO')) {
     http_response_code(403);
     exit('Acceso directo no permitido');
-}
-*/
+} */
+
 if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
     $_SESSION['subsistema_id'] = intval($_GET['subsistema_id']);
     $_SESSION['modulo_id'] = intval($_GET['modulo_id']);
@@ -22,12 +23,13 @@ if (isset($_GET['subsistema_id'], $_GET['modulo_id'])) {
 $sid = $_GET['subsistema_id'] ?? $_SESSION['subsistema_id'] ?? null;
 $mid = $_GET['modulo_id'] ?? $_SESSION['modulo_id'] ?? null;
 
-$ruta_regreso = 'navegar.php?ruta=formulario_menu_principal.php';
+$ruta_regreso = 'navegar.php?ruta=formulario_buscar_prestadores_n.php';
+
 if ($sid && $mid) {
-    $ruta_regreso = 'navegar.php?ruta=formulario_sub_modulos.php'
-    . '&subsistema_id=' . intval($sid)
+    $ruta_regreso .= '&subsistema_id=' . intval($sid)
     . '&modulo_id=' . intval($mid);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -139,10 +141,23 @@ if ($sid && $mid) {
             border-color: #c0c0c0;
             color: #000;
         }
+        .prestador-activo {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .prestador-activo strong {
+            color: var(--mep-primary, #192952);
+        }
+        .prestador-activo a {
+            color: var(--mep-primary, #192952);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="layout-page">
-    <?php include 'partials/header.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/header.php'; ?>
+    </div>
 
     <div class="container py-4">
         <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
@@ -150,6 +165,10 @@ if ($sid && $mid) {
                 <h4 class="mb-1 fw-bold" style="color: var(--mep-primary);">
                     Buscar Activos y Alias
                 </h4>
+                <div id="prestadorActivo" class="prestador-activo" style="display: none;">
+                    <i class="bi bi-person-badge me-1"></i>Solicitando a: <strong id="prestadorActivoNombre"></strong>
+                    <a href="<?= htmlspecialchars($ruta_regreso) ?>" class="ms-2">Cambiar</a>
+                </div>
                 <!-- <small class="text-muted">                    
                     <a href="contactenos_n.php?rep=Error en formulario buscar alias html" class="text-decoration-none"><i class="bi bi-envelope"></i> Reportar Incidencia / Error</a>
                 </small> -->
@@ -224,10 +243,12 @@ if ($sid && $mid) {
         <i class="bi bi-arrow-left-circle-fill"></i>
     </a>
 
-    <?php include 'partials/footer.php'; ?>
+    <div class="d-none d-md-block">
+        <?php include 'partials/footer.php'; ?>
+    </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <script src="js/formulario_buscar_alias_n.js?version=5"></script>
+    <script src="js/formulario_buscar_alias_n.js?version=2.4"></script>
 </body>
 </html>

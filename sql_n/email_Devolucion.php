@@ -49,13 +49,15 @@ class Email_Devolucion
                 
         date_default_timezone_set('America/Costa_Rica');
         
-        $txtNombresFormato = utf8_decode($txtNombres);
+        $txtNombresFormato = $txtNombres;
       
         $the_subject = "Devolucion de Equipo";
         $address_to = $solicitud_email_funcionario;
         $from_name = "Administrador";
 
         $phpmailer = new PHPMailer();
+        $phpmailer->CharSet = 'UTF-8';   // PHPMailer usa ISO-8859-1 por defecto (antes se usaba utf8_decode)
+        $phpmailer->Encoding = 'base64';
     
         // ---------- datos de la cuenta de Tecnopresta -------------------------------
         $phpmailer->Username = $this->correo;
@@ -107,6 +109,7 @@ class Email_Devolucion
         $phpmailer->Body .= "<img src=\"cid:encabezado\" width=\"100%\" alt=\"TecnoPresta - Ministerio de Educaci&oacute;n P&uacute;blica\" />";
         $phpmailer->Body .= "<h3> Estimado Funcionario (a) </h3>";
         $phpmailer->Body .="<p> <b> El Sistema de Inventario e Incidencias de Pr&eacute;stamos de Equipo  [Tecnopresta] </b> le informa:</p>";
+        $phpmailer->Body .= "<h1 style='margin:20px 0; padding:14px 10px; text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:28px; font-weight:bold; letter-spacing:1px; color:#003366; border-top:4px solid #003366; border-bottom:4px solid #003366;'>Constancia Devoluci&oacute;n de Equipo</h1>";
 
         $phpmailer->Body .= "<div id='container'> <table style='width:100%'>
                             <tbody>

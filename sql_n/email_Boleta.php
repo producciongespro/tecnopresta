@@ -30,13 +30,15 @@ class Email_Boleta
                                 $destino, $prestamo_Id, $codigo, $prestamo_uso) 
     {
                     
-        $txtDependencia = utf8_decode($Dependencia);
-        $txtDestino = utf8_decode($destino);
+        $txtDependencia = $Dependencia;
+        $txtDestino = $destino;
        
         $the_subject = "Boleta Imprimible para Oficial de Seguridad";
         $address_to = $para;
         $from_name = "Administrador";
         $phpmailer = new PHPMailer();
+        $phpmailer->CharSet = 'UTF-8';   // PHPMailer usa ISO-8859-1 por defecto (antes se usaba utf8_decode)
+        $phpmailer->Encoding = 'base64';
     
         // ---------- datos de la cuenta de Tecnopresta -------------------------------
         $phpmailer->Username = $this->correo;

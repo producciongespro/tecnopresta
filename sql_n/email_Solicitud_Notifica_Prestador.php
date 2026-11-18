@@ -4,6 +4,10 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
+// require "../PHPMailer/SMTP.php";
+// require "../PHPMailer/PHPMailer.php";
+// require "../PHPMailer/Exception.php";
+
 header('Content-Type: text/html; charset=UTF-8');
 
 class Email_Solicitud_Notifica_Prestador
@@ -78,6 +82,7 @@ class Email_Solicitud_Notifica_Prestador
             $phpmailer->Body .= "<head><meta http-equiv='Content-type' content='text/html; charset=utf-8'/></head>";
             $phpmailer->Body .= "<img src=\"cid:encabezado\" width=\"100%\" height=\"150px\" alt=\"TecnoPresta - Ministerio de Educaci&oacute;n P&uacute;blica\" />";
 
+            
             $phpmailer->Body .= "<h1>Tecnopresta le informa</h1>
                                 <h2>Existe Nueva Solicitud de Equipo en el sistema</h2>
                                 <h3><a href='https://tecnopresta.mep.go.cr'> Ir a Tecnopresta</a></h3>

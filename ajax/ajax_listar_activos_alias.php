@@ -2,28 +2,17 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// Validación de autenticación (Azure o sesión estándar)
-$usuario_azure = null;
-if (file_exists(__DIR__ . '/../usuarioAzure.php')) {
-    require_once __DIR__ . '/../usuarioAzure.php';
-    if (function_exists('obtenerUsuarioSesion')) {
-        $usuario_azure = obtenerUsuarioSesion();
-    }
+require_once __DIR__ . '/../usuarioAzure.php';
+$usuario_azure = obtenerUsuarioSesion();
+if (!$usuario_azure) {
+    header("Location: index.html");
+    exit();
 }
 
-$logcodigo = $usuario_azure['codigoPresu'] ?? ($_SESSION['codigo'] ?? null);
-$logusuario = $usuario_azure['cedula'] ?? ($_SESSION['cedula'] ?? null);
+$logcodigo = $usuario_azure['codigoPresu'] ?? null;
+$logusuario = $usuario_azure['cedula'] ?? null;
 
-// Validar permisos
-$tienellave = false;
-if (isset($_SESSION['tipo']) && in_array($_SESSION['tipo'], [1, 2, 3])) {
-    $tienellave = true;
-} elseif ($usuario_azure !== null) {
-    $tienellave = true;
-}
-
-if (!$tienellave || empty($logcodigo)) {
+if (empty($logcodigo)) {
     header('Content-Type: application/json; charset=utf-8');
     http_response_code(403);
     echo json_encode(['error' => 'No autorizado o sesión expirada']);
@@ -184,13 +173,16 @@ $sql_count = "SELECT COUNT(*) as total_filtrados
                   SELECT apl.lugar_id, amb.id_ambito, amb.nombre
                   FROM t_ambitos_prestador_lugar apl
                   INNER JOIN (
-                      SELECT lugar_id, MAX(id) AS max_id
-                      FROM t_ambitos_prestador_lugar
-                      GROUP BY lugar_id
+                      SELECT apl2.lugar_id, MAX(apl2.id) AS max_id
+                      FROM t_ambitos_prestador_lugar apl2
+                      INNER JOIN t_ambitos_prestador amb2 ON apl2.ambito_id = amb2.id_ambito
+                      INNER JOIN usuarios_roles ur2 ON amb2.usuarios_roles_id = ur2.id
+                      WHERE amb2.id_instituciones = ? 
+                        AND amb2.eliminado = 0
+                        AND ur2.eliminado = 0
+                      GROUP BY apl2.lugar_id
                   ) latest_apl ON apl.id = latest_apl.max_id
-                  INNER JOIN t_ambitos_prestador amb ON apl.ambito_id = amb.id_ambito 
-                                                      AND amb.id_instituciones = ? 
-                                                      AND amb.eliminado = 0
+                  INNER JOIN t_ambitos_prestador amb ON apl.ambito_id = amb.id_ambito
               ) Tamb ON Tp.id_lugar = Tamb.lugar_id
               WHERE $where_sql";
 
@@ -237,13 +229,16 @@ $sql_data = "SELECT Tp.id_placa, Tp.placa, Tp.serial, Tp.codigo, Tp.activo,
                   SELECT apl.lugar_id, amb.id_ambito, amb.nombre
                   FROM t_ambitos_prestador_lugar apl
                   INNER JOIN (
-                      SELECT lugar_id, MAX(id) AS max_id
-                      FROM t_ambitos_prestador_lugar
-                      GROUP BY lugar_id
+                      SELECT apl2.lugar_id, MAX(apl2.id) AS max_id
+                      FROM t_ambitos_prestador_lugar apl2
+                      INNER JOIN t_ambitos_prestador amb2 ON apl2.ambito_id = amb2.id_ambito
+                      INNER JOIN usuarios_roles ur2 ON amb2.usuarios_roles_id = ur2.id
+                      WHERE amb2.id_instituciones = ? 
+                        AND amb2.eliminado = 0
+                        AND ur2.eliminado = 0
+                      GROUP BY apl2.lugar_id
                   ) latest_apl ON apl.id = latest_apl.max_id
-                  INNER JOIN t_ambitos_prestador amb ON apl.ambito_id = amb.id_ambito 
-                                                      AND amb.id_instituciones = ? 
-                                                      AND amb.eliminado = 0
+                  INNER JOIN t_ambitos_prestador amb ON apl.ambito_id = amb.id_ambito
              ) Tamb ON Tp.id_lugar = Tamb.lugar_id
              WHERE $where_sql
              ORDER BY Tz.alias ASC, Tp.numero_activo ASC, Tg.clase ASC, Tp.placa ASC
